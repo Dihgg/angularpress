@@ -1,8 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { PostComponent } from './post/post.component';
+import { PageComponent } from './page/page.component';
+import { ArchiveComponent } from './archive/archive.component';
+import { CategoryComponent } from './category/category.component';
+import { TagComponent } from './tag/tag.component';
 
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: ':page', component: PageComponent },
+  { path: 'post/:slug', component: PostComponent },
+  { path: 'categoria/:category', component: CategoryComponent },
+  { path: 'tag/:tag', component: TagComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

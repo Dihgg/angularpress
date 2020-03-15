@@ -8,6 +8,9 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <app-root></app-root>
+  <app-root
+    id="<?php echo get_queried_object()->ID  ?>"
+    post-type="<?php echo get_queried_object()->post_type ?>"
+  ></app-root>
 </body>
 </html>

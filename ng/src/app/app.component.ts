@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
+import { WordpressService } from '././services/wordpress.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'gamefoss';
+  constructor(
+    private appRoot: ElementRef,
+    private wordpress: WordpressService
+  ) {
+    console.log('ROOT', this.appRoot);
+  }
 }
