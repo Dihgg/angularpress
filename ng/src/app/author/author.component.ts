@@ -19,20 +19,8 @@ export class AuthorComponent implements OnInit {
 
   ngOnInit(): void {
     this.wordpress.getUser(this.id).subscribe(
-      user => {
-        this.author = this.wordpress.parseUser(user);
-      },
-      error => this.onError(error)
+      user => this.author = user
     )
-  }
-
-  ngOnChanged() {
-    console.log('LOL', this.id);
-    
-  }
-  
-  public onError(error) {
-    console.error('DEU RUIM');    
   }
 
 }

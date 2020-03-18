@@ -1,7 +1,8 @@
 import { Injectable, Type } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PlatformLocation, Location } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
 import { Post, User } from '../services/wordpress.interface';
 
@@ -30,51 +31,52 @@ export class WordpressService {
     return this.http.get<T>(`${this.URL}${path}/`, {
       headers: this.headers,
       params: params
-    }).pipe(
-      
-    );
+    });
   }
 
   /**
    * Recupera Posts
-   * @param {Params} params Parâmetros para recuperação dos posts 
+   * @param {Params} params Parâmetros para recuperação dos posts
+   * @returns {Observable<Post[]>} Retorna um observable com array de posts
    */
-  public getPosts(params: Params) {
-    return this.get<Post[]>(`posts`, params);
-  }
-
-  public getUser(id: number) {
-    return this.get<User>(`users/${id}`);
+  public getPosts(params: Params): Observable<Post[]> {
+    return this.get<Post[]>(`posts`, params).pipe(
+      map((res: any) => {
+        let posts: Post[] = [];
+        res.forEach((post: any) => {
+          posts.push({
+            id: post.id,
+            title: post.title.rendered,
+            date: post.date,
+            excerpt: post.excerpt.rendered,
+            content: post.content.rendered,
+            author: post.author
+          })
+        })
+        return posts;
+      }),
+      catchError(error => throwError(error))
+    );
   }
 
   /**
-   * Recupera as informações do post tratadas
-   * @param {any} post 
-   * @returns {Post} retorna um objeto do tipo Post
+   * Recupera Usuário
+   * @param {number} id ID do usuário
+   * @returns {Observable<User>} Retorna um observable com dados do usuário
    */
-  public parsePost(post: any): Post {
-    console.log('PARSEPOST', post);
-    
-    return {
-      id: post.id,
-      title: post.title.rendered,
-      date: post.date,
-      excerpt: post.excerpt.rendered,
-      content: post.content.rendered,
-      author: post.author
-    };
+  public getUser(id: number): Observable<User> {
+    return this.get<User>(`users/${id}`).pipe(
+      map((res: any) => {
+        return {
+          id: res.id,
+          name: res.name,
+          link: res.link,
+          slug: res.slug,
+          avatar: res.avatar_urls['96']
+        }
+      }),
+      catchError(error => throwError(error))
+    );
   }
-
-  public parseUser(obj:any): User {
-    return {
-      id: obj.id,
-      name: obj.name,
-      link: obj.link,
-      slug: obj.slug,
-      avatar: obj.avatar_urls['96']
-    }
-  }
-
-  public getPages(params: Params) { }
 
 }

@@ -28,20 +28,11 @@ export class PostComponent implements OnInit {
       'slug': this.route.snapshot.paramMap.get('slug')
     }).subscribe(
       posts => {
-        this.post = this.wordpress.parsePost(posts[0]);
-      },
-      error => this.onError(error)
+        this.post = posts[0];
+      }
     );
   }
   
   ngOnDestroy() : void { }
-
-  public build(post: any): void {
-    this.post = this.wordpress.parsePost(post);
-  }
-
-  public onError(error) {
-    console.error('DEU RUIM');
-  }
 
 }
