@@ -14,5 +14,10 @@ export interface Post {
 	excerpt: string;
 	author: number;
 	categories?: number[];
-	tags?: number[]
+	tags?: number[];
+}
+
+export interface Base {
+	header: Post[];
+	footer: Post[];
 }

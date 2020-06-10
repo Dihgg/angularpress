@@ -5,10 +5,10 @@
 		{{post.author}}
 		<app-author [id]="post.author" *ngIf="post.author"></app-author>
 		<section>
-			<blockquote [innerHtml]="post.excerpt"></blockquote>
+			<blockquote [innerHTML]="post.excerpt"></blockquote>
 		</section>
 	</header>
 	<body>		
-		<section [innerHtml]="post.content"></section>
+		<section [innerHTML]="post.content"></section>
 	</body>
 </article>

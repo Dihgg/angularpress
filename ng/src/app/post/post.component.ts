@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WordpressService } from '../services/wordpress.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -9,7 +9,7 @@ import { Post, User } from '../services/wordpress.interface';
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss']
 })
-export class PostComponent implements OnInit {
+export class PostComponent implements OnInit, OnDestroy {
 
   public post: Post;
 
