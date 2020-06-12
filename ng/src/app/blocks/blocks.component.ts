@@ -13,7 +13,7 @@ export class BlocksComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.block);
+    console.log('BLOCK', this.block.attrs);
   }
 
 }
