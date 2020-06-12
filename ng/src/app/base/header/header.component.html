@@ -1,0 +1,6 @@
+<header id="header">
+	<nav>
+		<a [routerLink]="['/']">Início</a>
+		<a *ngFor="let item of header" [href]="item.url" [target]="item.target">{{item.title}}</a>
+	</nav>
+</header>

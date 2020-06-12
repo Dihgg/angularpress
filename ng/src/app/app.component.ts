@@ -1,6 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
-import { WordpressService } from '././services/wordpress.service';
-import { Post } from './services/wordpress.interface';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +7,5 @@ import { Post } from './services/wordpress.interface';
 })
 export class AppComponent {
 
-  constructor(
-    private wordpress: WordpressService
-  ) {
-    this.wordpress.getBase().subscribe(
-      base => console.log(base)
-    )
-  }
+  constructor() { }
 }

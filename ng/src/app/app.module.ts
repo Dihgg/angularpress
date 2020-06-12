@@ -11,6 +11,7 @@ import { ArchiveComponent } from './archive/archive.component';
 import { CategoryComponent } from './category/category.component';
 import { TagComponent } from './tag/tag.component';
 import { AuthorComponent } from './author/author.component';
+import { HeaderComponent } from './base/header/header.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AuthorComponent } from './author/author.component';
     ArchiveComponent,
     CategoryComponent,
     TagComponent,
-    AuthorComponent
+    AuthorComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
