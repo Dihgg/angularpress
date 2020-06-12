@@ -13,6 +13,7 @@ export interface Post {
 	content: string;
 	excerpt: string;
 	author: number;
+	blocks?: Block[];
 	categories?: number[];
 	tags?: number[];
 }
@@ -23,4 +24,10 @@ export interface MenuItem {
 	url: string;
 	classes: string[];
 	target: string;
+}
+
+export interface Block {
+	name: string;
+	attrs: string[];
+	html: string;
 }

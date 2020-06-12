@@ -8,7 +8,9 @@
 			<blockquote [innerHTML]="post.excerpt"></blockquote>
 		</section>
 	</header>
-	<body>		
-		<section [innerHTML]="post.content"></section>
+	<body>
+		<ng-container *ngFor="let block of post.blocks">
+			<app-blocks *ngIf="block.name" [block]="block"></app-blocks>
+		</ng-container>
 	</body>
 </article>

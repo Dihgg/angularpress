@@ -1,10 +1,10 @@
 import { Injectable, Type } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { PlatformLocation, Location } from '@angular/common';
+import { LocationStrategy, Location } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem } from '../services/wordpress.interface';
+import { Post, User, MenuItem, Block } from '../services/wordpress.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -44,12 +44,18 @@ export class WordpressService {
       map((res: any) => {
         let posts: Post[] = [];
         res.forEach((post: any) => {
+          console.log('POST', post);
           posts.push({
             id: post.id,
             title: post.title.rendered,
             date: post.date,
             excerpt: post.excerpt.rendered,
             content: post.content.rendered,
+            blocks: post.blocks.map((block: any): Block => ({
+              name: block.blockName,
+              attrs: block.attrs,
+              html: block.innerHTML
+            })),
             author: post.author
           });
         });
@@ -84,6 +90,7 @@ export class WordpressService {
       map((res: any) => {
         let items: MenuItem[] = [];
         res.forEach((item: any) => {
+          console.log('MENU ITEM', item);
           items.push({
             type: (item.post_type === 'custom') ? 'custom' : 'post',
             title: item.title,

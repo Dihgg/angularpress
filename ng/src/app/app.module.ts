@@ -12,6 +12,7 @@ import { CategoryComponent } from './category/category.component';
 import { TagComponent } from './tag/tag.component';
 import { AuthorComponent } from './author/author.component';
 import { HeaderComponent } from './base/header/header.component';
+import { BlocksModule } from './blocks/blocks.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { HeaderComponent } from './base/header/header.component';
     HeaderComponent
   ],
   imports: [
+    BlocksModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
