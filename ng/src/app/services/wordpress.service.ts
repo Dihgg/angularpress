@@ -4,7 +4,7 @@ import { PlatformLocation, Location } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, Base } from '../services/wordpress.interface';
+import { Post, User, MenuItem } from '../services/wordpress.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -78,16 +78,23 @@ export class WordpressService {
       catchError(error => throwError(error))
     );
   }
-  public getBase(): Observable<Base> {
-    return this.get<Base>(`base`).pipe(
-      map((res: any) => {
-        return {
-          header: res.header,
-          footer: res.footer
-        }
-      }),
-      catchError( error => throwError(error))
-    )
-  }
 
+  public getMenu(name: string): Observable<MenuItem[]> {
+    return this.get<MenuItem>(`menu`, { name: name }).pipe(
+      map((res: any) => {
+        let items: MenuItem[] = [];
+        res.forEach((item: any) => {
+          items.push({
+            type: (item.post_type === 'custom') ? 'custom' : 'post',
+            title: item.title,
+            url: item.url,
+            classes: item.classes,
+            target: item.target
+          })
+        });
+        return items;
+      }),
+      catchError(error => throwError(error))
+    );
+  }
 }

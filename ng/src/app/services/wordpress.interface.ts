@@ -17,7 +17,10 @@ export interface Post {
 	tags?: number[];
 }
 
-export interface Base {
-	header: Post[];
-	footer: Post[];
+export interface MenuItem {
+	type: 'post' | 'custom';
+	title: string;
+	url: string;
+	classes: string[];
+	target: string;
 }
