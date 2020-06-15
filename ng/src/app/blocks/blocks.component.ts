@@ -8,12 +8,10 @@ import { Block } from 'src/app/services/wordpress.interface';
 })
 export class BlocksComponent implements OnInit {
 
-  @Input() block: Block;
+  @Input() blocks: Block[] = [];
 
   constructor() { }
 
-  ngOnInit(): void {
-    console.log('BLOCK', this.block.attrs);
-  }
+  ngOnInit(): void { }
 
 }

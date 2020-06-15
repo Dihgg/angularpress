@@ -9,8 +9,6 @@
 		</section>
 	</header>
 	<body>
-		<ng-container *ngFor="let block of post.blocks">
-			<app-blocks *ngIf="block.name" [block]="block"></app-blocks>
-		</ng-container>
+		<app-blocks [blocks]="post.blocks"></app-blocks>
 	</body>
 </article>

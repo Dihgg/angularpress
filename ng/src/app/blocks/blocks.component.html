@@ -1,7 +1,9 @@
-<ng-container [ngSwitch]="block.name">
-  <app-youtube
-    *ngSwitchCase="'core-embed/youtube'"
-    [video]="block.attrs['url']"
-  ></app-youtube>
-  <div *ngSwitchDefault class="block-content" [innerHTML]="block.html"></div>
+<ng-container *ngFor="let block of blocks">
+  <ng-container *ngIf="block.name" [ngSwitch]="block.name">
+    <app-youtube
+      *ngSwitchCase="'core-embed/youtube'"
+      [video]="block.attrs['url']"
+    ></app-youtube>
+    <div *ngSwitchDefault class="block-content" [innerHTML]="block.html"></div>
+  </ng-container>
 </ng-container>
