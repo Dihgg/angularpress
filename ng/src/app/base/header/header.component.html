@@ -1,6 +1,3 @@
 <header id="header">
-	<nav>
-		<a [routerLink]="['/']">{{title.getTitle()}}</a>
-		<a *ngFor="let item of header" [href]="item.url" [target]="item.target">{{item.title}}</a>
-	</nav>
+	<app-menu [menu]="header" [showHome]="true"></app-menu>
 </header>

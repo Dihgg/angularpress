@@ -24,6 +24,7 @@ export interface MenuItem {
 	url: string;
 	classes: string[];
 	target: string;
+	urlRouter?: string;
 }
 
 export interface Block {

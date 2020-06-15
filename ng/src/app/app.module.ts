@@ -14,6 +14,7 @@ import { AuthorComponent } from './author/author.component';
 import { HeaderComponent } from './base/header/header.component';
 import { BlocksModule } from './blocks/blocks.module';
 import { FooterComponent } from './base/footer/footer.component';
+import { MenuComponent } from './base/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { FooterComponent } from './base/footer/footer.component';
     TagComponent,
     AuthorComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    MenuComponent
   ],
   imports: [
     BlocksModule,
