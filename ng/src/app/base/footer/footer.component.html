@@ -1,0 +1,6 @@
+<footer id="footer">
+	<nav>
+		<a [routerLink]="['/']">{{title.getTitle()}}</a>
+		<a *ngFor="let item of footer" [href]="item.url" [target]="item.target">{{item.title}}</a>
+	</nav>
+</footer>

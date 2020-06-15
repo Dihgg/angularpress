@@ -13,6 +13,7 @@ import { TagComponent } from './tag/tag.component';
 import { AuthorComponent } from './author/author.component';
 import { HeaderComponent } from './base/header/header.component';
 import { BlocksModule } from './blocks/blocks.module';
+import { FooterComponent } from './base/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { BlocksModule } from './blocks/blocks.module';
     CategoryComponent,
     TagComponent,
     AuthorComponent,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BlocksModule,
