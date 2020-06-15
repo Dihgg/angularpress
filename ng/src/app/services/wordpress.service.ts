@@ -44,7 +44,6 @@ export class WordpressService {
       map((res: any) => {
         let posts: Post[] = [];
         res.forEach((post: any) => {
-          console.log('POST', post);
           posts.push({
             id: post.id,
             title: post.title.rendered,
@@ -90,13 +89,12 @@ export class WordpressService {
       map((res: any) => {
         let items: MenuItem[] = [];
         res.forEach((item: any) => {
-          console.log('MENU ITEM', item);
           items.push({
             type: (item.post_type === 'custom') ? 'custom' : 'post',
             title: item.title,
             url: item.url,
             classes: item.classes,
-            target: item.target
+            target: item.target || null
           })
         });
         return items;

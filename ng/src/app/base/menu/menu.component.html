@@ -1,0 +1,7 @@
+<nav>
+	<a *ngIf="showHome" [routerLink]="['/']">{{title.getTitle()}}</a>
+	<ng-container *ngFor="let link of items">
+		<a *ngIf="link.urlRouter" [routerLink]="link.urlRouter" [target]="link.target" [ngClass]="link.classes">{{link.title}}</a>
+		<a *ngIf="!link.urlRouter" [href]="link.url" [target]="link.target" [ngClass]="link.classes">{{link.title}}</a>
+	</ng-container>
+</nav>
