@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BlocksComponent } from './blocks.component';
 import { YoutubeModule } from './youtube/youtube.module';
+import { LatestPostsComponent } from './latest-posts/latest-posts.component';
 
 
 
 @NgModule({
-  declarations: [BlocksComponent],
+  declarations: [BlocksComponent, LatestPostsComponent],
   imports: [
     CommonModule,
     YoutubeModule
