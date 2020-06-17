@@ -6,6 +6,12 @@ export interface User {
 	avatar: string;
 }
 
+export interface PostArgs {
+	order?: 'asc' | 'desc';
+	orderBy?: string;
+	numberposts?: number;
+}
+
 export interface Post {
 	id: string;
 	date: Date;
