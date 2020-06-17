@@ -11,11 +11,12 @@ export class LatestPostsComponent implements OnInit {
 
   public posts: Post[] = [];
   public args: PostArgs;
+  public css: string[];
 
   @Input()
-  set attrs(attrs: string[]) {
+  set attrs(attrs: string[]) {    
     this.args = {
-      numberposts: attrs['postsToShow'],
+      per_page: attrs['postsToShow'],
       order: attrs['order'],
       orderBy: attrs['orderBy']
     }

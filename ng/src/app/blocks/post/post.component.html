@@ -1,0 +1,7 @@
+<article *ngIf="post">
+	<a [routerLink]="getRouterLink(post.url)">
+		<img *ngIf="thumbnail" [src]="thumbnail.url" [alt]="thumbnail.alt"/>
+		<h1>{{post.title}}</h1>
+		<div *ngIf="post.excerpt" class="excerpt" [innerHTML]="post.excerpt"></div>
+	</a>
+</article>

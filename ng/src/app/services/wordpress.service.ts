@@ -4,7 +4,7 @@ import { LocationStrategy, Location } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem, Block } from '../services/wordpress.interface';
+import { Post, User, MenuItem, Block, Media, Image } from '../services/wordpress.interface';
 
 declare const BASE_HREF: string;
 @Injectable({
@@ -50,6 +50,7 @@ export class WordpressService {
         res.forEach((post: any) => {
           posts.push({
             id: post.id,
+            url: post.link,
             title: post.title.rendered,
             date: post.date,
             excerpt: post.excerpt.rendered,
@@ -59,7 +60,8 @@ export class WordpressService {
               attrs: block.attrs,
               html: block.innerHTML
             })),
-            author: post.author
+            author: post.author,
+            thumbnail: post.featured_media || null
           });
         });
         return posts;
@@ -90,6 +92,11 @@ export class WordpressService {
     );
   }
 
+  /**
+   * Recupera um Menu do Wordpress
+   * @param {string} name Nome do menu
+   * @returns {Observable<MenuItem[]>} Retorna um observable com uma lista de itens de menu
+   */
   public getMenu(name: string): Observable<MenuItem[]> {
     return this.get<MenuItem>(`menu`, { name: name }).pipe(
       map((res: any) => {
@@ -106,6 +113,35 @@ export class WordpressService {
         return items;
       }),
       catchError(error => throwError(error))
+    );
+  }
+
+  public getMedia(params: Params): Observable<Media[]> {
+    return this.get<Media>(`media`, params)
+    .pipe(map((res: any): Media[] => {
+      const medias: Media[] = [];
+      res.forEach((media: any) => medias.push({
+        id: media.id,
+        type: media.media_type,
+        url: media.source_url,
+        sizes: (() => {
+          const images: Image[] = [];
+          Object.getOwnPropertyNames(media.media_details.sizes).forEach((key: string) => {
+            const image: any = media.media_details.sizes[key];            
+            images[key] = {
+              size: key,
+              width: image.width,
+              height: image.height,
+              url: image.source_url,
+              alt: media.alt_text
+            };
+          });
+          return images;
+        })()
+      }));
+      return medias;
+    }),
+    catchError(error => throwError(error))
     );
   }
 }

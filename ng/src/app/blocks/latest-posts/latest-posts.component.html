@@ -1,8 +1,6 @@
 <p>latest-posts works!</p>
 <ul *ngIf="posts">
 	<li *ngFor="let post of posts">
-		<article>
-			<h1>{{post.title}}</h1>
-		</article>
+		<app-post [post]="post"></app-post>
 	</li>
 </ul>

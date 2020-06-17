@@ -9,11 +9,12 @@ export interface User {
 export interface PostArgs {
 	order?: 'asc' | 'desc';
 	orderBy?: string;
-	numberposts?: number;
+	per_page?: number;
 }
 
 export interface Post {
 	id: string;
+	url: string;
 	date: Date;
 	title: string;
 	content: string;
@@ -22,6 +23,7 @@ export interface Post {
 	blocks?: Block[];
 	categories?: number[];
 	tags?: number[];
+	thumbnail?: number;
 }
 
 export interface MenuItem {
@@ -37,4 +39,21 @@ export interface Block {
 	name: string;
 	attrs: string[];
 	html: string;
+}
+
+export interface Image {
+	size: 'medium' | 'large' | 'thumbnail' | 'medium_large' | 'full' | string,
+	url: string
+	width: number;
+	height: number;
+	alt?: string;
+}
+export interface Media {
+	id: number;
+	url: string;
+	sizes: Image[];
+	type: 'image' | string;
+	caption?: string;
+	alt_text?: string;
+
 }
