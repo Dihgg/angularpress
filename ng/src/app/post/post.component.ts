@@ -9,30 +9,27 @@ import { Post, User } from '../services/wordpress.interface';
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss']
 })
-export class PostComponent implements OnInit, OnDestroy {
+export class PostComponent implements OnInit {
 
   public post: Post;
+  public slug: string;
+  public type = 'posts';
 
   constructor(
-    private route: ActivatedRoute,
-    private wordpress: WordpressService,
-    private location: Location
-  ) { }
-
-  ngOnInit(): void {
-    this.getPost();
+    public route: ActivatedRoute,
+    public wordpress: WordpressService
+  ) {
+    this.slug = this.route.snapshot.paramMap.get('slug');
   }
 
-  private getPost() {
+  ngOnInit(): void {
     this.wordpress.getPosts({
-      'slug': this.route.snapshot.paramMap.get('slug')
-    }).subscribe(
+      'slug': this.slug
+    }, this.type).subscribe(
       posts => {
         this.post = posts[0];
       }
     );
   }
-  
-  ngOnDestroy() : void { }
 
 }

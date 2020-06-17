@@ -24,9 +24,7 @@ export class MenuComponent implements OnInit {
         item.url = null;
       }
       this.items.push(item);
-    });
-    console.log('MENU', this.items);
-    
+    });    
   }
 
   constructor(

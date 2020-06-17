@@ -1,1 +1,3 @@
-<p>page works!</p>
+<article *ngIf="post">
+	<app-blocks [blocks]="post.blocks"></app-blocks>
+</article>
