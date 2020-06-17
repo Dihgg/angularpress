@@ -37,10 +37,11 @@ export class WordpressService {
   /**
    * Recupera Posts
    * @param {Params} params Parâmetros para recuperação dos posts
+   * @param {'posts' | 'pages'} type Tipo de post para recuperação
    * @returns {Observable<Post[]>} Retorna um observable com array de posts
    */
-  public getPosts(params: Params): Observable<Post[]> {
-    return this.get<Post[]>(`posts`, params).pipe(
+  public getPosts(params: Params, type: 'posts' | 'pages' | string = 'posts'): Observable<Post[]> {
+    return this.get<Post[]>(type, params).pipe(
       map((res: any) => {
         let posts: Post[] = [];
         res.forEach((post: any) => {
@@ -63,6 +64,8 @@ export class WordpressService {
       catchError(error => throwError(error))
     );
   }
+
+
 
   /**
    * Recupera Usuário

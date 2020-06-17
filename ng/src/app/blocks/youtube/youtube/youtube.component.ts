@@ -8,9 +8,11 @@ import { Component, OnInit, Input } from '@angular/core';
 export class YoutubeComponent implements OnInit {
 
   public videoId: string;
+
   @Input()
-  set video(url: string) {
-    let match = url.match(/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
+  set attrs(attrs: string[]) {
+    const url = attrs['url'];
+    const match = url.match(/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
     if (match && match[2].length === 11) {
       this.videoId = match[2];
     }
