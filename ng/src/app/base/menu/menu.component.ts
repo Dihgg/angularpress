@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MenuItem } from 'src/app/services/wordpress.interface';
 import { Title } from '@angular/platform-browser';
-
-declare const BASE_HREF: string;
+import { WordpressService } from 'src/app/services/wordpress.service';
 
 @Component({
   selector: 'app-menu',
@@ -11,7 +10,6 @@ declare const BASE_HREF: string;
 })
 export class MenuComponent implements OnInit {
 
-  public BASE_HREF = BASE_HREF;
   public items: MenuItem[] = [];
 
   @Input() showHome = false;
@@ -19,8 +17,8 @@ export class MenuComponent implements OnInit {
   set menu(items: MenuItem[]) {
     this.items = [];
     items.forEach((item: MenuItem) => {
-      if (item.url.includes(BASE_HREF) && !item.target) {
-        item.urlRouter = item.url.replace(BASE_HREF, "");
+      if (item.url.includes(WordpressService.BASE_HREF) && !item.target) {
+        item.urlRouter = item.url.replace(WordpressService.BASE_HREF, "");
         item.url = null;
       }
       this.items.push(item);

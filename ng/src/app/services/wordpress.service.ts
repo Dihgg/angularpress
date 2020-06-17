@@ -6,6 +6,7 @@ import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
 import { Post, User, MenuItem, Block } from '../services/wordpress.interface';
 
+declare const BASE_HREF: string;
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +15,8 @@ export class WordpressService {
   private URL: string;
   private context = "v2";
   private headers = {};
+
+  public static BASE_HREF = BASE_HREF;
 
   constructor(
     private http: HttpClient,
