@@ -1,7 +1,7 @@
 <article *ngIf="post">
 	<header>
 		<h1>{{post.title}}</h1>
-		<time>{{post.date | date:'dd/MM/yyyy hh:mm a' }}</time>
+		<time [attr.datetime]="post.date">{{post.date_formatted}}</time>
 		{{post.author}}
 		<app-author [id]="post.author" *ngIf="post.author"></app-author>
 		<section>

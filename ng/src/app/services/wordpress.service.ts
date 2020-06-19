@@ -56,6 +56,7 @@ export class WordpressService {
             url: post.link,
             title: post.title.rendered.replace(/(<([^>]+)>)/ig, ''),
             date: post.date,
+            date_formatted: post.date_formatted,
             excerpt: post.excerpt.rendered.replace(/(<([^>]+)>)/ig, ''),
             content: post.content.rendered.replace(/(<([^>]+)>)/ig, ''),
             blocks: post.blocks.map((block: any): Block => ({

@@ -2,7 +2,7 @@
 	<a [routerLink]="getRouterLink(post.url)">
 		<img *ngIf="thumbnail" class="post__thumbnail" [src]="thumbnail.url" [alt]="thumbnail.alt"/>
 		<h1 class="post__title">{{post.title}}</h1>
-		<time *ngIf="options.showDate">{{post.date | date:'dd/MM/yyyy hh:mm a' }}</time>
+		<time *ngIf="options.showDate" [attr.datetime]="post.date">{{post.date_formatted}}</time>
 		<div *ngIf="options.showContent" class="post__content">
 			<ng-container [ngSwitch]="options.contentType">
 				<ng-container *ngSwitchCase="'excerpt'">

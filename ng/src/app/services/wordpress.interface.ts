@@ -19,6 +19,7 @@ export interface Post {
 	id: string;
 	url: string;
 	date: Date;
+	date_formatted: string;
 	title: string;
 	content: string;
 	excerpt: string;
