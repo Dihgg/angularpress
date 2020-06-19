@@ -1,0 +1,25 @@
+<ngu-carousel
+  #carousel
+  class="gallery"
+  [inputs]="config"
+  [dataSource]="images"
+  [ngClass]="css"
+>
+  <ngu-tile *nguCarouselDef="let image; let i = index">
+    <figure class="gallery__item">
+      <img [src]="image.url" [alt]="image.alt" />
+      <figcaption *ngIf="image.caption">{{ image.caption }}</figcaption>
+    </figure>
+  </ngu-tile>
+  <ul class="gallery__points" NguCarouselPoint>
+    <li
+      *ngFor="let i of carousel.pointNumbers"
+      class="gallery__point"
+	  [class.active]="i == carousel.activePoint"
+	  attr.aria-label="Ir para {{i+1}}"
+      (click)="carousel.moveTo(i)"
+    >
+      &nbsp;
+    </li>
+  </ul>
+</ngu-carousel>

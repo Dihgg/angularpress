@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
 import { Post, User, MenuItem, Block, Media, Image, PostArgs } from '../services/wordpress.interface';
+import { sanitizeHtml } from '../utils/utils';
 
 declare const BASE_HREF: string;
 
@@ -31,11 +32,15 @@ export class WordpressService {
    * @param {string} path caminho para REST API 
    * @param {Params} params Parâmetros URL GET
    */
-  private get<T>(path: string, params: Params = {}, id?: string): Observable<T> {
+  private get<T>(path: string, params: Params = {}, id?: string | number): Observable<T> {
     return this.http.get<T>(`${this.URL}${path}/${id || ''}`, {
       headers: this.headers,
       params: params
     });
+  }
+
+  private sanitizeHtml(str: string): string {
+    return str.replace(/(<([^>]+)>)/ig, '');
   }
 
   /**
@@ -49,16 +54,14 @@ export class WordpressService {
       map((res: any) => {
         let posts: Post[] = [];
         res.forEach((post: any) => {
-          console.log('POST', post);
-          
           posts.push({
             id: post.id,
             url: post.link,
-            title: post.title.rendered.replace(/(<([^>]+)>)/ig, ''),
+            title: sanitizeHtml(post.title.rendered),
             date: post.date,
             date_formatted: post.date_formatted,
-            excerpt: post.excerpt.rendered.replace(/(<([^>]+)>)/ig, ''),
-            content: post.content.rendered.replace(/(<([^>]+)>)/ig, ''),
+            excerpt: sanitizeHtml(post.excerpt.rendered),
+            content: sanitizeHtml(post.content.rendered),
             blocks: post.blocks.map((block: any): Block => ({
               name: block.blockName,
               attrs: block.attrs,
@@ -123,10 +126,9 @@ export class WordpressService {
    * @param {string} id id da mídia
    * @returns {Obeservable<Media>} Observable da resposta com uma mídia 
    */
-  public getMedia(id: string): Observable<Media> {
+  public getMedia(id: number): Observable<Media> {
     return this.get<Media>(`media`, null, id)
     .pipe(map((media: any): Media => {
-      // const medias: Media[] = [];
       return {
         id: media.id,
         type: media.media_type,
@@ -140,7 +142,8 @@ export class WordpressService {
               width: image.width,
               height: image.height,
               url: image.source_url,
-              alt: media.alt_text
+              alt: media.alt_text,
+              caption: sanitizeHtml(media.caption.rendered)
             };
           });
           return images;

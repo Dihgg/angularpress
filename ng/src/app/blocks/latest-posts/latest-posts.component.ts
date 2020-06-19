@@ -16,9 +16,7 @@ export class LatestPostsComponent implements OnInit {
   public options: PostOptions;
 
   @Input()
-  set attrs(attrs: string[]) {    
-    console.log('LATEST ATTRS', attrs);
-    
+  set attrs(attrs: string[]) {
     this.args = {
       per_page: attrs['postsToShow'],
       order: attrs['order'],
