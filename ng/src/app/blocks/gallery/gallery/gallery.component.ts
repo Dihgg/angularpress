@@ -49,10 +49,7 @@ export class GalleryComponent implements OnInit {
 
   ngOnInit(): void {
     this.ids.forEach((id: number) => this.wordpress.getMedia(id).subscribe(
-      media => {
-        this.images.push(media.sizes['full']);
-        console.log(this.images);
-      }
+      media => this.images.push(media.sizes['full'])
     ));
   }
 
