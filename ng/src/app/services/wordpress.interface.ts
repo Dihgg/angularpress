@@ -51,6 +51,7 @@ export interface Image {
 	width: number;
 	height: number;
 	alt?: string;
+	caption?: string;
 }
 export interface Media {
 	id: number;

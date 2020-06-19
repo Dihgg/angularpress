@@ -6,6 +6,7 @@ import { LatestPostsComponent } from './latest-posts/latest-posts.component';
 import { PostComponent } from './post/post.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { TruncatePipe } from '../pipes/truncate.pipe';
+import { GalleryModule } from './gallery/gallery.module';
 
 
 
@@ -19,7 +20,8 @@ import { TruncatePipe } from '../pipes/truncate.pipe';
   imports: [
     AppRoutingModule,
     CommonModule,
-    YoutubeModule
+    YoutubeModule,
+    GalleryModule
   ],
   exports: [
     BlocksComponent

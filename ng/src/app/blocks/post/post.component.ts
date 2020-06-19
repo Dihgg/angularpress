@@ -21,7 +21,7 @@ export class PostComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.post.thumbnail) {
-      this.wordpress.getMedia(this.post.thumbnail.toString()).subscribe(
+      this.wordpress.getMedia(this.post.thumbnail).subscribe(
         media => {
           this.thumbnail = media.sizes['medium']
         }
