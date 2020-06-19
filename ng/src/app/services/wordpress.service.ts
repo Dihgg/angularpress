@@ -4,7 +4,9 @@ import { LocationStrategy, Location } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem, Block } from '../services/wordpress.interface';
+import { Post, User, MenuItem, Block, Media, Image, PostArgs } from '../services/wordpress.interface';
+
+declare const BASE_HREF: string;
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,8 @@ export class WordpressService {
   private URL: string;
   private context = "v2";
   private headers = {};
+
+  public static BASE_HREF = BASE_HREF;
 
   constructor(
     private http: HttpClient,
@@ -27,8 +31,8 @@ export class WordpressService {
    * @param {string} path caminho para REST API 
    * @param {Params} params Parâmetros URL GET
    */
-  private get<T>(path: string, params: Params = {}): Observable<T> {
-    return this.http.get<T>(`${this.URL}${path}/`, {
+  private get<T>(path: string, params: Params = {}, id?: string): Observable<T> {
+    return this.http.get<T>(`${this.URL}${path}/${id || ''}`, {
       headers: this.headers,
       params: params
     });
@@ -40,23 +44,28 @@ export class WordpressService {
    * @param {'posts' | 'pages'} type Tipo de post para recuperação
    * @returns {Observable<Post[]>} Retorna um observable com array de posts
    */
-  public getPosts(params: Params, type: 'posts' | 'pages' | string = 'posts'): Observable<Post[]> {
+  public getPosts(params: PostArgs, type: 'posts' | 'pages' | string = 'posts'): Observable<Post[]> {
     return this.get<Post[]>(type, params).pipe(
       map((res: any) => {
         let posts: Post[] = [];
         res.forEach((post: any) => {
+          console.log('POST', post);
+          
           posts.push({
             id: post.id,
-            title: post.title.rendered,
+            url: post.link,
+            title: post.title.rendered.replace(/(<([^>]+)>)/ig, ''),
             date: post.date,
-            excerpt: post.excerpt.rendered,
-            content: post.content.rendered,
+            date_formatted: post.date_formatted,
+            excerpt: post.excerpt.rendered.replace(/(<([^>]+)>)/ig, ''),
+            content: post.content.rendered.replace(/(<([^>]+)>)/ig, ''),
             blocks: post.blocks.map((block: any): Block => ({
               name: block.blockName,
               attrs: block.attrs,
               html: block.innerHTML
             })),
-            author: post.author
+            author: post.author,
+            thumbnail: post.featured_media || null
           });
         });
         return posts;
@@ -64,8 +73,6 @@ export class WordpressService {
       catchError(error => throwError(error))
     );
   }
-
-
 
   /**
    * Recupera Usuário
@@ -87,6 +94,11 @@ export class WordpressService {
     );
   }
 
+  /**
+   * Recupera um Menu do Wordpress
+   * @param {string} name Nome do menu
+   * @returns {Observable<MenuItem[]>} Retorna um observable com uma lista de itens de menu
+   */
   public getMenu(name: string): Observable<MenuItem[]> {
     return this.get<MenuItem>(`menu`, { name: name }).pipe(
       map((res: any) => {
@@ -103,6 +115,39 @@ export class WordpressService {
         return items;
       }),
       catchError(error => throwError(error))
+    );
+  }
+
+  /**
+   * Recupera informações sobre uma mídia
+   * @param {string} id id da mídia
+   * @returns {Obeservable<Media>} Observable da resposta com uma mídia 
+   */
+  public getMedia(id: string): Observable<Media> {
+    return this.get<Media>(`media`, null, id)
+    .pipe(map((media: any): Media => {
+      // const medias: Media[] = [];
+      return {
+        id: media.id,
+        type: media.media_type,
+        url: media.source_url,
+        sizes: (() => {
+          const images: Image[] = [];
+          Object.getOwnPropertyNames(media.media_details.sizes).forEach((key: string) => {
+            const image: any = media.media_details.sizes[key];            
+            images[key] = {
+              size: key,
+              width: image.width,
+              height: image.height,
+              url: image.source_url,
+              alt: media.alt_text
+            };
+          });
+          return images;
+        })()
+      }
+    }),
+    catchError(error => throwError(error))
     );
   }
 }
