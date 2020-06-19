@@ -7,9 +7,12 @@ export interface User {
 }
 
 export interface PostArgs {
+	id?: number;
+	slug?: string;
 	order?: 'asc' | 'desc';
 	orderBy?: string;
 	per_page?: number;
+	categories?: number[];
 }
 
 export interface Post {

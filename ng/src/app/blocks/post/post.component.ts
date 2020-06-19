@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Post, Image } from 'src/app/services/wordpress.interface';
 import { WordpressService } from 'src/app/services/wordpress.service';
+import { PostOptions } from '../../types/options.type';
 
 @Component({
   selector: 'app-post',
@@ -10,6 +11,7 @@ import { WordpressService } from 'src/app/services/wordpress.service';
 export class PostComponent implements OnInit {
 
   @Input() post: Post;
+  @Input() options: PostOptions;
 
   public thumbnail: Image;
 
@@ -17,11 +19,11 @@ export class PostComponent implements OnInit {
     public wordpress: WordpressService
   ) { }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     if (this.post.thumbnail) {
-      this.wordpress.getMedia({id: this.post.thumbnail}).subscribe(
+      this.wordpress.getMedia(this.post.thumbnail.toString()).subscribe(
         media => {
-          this.thumbnail = media[0].sizes['medium']
+          this.thumbnail = media.sizes['medium']
         }
       );
     }

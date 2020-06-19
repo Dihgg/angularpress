@@ -4,9 +4,10 @@ import { LocationStrategy, Location } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem, Block, Media, Image } from '../services/wordpress.interface';
+import { Post, User, MenuItem, Block, Media, Image, PostArgs } from '../services/wordpress.interface';
 
 declare const BASE_HREF: string;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,8 +31,8 @@ export class WordpressService {
    * @param {string} path caminho para REST API 
    * @param {Params} params Parâmetros URL GET
    */
-  private get<T>(path: string, params: Params = {}): Observable<T> {
-    return this.http.get<T>(`${this.URL}${path}/`, {
+  private get<T>(path: string, params: Params = {}, id?: string): Observable<T> {
+    return this.http.get<T>(`${this.URL}${path}/${id || ''}`, {
       headers: this.headers,
       params: params
     });
@@ -43,18 +44,20 @@ export class WordpressService {
    * @param {'posts' | 'pages'} type Tipo de post para recuperação
    * @returns {Observable<Post[]>} Retorna um observable com array de posts
    */
-  public getPosts(params: Params, type: 'posts' | 'pages' | string = 'posts'): Observable<Post[]> {
+  public getPosts(params: PostArgs, type: 'posts' | 'pages' | string = 'posts'): Observable<Post[]> {
     return this.get<Post[]>(type, params).pipe(
       map((res: any) => {
         let posts: Post[] = [];
         res.forEach((post: any) => {
+          console.log('POST', post);
+          
           posts.push({
             id: post.id,
             url: post.link,
-            title: post.title.rendered,
+            title: post.title.rendered.replace(/(<([^>]+)>)/ig, ''),
             date: post.date,
-            excerpt: post.excerpt.rendered,
-            content: post.content.rendered,
+            excerpt: post.excerpt.rendered.replace(/(<([^>]+)>)/ig, ''),
+            content: post.content.rendered.replace(/(<([^>]+)>)/ig, ''),
             blocks: post.blocks.map((block: any): Block => ({
               name: block.blockName,
               attrs: block.attrs,
@@ -69,8 +72,6 @@ export class WordpressService {
       catchError(error => throwError(error))
     );
   }
-
-
 
   /**
    * Recupera Usuário
@@ -116,11 +117,16 @@ export class WordpressService {
     );
   }
 
-  public getMedia(params: Params): Observable<Media[]> {
-    return this.get<Media>(`media`, params)
-    .pipe(map((res: any): Media[] => {
-      const medias: Media[] = [];
-      res.forEach((media: any) => medias.push({
+  /**
+   * Recupera informações sobre uma mídia
+   * @param {string} id id da mídia
+   * @returns {Obeservable<Media>} Observable da resposta com uma mídia 
+   */
+  public getMedia(id: string): Observable<Media> {
+    return this.get<Media>(`media`, null, id)
+    .pipe(map((media: any): Media => {
+      // const medias: Media[] = [];
+      return {
         id: media.id,
         type: media.media_type,
         url: media.source_url,
@@ -138,8 +144,7 @@ export class WordpressService {
           });
           return images;
         })()
-      }));
-      return medias;
+      }
     }),
     catchError(error => throwError(error))
     );

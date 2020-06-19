@@ -5,11 +5,17 @@ import { YoutubeModule } from './youtube/youtube.module';
 import { LatestPostsComponent } from './latest-posts/latest-posts.component';
 import { PostComponent } from './post/post.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { TruncatePipe } from '../pipes/truncate.pipe';
 
 
 
 @NgModule({
-  declarations: [BlocksComponent, LatestPostsComponent, PostComponent],
+  declarations: [
+    TruncatePipe,
+    BlocksComponent,
+    LatestPostsComponent,
+    PostComponent
+  ],
   imports: [
     AppRoutingModule,
     CommonModule,
