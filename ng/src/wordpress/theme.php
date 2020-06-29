@@ -22,3 +22,5 @@
 
 	// Filters
 	require_once('filters/filters.php');
+	
+	

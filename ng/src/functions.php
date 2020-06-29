@@ -1,4 +1,4 @@
 <?php
 
-require_once('backend/theme.php');
-require_once('backend/api.php');
+require_once('wordpress/theme.php');
+require_once('wordpress/api.php');

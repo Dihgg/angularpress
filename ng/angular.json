@@ -29,6 +29,7 @@
               "src/assets",
               "src/functions.php",
               "src/backend",
+              "src/wordpress",
               "src/style.css",
               "src/screenshot.png"
             ],
