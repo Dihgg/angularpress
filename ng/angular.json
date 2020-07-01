@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "deployUrl": "<?php echo get_stylesheet_directory_uri() ?>/",
+            "deployUrl": "angularpress/wp-content/themes/gamefoss/",
             "outputPath": "../wp-content/themes/gamefoss/",
             "index": "src/index.php",
             "main": "src/main.ts",
@@ -28,6 +28,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/functions.php",
+              "src/theme.css.php",
               "src/footer.php",
               "src/wordpress",
               "src/style.css",
@@ -36,6 +37,11 @@
             "styles": [
               "src/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/scss/"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
@@ -46,6 +52,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "deployUrl": "wp-content/themes/gamefoss/",
               "baseHref": "/",
               "optimization": true,
               "outputHashing": "all",

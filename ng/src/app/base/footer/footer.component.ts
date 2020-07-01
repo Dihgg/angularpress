@@ -11,14 +11,17 @@ import { Title } from '@angular/platform-browser';
 export class FooterComponent implements OnInit {
 
   public footer: MenuItem[] = [];
+  public showSocials: boolean;
 
   constructor(
     public wordpress: WordpressService,
     public title: Title
-  ) { }
+  ) {
+    this.showSocials = WordpressService.THEME.options.footer.socials;
+  }
 
   ngOnInit(): void {
-    this.wordpress.getMenu('Footer').subscribe(
+    this.wordpress.getMenu('footer-links').subscribe(
       menu => (this.footer = menu)
     )
   }

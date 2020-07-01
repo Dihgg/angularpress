@@ -15,6 +15,7 @@ import { HeaderComponent } from './base/header/header.component';
 import { BlocksModule } from './blocks/blocks.module';
 import { FooterComponent } from './base/footer/footer.component';
 import { MenuComponent } from './base/menu/menu.component';
+import { SocialsComponent } from './base/socials/socials.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { MenuComponent } from './base/menu/menu.component';
     AuthorComponent,
     HeaderComponent,
     FooterComponent,
-    MenuComponent
+    MenuComponent,
+    SocialsComponent
   ],
   imports: [
     BlocksModule,

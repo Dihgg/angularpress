@@ -4,10 +4,11 @@ import { LocationStrategy, Location } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem, Block, Media, Image, PostArgs } from '../services/wordpress.interface';
+import { Post, User, MenuItem, Block, Media, Image, PostArgs, THEME } from '../services/wordpress.interface';
 import { sanitizeHtml } from '../utils/utils';
 
 declare const BASE_HREF: string;
+declare const THEME: THEME;
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class WordpressService {
   private context = "v2";
   private headers = {};
 
-  public static BASE_HREF = BASE_HREF;
+  public static BASE_HREF: string = BASE_HREF;
+  public static THEME: THEME = THEME;
 
   constructor(
     private http: HttpClient,
@@ -99,13 +101,16 @@ export class WordpressService {
 
   /**
    * Recupera um Menu do Wordpress
-   * @param {string} name Nome do menu
+   * @param {string} location Nome do menu
    * @returns {Observable<MenuItem[]>} Retorna um observable com uma lista de itens de menu
    */
-  public getMenu(name: string): Observable<MenuItem[]> {
-    return this.get<MenuItem>(`menu`, { name: name }).pipe(
+  public getMenu(location: string): Observable<MenuItem[]> {
+    return this.get<MenuItem>(`menu`, { location: location }).pipe(
       map((res: any) => {
         let items: MenuItem[] = [];
+        if (!res) {
+          return [];
+        }
         res.forEach((item: any) => {
           items.push({
             type: (item.post_type === 'custom') ? 'custom' : 'post',
@@ -152,5 +157,9 @@ export class WordpressService {
     }),
     catchError(error => throwError(error))
     );
+  }
+
+  public getTHEME(): THEME {
+    return WordpressService.THEME;
   }
 }

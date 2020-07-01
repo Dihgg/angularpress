@@ -11,14 +11,17 @@ import { Title } from '@angular/platform-browser';
 export class HeaderComponent implements OnInit {
 
   public header: MenuItem[] = [];
+  public showSocials: boolean;
 
   constructor(
     public wordpress: WordpressService,
     public title: Title
-  ) { }
+  ) {
+    this.showSocials = WordpressService.THEME.options.header.socials;
+  }
 
   ngOnInit(): void {
-    this.wordpress.getMenu('Main Menu').subscribe(
+    this.wordpress.getMenu('main-nav').subscribe(
       menu => (this.header = menu)
     );
   }
