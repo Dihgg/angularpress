@@ -2,8 +2,7 @@
 @import '~bootstrap/scss/bootstrap-grid';
 
 @import "scss/partials/partials";
-@import "scss/fonts";
-@import "scss/icons";
+@import "scss/typography";
 
 body {
 	position: relative;
@@ -17,6 +16,7 @@ body {
 
 ul, ol {
 	list-style: none;
+	padding: 0;
 }
 a {
 	text-decoration: none;
