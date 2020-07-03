@@ -16,6 +16,7 @@ import { BlocksModule } from './blocks/blocks.module';
 import { FooterComponent } from './base/footer/footer.component';
 import { MenuComponent } from './base/menu/menu.component';
 import { SocialsComponent } from './base/socials/socials.component';
+import { IconsModule } from './icons/icons.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { SocialsComponent } from './base/socials/socials.component';
     BlocksModule,
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    IconsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

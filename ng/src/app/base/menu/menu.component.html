@@ -5,9 +5,11 @@
   <div class="col-3 d-lg-none">
     <button
       *ngIf="toggler"
-      class="icon-menu d-lg-none"
+      class="d-lg-none"
       (click)="menuToggled = !menuToggled"
-    ></button>
+    >
+      <i-feather name="menu"></i-feather>
+    </button>
   </div>
   <div class="col-auto col-lg-4">
     <a *ngIf="showHome" [routerLink]="['/']" class="menu__home">
@@ -33,7 +35,7 @@
     </a>
   </div>
   <div
-    class="menu__container theme--menu-bg theme--menu-color col col-sm-5 col-lg-auto"
+    class="menu__container theme--menu-bg theme--menu-color col-10 col-sm-5 col-lg-auto"
     [class.menu__container--toggled]="menuToggled"
     [attr.aria-hidden]="!menuToggled"
   >
@@ -45,7 +47,8 @@
           [routerLink]="link.urlRouter"
           [target]="link.target"
           [ngClass]="link.classes"
-          >{{ link.title }}</a
+        >
+          <strong>{{ link.title }}</strong></a
         >
         <a
           *ngIf="!link.urlRouter"
@@ -53,11 +56,12 @@
           [href]="link.url"
           [target]="link.target"
           [ngClass]="link.classes"
-          >{{ link.title }}</a
+        >
+          <strong>{{ link.title }}</strong></a
         >
       </li>
     </ul>
     <ng-content></ng-content>
   </div>
-  <div class="col-3 col-lg-4">a</div>
+  <div class="col-3 col-lg-4">sarch</div>
 </nav>

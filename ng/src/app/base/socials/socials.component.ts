@@ -21,8 +21,8 @@ export class SocialsComponent implements OnInit {
     );
   }
 
-  public getClass(url: string): string {
-    return `icon-${new URL(url).hostname.match(/^(.*?)\./)[1]}`;
+  public getIcon(url: string): string {
+    return new URL(url).hostname.match(/^(.*?)\./)[1];
   }
 
 }

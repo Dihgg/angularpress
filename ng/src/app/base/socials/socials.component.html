@@ -5,6 +5,7 @@
     target="_blank"
     [title]="social.title"
     class="social__item theme--menu-color"
-    [ngClass]="getClass(social.url)"
-  ></a>
+  >
+    <i-feather [name]="getIcon(social.url)"></i-feather>
+  </a>
 </nav>
