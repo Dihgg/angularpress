@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { WordpressService } from './services/wordpress.service';
+import { THEME } from './services/wordpress.interface';
 
 @Component({
   selector: 'app-root',

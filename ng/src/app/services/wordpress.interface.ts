@@ -62,3 +62,19 @@ export interface Media {
 	alt_text?: string;
 
 }
+
+export interface THEME {	
+	logos: {
+		mobile: string;
+		desktop: string;
+	};
+
+	options: {
+		header: {
+			socials: boolean;
+		};
+		footer: {
+			socials: boolean;
+		} 
+	};
+}

@@ -1,3 +1,10 @@
-<header id="header">
-	<app-menu [menu]="header" [showHome]="true"></app-menu>
+<header id="header" class="theme--menu-bg theme--menu-color container-fluid">
+  <app-menu
+    [menu]="header"
+    class="menu-header"
+    [showHome]="true"
+    [toggler]="true"
+  >
+    <app-socials *ngIf="showSocials"></app-socials>
+  </app-menu>
 </header>

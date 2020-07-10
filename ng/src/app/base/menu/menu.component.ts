@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MenuItem } from 'src/app/services/wordpress.interface';
+import { MenuItem, THEME } from 'src/app/services/wordpress.interface';
 import { Title } from '@angular/platform-browser';
 import { WordpressService } from 'src/app/services/wordpress.service';
 
@@ -11,8 +11,14 @@ import { WordpressService } from 'src/app/services/wordpress.service';
 export class MenuComponent implements OnInit {
 
   public items: MenuItem[] = [];
+  public logos: THEME['logos'];
+
+  public menuToggled = false;
 
   @Input() showHome = false;
+  @Input() toggler = false;
+  @Input() search = false;
+
   @Input()
   set menu(items: MenuItem[]) {
     this.items = [];
@@ -22,13 +28,20 @@ export class MenuComponent implements OnInit {
         item.url = null;
       }
       this.items.push(item);
-    });    
+    });
   }
 
   constructor(
-    public title: Title
-  ) { }
+    public title: Title,
+    public wordpress: WordpressService
+  ) {
+    this.logos = WordpressService.THEME.logos;
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    if (!this.toggler) {
+      this.menuToggled = true;
+    }
+  }
 
 }

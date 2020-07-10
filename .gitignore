@@ -1,6 +1,6 @@
 *.code-workspace
 **/node_modules/
-wp-content/themes/
-wp-content/uploads/
-wp-content/languages/
+**/wp-content/themes/
+**/wp-content/uploads/
+**/wp-content/languages/
 !wp-content/themes/index.php

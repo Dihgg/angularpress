@@ -5,6 +5,15 @@
 			'name'
 		),
 		'callback' => function($params) {
-			return wp_get_nav_menu_items($params['name']);
+			$location = $params['location'];
+
+			// Get all locations
+			$locations = get_nav_menu_locations();
+
+			// Get object id by location
+			$menu_obj = wp_get_nav_menu_object( $locations[$location] );
+
+			// Get menu items by menu name
+			return wp_get_nav_menu_items($menu_obj->name);
 		}
 	));
