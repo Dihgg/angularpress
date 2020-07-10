@@ -4,10 +4,11 @@
   position: fixed;
   z-index: 10;
   @include bp(false, $s-md) {
-	  height: 64px;
+	  height: 60px;
     ::ng-deep .menu {
       &__container {
-        height: calc(100vh - 64px);
+        top: 60px;
+        height: calc(100vh - 60px);
         display: flex;
         flex-direction: column;
         justify-content: space-between;

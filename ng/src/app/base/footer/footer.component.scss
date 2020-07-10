@@ -1,0 +1,27 @@
+@import "partials/partials";
+
+#footer {
+  ::ng-deep {
+    .menu {
+      @include bp(false, $s-md) {
+        padding-top: $gutter * 2;
+        text-align: center;
+        > div {
+          width: 100%;
+          max-width: none;
+          flex: auto;
+        }
+      }
+      @include bp($s-md) {
+        align-items: start !important;
+      }
+      .menu__item__link {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+      .menu__submenu .menu__item__link {
+        font-weight: normal;
+      }
+    }
+  }
+}

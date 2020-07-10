@@ -1,0 +1,13 @@
+@import "partials/partials";
+
+.social {
+  display: flex;
+  justify-content: center;
+  margin: $gutter auto;
+  @include bp($s-md) {
+	justify-content: space-evenly;
+  }
+  &__item {
+	margin: auto $gutter;
+  }
+}

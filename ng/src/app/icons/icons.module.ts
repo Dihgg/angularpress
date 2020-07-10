@@ -4,7 +4,8 @@ import {
   Menu,
   Facebook,
   Twitter,
-  Search
+  Search,
+  ExternalLink
 } from 'angular-feather/icons';
 
 @NgModule({
@@ -14,7 +15,8 @@ import {
       Menu,
       Facebook,
       Twitter,
-      Search
+      Search,
+      ExternalLink
     })
   ],
   exports: [

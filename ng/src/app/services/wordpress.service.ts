@@ -99,6 +99,17 @@ export class WordpressService {
     );
   }
 
+  private getMenuItem(item: any): MenuItem {
+    return {
+      ID: parseInt(item.ID),
+      type: (item.post_type === 'custom') ? 'custom' : 'post',
+      title: item.title,
+      url: item.url,
+      classes: item.classes,
+      target: item.target || null
+    }
+  }
+
   /**
    * Recupera um Menu do Wordpress
    * @param {string} location Nome do menu
@@ -107,18 +118,27 @@ export class WordpressService {
   public getMenu(location: string): Observable<MenuItem[]> {
     return this.get<MenuItem>(`menu`, { location: location }).pipe(
       map((res: any) => {
+        console.log('RES', res);
         let items: MenuItem[] = [];
         if (!res) {
           return [];
         }
         res.forEach((item: any) => {
-          items.push({
-            type: (item.post_type === 'custom') ? 'custom' : 'post',
-            title: item.title,
-            url: item.url,
-            classes: item.classes,
-            target: item.target || null
-          })
+          if (parseInt(item.menu_item_parent)) {
+            let index: number;
+            items.forEach((obj: any, i: number) => {
+              if (obj.ID === parseInt(item.menu_item_parent)) {
+                index = i;
+              }
+            });
+            if (items[index].items) {
+              items[index].items.push(this.getMenuItem(item));
+            } else {
+              items[index].items = [this.getMenuItem(item)];
+            }
+          } else {
+            items.push(this.getMenuItem(item));
+          }
         });
         return items;
       }),
@@ -133,30 +153,30 @@ export class WordpressService {
    */
   public getMedia(id: number): Observable<Media> {
     return this.get<Media>(`media`, null, id)
-    .pipe(map((media: any): Media => {
-      return {
-        id: media.id,
-        type: media.media_type,
-        url: media.source_url,
-        sizes: (() => {
-          const images: Image[] = [];
-          Object.getOwnPropertyNames(media.media_details.sizes).forEach((key: string) => {
-            const image: any = media.media_details.sizes[key];            
-            images[key] = {
-              size: key,
-              width: image.width,
-              height: image.height,
-              url: image.source_url,
-              alt: media.alt_text,
-              caption: sanitizeHtml(media.caption.rendered)
-            };
-          });
-          return images;
-        })()
-      }
-    }),
-    catchError(error => throwError(error))
-    );
+      .pipe(map((media: any): Media => {
+        return {
+          id: media.id,
+          type: media.media_type,
+          url: media.source_url,
+          sizes: (() => {
+            const images: Image[] = [];
+            Object.getOwnPropertyNames(media.media_details.sizes).forEach((key: string) => {
+              const image: any = media.media_details.sizes[key];
+              images[key] = {
+                size: key,
+                width: image.width,
+                height: image.height,
+                url: image.source_url,
+                alt: media.alt_text,
+                caption: sanitizeHtml(media.caption.rendered)
+              };
+            });
+            return images;
+          })()
+        }
+      }),
+        catchError(error => throwError(error))
+      );
   }
 
   public getTHEME(): THEME {

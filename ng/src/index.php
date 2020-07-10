@@ -10,7 +10,8 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 
-<body class="theme--bg theme--color">
+<body <?php body_class(array('theme--bg', 'theme--color')) ?>>
+  <?php wp_admin_bar_render(); ?>
   <app-root></app-root>
   <?php get_footer(); ?>
   <?php require_once('theme.css.php'); ?>

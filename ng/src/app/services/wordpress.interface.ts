@@ -31,12 +31,14 @@ export interface Post {
 }
 
 export interface MenuItem {
+	ID: number;
 	type: 'post' | 'custom';
 	title: string;
 	url: string;
 	classes: string[];
 	target: string;
 	urlRouter?: string;
+	items?: MenuItem[];
 }
 
 export interface Block {

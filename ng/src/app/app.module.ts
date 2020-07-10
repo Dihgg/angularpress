@@ -17,6 +17,9 @@ import { FooterComponent } from './base/footer/footer.component';
 import { MenuComponent } from './base/menu/menu.component';
 import { SocialsComponent } from './base/socials/socials.component';
 import { IconsModule } from './icons/icons.module';
+import { MenuLinkComponent } from './base/menu/menu-link/menu-link.component';
+import { MenuModule } from './base/menu/menu.module';
+import { SocialsModule } from './base/socials/socials.module';
 
 @NgModule({
   declarations: [
@@ -30,15 +33,15 @@ import { IconsModule } from './icons/icons.module';
     AuthorComponent,
     HeaderComponent,
     FooterComponent,
-    MenuComponent,
-    SocialsComponent
   ],
   imports: [
     BlocksModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    IconsModule
+    IconsModule,
+    MenuModule,
+    SocialsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

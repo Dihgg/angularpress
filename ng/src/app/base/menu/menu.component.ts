@@ -23,12 +23,34 @@ export class MenuComponent implements OnInit {
   set menu(items: MenuItem[]) {
     this.items = [];
     items.forEach((item: MenuItem) => {
-      if (item.url.includes(WordpressService.BASE_HREF) && !item.target) {
-        item.urlRouter = item.url.replace(WordpressService.BASE_HREF, "");
-        item.url = null;
+      item = this.setUrl(item);
+      if (item.items) {
+        item.classes.push('menu__item__link--has-child');
+        item.items.forEach((item_: MenuItem, i: number) => {
+          item.items[i] = this.setUrl(item_);
+        });
       }
       this.items.push(item);
+      /* if (item.items) {
+        item.items.forEach((item_: MenuItem, i: number) => {
+          item_ = this.setUrl(item_);
+          if (this.items[i].items) {
+            this.items[i].items.push(item_);
+          } else {
+            this.items[i].items = [item_];
+          }
+        });
+      } */
     });
+    console.log('MENU', this.items);
+  }
+
+  public setUrl(item: MenuItem): MenuItem {
+    if (item.url.includes(WordpressService.BASE_HREF) && !item.target) {
+      item.urlRouter = item.url.replace(WordpressService.BASE_HREF, "");
+      item.url = null;
+    }
+    return item;
   }
 
   constructor(

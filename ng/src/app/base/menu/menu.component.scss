@@ -1,21 +1,17 @@
 @import "partials/partials";
 
 .menu {
-  padding-top: $gutter;
-  padding-bottom: $gutter;
+  padding: $gutter 0;
+  // padding-bottom: $gutter;
   position: relative;
   $self: &;
-  
-  &__home {
-    &__logo img {
-      width: 120px;
-      height: auto;
-      @include bp($s-sm) {
-        width: 240px;
-        height: auto;
-      }
-    }
+
+  @include bp($s-md) {
+    // padding-left: $gutter;
+    padding: 0 $gutter;
   }
+
+
   &--has-toggler {
     #{$self}__container {
       position: absolute;
@@ -33,6 +29,50 @@
         position: relative;
         left: auto;
       }
+    }
+  }
+
+  &__home {
+    &__logo img {
+      width: 100%;
+      height: auto;
+      @include bp(false, $s-md) {
+        width: 120px;
+      }
+      @include bp($s-lg) {
+        max-width: 200px;
+      }
+      /* @include bp($s-sm) {
+        width: 240px;
+        height: auto;
+      }
+      @include bp($s-md) {
+        width: 180px;
+      }
+      @include bp($s-lg) {
+        width: 120px;
+      } */
+    }
+  }
+
+  &__container {
+    @include bp($s-md) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &__items {
+    @include bp($s-md) {
+      display: flex;
+      align-items: flex-start;
+    }
+  }
+  &__item {
+    margin: $gutter auto;
+    @include bp($s-md) {
+      margin: 0 $gutter;
     }
   }
 }

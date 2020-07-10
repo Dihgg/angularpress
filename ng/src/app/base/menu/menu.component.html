@@ -1,5 +1,5 @@
 <nav
-  class="menu row align-items-center justify-content-between"
+  class="menu row align-items-center ali justify-content-between"
   [class.menu--has-toggler]="toggler"
 >
   <div class="col-3 d-lg-none">
@@ -11,7 +11,9 @@
       <i-feather name="menu" class="theme--menu-color"></i-feather>
     </button>
   </div>
-  <div class="col-auto col-lg-4">
+  <div
+    class="col-6 col-lg-2 pl-lg-0 d-flex justify-content-center justify-content-lg-start"
+  >
     <a *ngIf="showHome" [routerLink]="['/']" class="menu__home">
       <picture
         *ngIf="logos && (logos.mobile || logos.desktop)"
@@ -35,33 +37,28 @@
     </a>
   </div>
   <div
-    class="menu__container theme--menu-bg theme--menu-color col-10 col-sm-5 col-lg-auto"
+    class="menu__container theme--menu-bg theme--menu-color col-10 col-sm-5 col-lg-9"
     [class.menu__container--toggled]="menuToggled"
-    [attr.aria-hidden]="!menuToggled"
+    [attr.aria-hidden]="!menuToggled || null"
   >
     <ul class="menu__items">
-      <li *ngFor="let link of items" class="menu__item">
-        <a
-          *ngIf="link.urlRouter"
-          class="menu__item__link theme--menu-color"
-          [routerLink]="link.urlRouter"
-          [target]="link.target"
-          [ngClass]="link.classes"
-        >
-          <strong>{{ link.title }}</strong></a
-        >
-        <a
-          *ngIf="!link.urlRouter"
-          class="menu__item__link theme--menu-color"
-          [href]="link.url"
-          [target]="link.target"
-          [ngClass]="link.classes"
-        >
-          <strong>{{ link.title }}</strong></a
-        >
+      <li
+        *ngFor="let link of items"
+        class="menu__item"
+      >
+        <app-menu-link [link]="link"></app-menu-link>
+        <ul *ngIf="link.items" class="menu__submenu">
+          <li *ngFor="let link_ of link.items" class="menu__item--subitem">
+            <app-menu-link [link]="link_"></app-menu-link>
+          </li>
+        </ul>
       </li>
     </ul>
     <ng-content></ng-content>
   </div>
-  <div class="col-3 col-lg-4">sarch</div>
+  <div class="col-3 col-lg-1 pr-lg-0 d-flex flex-row-reverse">
+    <button *ngIf="search" class="btn btn--transparent">
+      <i-feather name="search" class="theme--menu-color"></i-feather>
+    </button>
+  </div>
 </nav>
