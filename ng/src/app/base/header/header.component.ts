@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { WordpressService } from 'src/app/services/wordpress.service';
-import { MenuItem } from 'src/app/services/wordpress.interface';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-header',
@@ -9,21 +7,13 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-
-  public header: MenuItem[] = [];
   public showSocials: boolean;
+  public menuToggled = false;
 
-  constructor(
-    public wordpress: WordpressService,
-    public title: Title
-  ) {
+  constructor() {
     this.showSocials = WordpressService.THEME.options.header.socials;
   }
 
-  ngOnInit(): void {
-    this.wordpress.getMenu('main-nav').subscribe(
-      menu => (this.header = menu)
-    );
-  }
+  ngOnInit(): void { }
 
 }

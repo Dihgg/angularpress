@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { MenuItem, THEME } from 'src/app/services/wordpress.interface';
 import { Title } from '@angular/platform-browser';
 import { WordpressService } from 'src/app/services/wordpress.service';
@@ -13,39 +13,31 @@ export class MenuComponent implements OnInit {
   public items: MenuItem[] = [];
   public logos: THEME['logos'];
 
-  public menuToggled = false;
+  public submenu = false;
+  public submenuH: number = 0;
 
   @Input() showHome = false;
-  @Input() toggler = false;
-  @Input() search = false;
+  @Input() classes: string[] = [];
 
-  @Input()
-  set menu(items: MenuItem[]) {
+  @ViewChild('$submenu') $submenu: ElementRef;
+
+  @Input() location: string;
+  public setMenu(items: MenuItem[]) {
     this.items = [];
     items.forEach((item: MenuItem) => {
       item = this.setUrl(item);
       if (item.items) {
-        item.classes.push('menu__item__link--has-child');
+        item.classes.push('menu__item__link--has-child', 'mb-2');
         item.items.forEach((item_: MenuItem, i: number) => {
           item.items[i] = this.setUrl(item_);
+          item.items[i].classes.push('mb-2');
         });
       }
       this.items.push(item);
-      /* if (item.items) {
-        item.items.forEach((item_: MenuItem, i: number) => {
-          item_ = this.setUrl(item_);
-          if (this.items[i].items) {
-            this.items[i].items.push(item_);
-          } else {
-            this.items[i].items = [item_];
-          }
-        });
-      } */
     });
-    console.log('MENU', this.items);
   }
 
-  public setUrl(item: MenuItem): MenuItem {
+  private setUrl(item: MenuItem): MenuItem {
     if (item.url.includes(WordpressService.BASE_HREF) && !item.target) {
       item.urlRouter = item.url.replace(WordpressService.BASE_HREF, "");
       item.url = null;
@@ -53,17 +45,24 @@ export class MenuComponent implements OnInit {
     return item;
   }
 
-  constructor(
-    public title: Title,
-    public wordpress: WordpressService
-  ) {
-    this.logos = WordpressService.THEME.logos;
+  public toggleSubmenu() {
+    this.submenu = !this.submenu;
+    const height: number = this.$submenu.nativeElement.firstChild.offsetHeight;
+    if (this.submenu) {
+      this.submenuH = height;
+    } else {
+      this.submenuH = 0;
+    }
   }
 
+  constructor(
+    public wordpress: WordpressService
+  ) { }
+
   ngOnInit(): void {
-    if (!this.toggler) {
-      this.menuToggled = true;
-    }
+    this.wordpress.getMenu(this.location).subscribe(
+      menu => this.setMenu(menu)
+    );
   }
 
 }

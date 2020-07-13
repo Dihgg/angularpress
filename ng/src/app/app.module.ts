@@ -20,6 +20,7 @@ import { IconsModule } from './icons/icons.module';
 import { MenuLinkComponent } from './base/menu/menu-link/menu-link.component';
 import { MenuModule } from './base/menu/menu.module';
 import { SocialsModule } from './base/socials/socials.module';
+import { LogoModule } from './base/logo/logo.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { SocialsModule } from './base/socials/socials.module';
     HttpClientModule,
     IconsModule,
     MenuModule,
-    SocialsModule
+    SocialsModule,
+    LogoModule
   ],
   providers: [],
   bootstrap: [AppComponent]

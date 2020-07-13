@@ -1,5 +1,33 @@
-<footer id="footer" class="theme--menu-bg theme--menu-color container-fluid pt-5 pb-2">
-	<app-menu [menu]="footer" [showHome]="true">
-	</app-menu>
-	<app-socials *ngIf="showSocials"></app-socials>
+<footer
+  id="footer"
+  class="theme--menu-bg theme--menu-color container-fluid pt-5 pb-2"
+>
+  <div class="row">
+    <div class="col-12 col-lg-2 d-flex justify-content-center">
+      <app-logo></app-logo>
+    </div>
+    <div class="col-12 col-lg-10 my-3 mt-lg-0 d-flex justify-content-center">
+      <app-menu
+        class="container-fluid"
+        location="footer-links"
+        [showHome]="true"
+      >
+      </app-menu>
+    </div>
+    <div
+      class="col-12 d-flex justify-content-center justify-content-lg-between"
+    >
+      <app-socials *ngIf="showSocials"></app-socials>
+    </div>
+  </div>
+  <div class="row">
+    <p class="signature col-12 d-flex justify-content-end">
+      <small>
+        Desenvolvido por:&nbsp;
+		<a href="//dihgg.com" target="_blank">
+			Dihgg
+		</a>
+      </small>
+    </p>
+  </div>
 </footer>

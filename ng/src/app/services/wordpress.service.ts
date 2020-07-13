@@ -179,7 +179,7 @@ export class WordpressService {
       );
   }
 
-  public getTHEME(): THEME {
+  public THEME(): THEME {
     return WordpressService.THEME;
   }
 }

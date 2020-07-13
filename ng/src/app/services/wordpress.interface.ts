@@ -65,7 +65,8 @@ export interface Media {
 
 }
 
-export interface THEME {	
+export interface THEME {
+	TEMPLATE_URI: string,	
 	logos: {
 		mobile: string;
 		desktop: string;

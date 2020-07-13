@@ -18,8 +18,9 @@ body {
     #header {
       margin-top: 46px;
       @include bp(false, 783px) {
-        .menu__container {
-          height: calc(100vh - 60px - 46px);
+        .header__menu {
+          top: calc(40px + 46px) !important;
+          height: calc(100vh - 40px - 46px) !important;
         }
       }
       @include bp(783px) {
