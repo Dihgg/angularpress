@@ -1,3 +1,4 @@
+<?php require_once('wordpress/languages.php'); ?>
 <!doctype html>
 <html <?php echo get_language_attributes() ?>>
 
@@ -32,10 +33,13 @@
           socials: <?php echo (get_theme_mod('header_show_socials', 'on') === 'on') ? 'true' : 'false'; ?>
         },
         footer: {
-          socials: <?php echo (get_theme_mod('footer_show_socials', 'off') === 'on') ? 'true' : 'false'; ?>
+          socials: <?php echo (get_theme_mod('footer_show_socials', 'off') === 'on') ? 'true' : 'false'; ?>,
+          disclaimer: `<?php echo get_theme_mod('footer_disclaimer'); ?>`
         }
       }
-    }
+    };
+
+    const TRANSLATION = <?php echo translations(); ?>;
   </script>
 
 </body>

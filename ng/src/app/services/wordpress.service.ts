@@ -1,14 +1,15 @@
 import { Injectable, Type } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { LocationStrategy, Location } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem, Block, Media, Image, PostArgs, THEME } from '../services/wordpress.interface';
+import { Post, User, MenuItem, Block, Media, Image, PostArgs, THEME, /* TRANSLATION */ } from '../services/wordpress.interface';
 import { sanitizeHtml } from '../utils/utils';
 
 declare const BASE_HREF: string;
 declare const THEME: THEME;
+declare const TRANSLATION: {};
 
 @Injectable({
   providedIn: 'root'
@@ -21,23 +22,25 @@ export class WordpressService {
 
   public static BASE_HREF: string = BASE_HREF;
   public THEME: THEME = THEME;
+  public TRANSLATION = TRANSLATION; 
 
   constructor(
     private http: HttpClient,
     private location: Location
   ) {
-    this.URL = `${this.location.prepareExternalUrl('wp-json')}/wp/${this.context}/`
+    this.URL = `${this.location.prepareExternalUrl('wp-json')}/wp/${this.context}/`;
+    console.log('TRANS', this.TRANSLATION);
   }
 
   /**
    * Wrapper do método get
    * @param {string} path caminho para REST API 
-   * @param {Params} params Parâmetros URL GET
+   * @param {Params} query Parâmetros URL GET
    */
-  private get<T>(path: string, params: Params = {}, id?: string | number): Observable<T> {
-    return this.http.get<T>(`${this.URL}${path}/${id || ''}`, {
+  private get<T>(path: string, params: Params = {}): Observable<T> {
+    return this.http.get<T>(`${this.URL}${path}`, {
       headers: this.headers,
-      params: params
+      params: params,
     });
   }
 
@@ -151,7 +154,7 @@ export class WordpressService {
    * @returns {Obeservable<Media>} Observable da resposta com uma mídia 
    */
   public getMedia(id: number): Observable<Media> {
-    return this.get<Media>(`media`, null, id)
+    return this.get<Media>(`media/${id}`)
       .pipe(map((media: any): Media => {
         return {
           id: media.id,
@@ -177,4 +180,31 @@ export class WordpressService {
         catchError(error => throwError(error))
       );
   }
+
+  public translate(label: string): string {
+    return this.TRANSLATION[label] || '';
+  }
+  
+  /**
+   * Método para chamar a API de Tradução
+   * @param {TRANSLATION[]} terms Array de Termos para tradução
+   * @returns {Obeservable<TRANSLATION[]>} Observable da resposta com um array de termos traduzidos 
+   */
+  /* public getTranslation(terms: TRANSLATION[]): Observable<TRANSLATION[]> {
+    return this.get<string>(`translate`, { terms: JSON.stringify(terms) })
+      .pipe(map((res: any): TRANSLATION[] => {
+        return res;
+      }),
+        catchError(error => throwError(error)))
+  } */
+
+ /*  public translate(translations: TRANSLATION[], term: string): string {
+    let translated: string;
+    Object.values<TRANSLATION>(translations).forEach((translation: TRANSLATION) => {
+      if(translation.term === term) {
+        translated = translation.translation;
+      }
+    });
+    return translated;
+  } */
 }
