@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WordpressService } from 'src/app/services/wordpress.service';
-import { MenuItem } from 'src/app/services/wordpress.interface';
-import { Title } from '@angular/platform-browser';
+/* import { TRANSLATION } from 'src/app/services/wordpress.interface'; */
 
 @Component({
   selector: 'app-footer',
@@ -9,21 +8,22 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-
-  public footer: MenuItem[] = [];
   public showSocials: boolean;
 
+  public year: number = new Date().getFullYear();
+
+  /* public labels: TRANSLATION[] = [
+    {
+      term: 'All rights reserved'
+    }
+  ]; */
+
   constructor(
-    public wordpress: WordpressService,
-    public title: Title
+    public wordpress: WordpressService
   ) {
-    this.showSocials = WordpressService.THEME.options.footer.socials;
+    this.showSocials = wordpress.THEME.options.footer.socials;
   }
 
-  ngOnInit(): void {
-    this.wordpress.getMenu('footer-links').subscribe(
-      menu => (this.footer = menu)
-    )
-  }
+  ngOnInit(): void { }
 
 }

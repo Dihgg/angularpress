@@ -1,0 +1,15 @@
+@import "partials/partials";
+
+#footer {
+  ::ng-deep {
+    .menu__item__link {
+      font-weight: bold;
+    }
+    .menu__item__submenu .menu__item__link {
+      font-weight: normal;
+    }
+  }
+  .disclaimer {
+    max-width: 420px;
+  }
+}

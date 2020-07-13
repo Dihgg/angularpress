@@ -1,37 +1,37 @@
 @import "partials/partials";
 
 .menu {
-  padding-top: $gutter;
-  padding-bottom: $gutter;
-  position: relative;
   $self: &;
-  
-  &__home {
-    &__logo img {
-      width: 120px;
-      height: auto;
-      @include bp($s-sm) {
-        width: 240px;
-        height: auto;
-      }
+
+  &__items {
+    @include bp($s-md) {
+      display: flex;
+      align-items: flex-start;
     }
   }
-  &--has-toggler {
-    #{$self}__container {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 10;
-      @include bp(false, $s-md) {
-        transform: translateX(-100%);
+  &__item {
+    margin: $gutter auto;
+    position: relative;
+    @include bp(false, $s-md) {
+      &__submenu {
+        overflow: hidden;
+        height: 0;
+        transition: height $transition-default;
+      }
+      &__toggler {
+        position: absolute;
+        right: 0;
+        top: 0;
         transition: transform $transition-default;
         &--toggled {
-          transform: translateX(0%);
+          transform: rotate(180deg);
         }
       }
-      @include bp($s-md) {
-        position: relative;
-        left: auto;
+    }
+    @include bp($s-md) {
+      margin: 0 $gutter;
+      &__submenu {
+        height: auto !important;
       }
     }
   }

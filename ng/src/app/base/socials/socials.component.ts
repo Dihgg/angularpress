@@ -22,7 +22,16 @@ export class SocialsComponent implements OnInit {
   }
 
   public getIcon(url: string): string {
-    return new URL(url).hostname.match(/^(.*?)\./)[1];
+    const name: string = new URL(url).hostname.match(/^(.*?)\./)[1];
+    switch (name) {
+      case 'facebook':
+      case 'twitter':
+      case 'instagram':
+      case 'twitch':
+        return name;
+      default:
+        return 'external-link';
+    }
   }
 
 }

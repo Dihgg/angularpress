@@ -1,67 +1,29 @@
-<nav
-  class="menu row align-items-center justify-content-between"
-  [class.menu--has-toggler]="toggler"
->
-  <div class="col-3 d-lg-none">
-    <button
-      *ngIf="toggler"
-      class="btn btn--transparent d-lg-none"
-      (click)="menuToggled = !menuToggled"
-    >
-      <i-feather name="menu" class="theme--menu-color"></i-feather>
-    </button>
-  </div>
-  <div class="col-auto col-lg-4">
-    <a *ngIf="showHome" [routerLink]="['/']" class="menu__home">
-      <picture
-        *ngIf="logos && (logos.mobile || logos.desktop)"
-        class="menu__home__logo"
+<nav class="menu theme--menu-bg theme--menu-color" [ngClass]="classes">
+  <ul class="menu__items">
+    <li *ngFor="let link of items" class="menu__item">
+      <app-menu-link [link]="link"></app-menu-link>
+      <nav
+        #$submenu
+        *ngIf="link.items"
+        class="menu__item__submenu"
+        [class.menu__item__submenu--toggled]="submenu"
+        [style.height.px]="submenuH"
       >
-        <source
-          *ngIf="logos.desktop"
-          media="(min-width:768px)"
-          [attr.srcset]="logos.desktop"
-        />
-        <source
-          *ngIf="logos.mobile"
-          media="(max-width:768px)"
-          [attr.srcset]="logos.mobile"
-        />
-        <img [src]="logos.mobile || logos.desktop" [alt]="title.getTitle()" />
-      </picture>
-      <ng-container *ngIf="!logos.mobile && !logos.desktop">
-        {{ title.getTitle() }}
-      </ng-container>
-    </a>
-  </div>
-  <div
-    class="menu__container theme--menu-bg theme--menu-color col-10 col-sm-5 col-lg-auto"
-    [class.menu__container--toggled]="menuToggled"
-    [attr.aria-hidden]="!menuToggled"
-  >
-    <ul class="menu__items">
-      <li *ngFor="let link of items" class="menu__item">
-        <a
-          *ngIf="link.urlRouter"
-          class="menu__item__link theme--menu-color"
-          [routerLink]="link.urlRouter"
-          [target]="link.target"
-          [ngClass]="link.classes"
-        >
-          <strong>{{ link.title }}</strong></a
-        >
-        <a
-          *ngIf="!link.urlRouter"
-          class="menu__item__link theme--menu-color"
-          [href]="link.url"
-          [target]="link.target"
-          [ngClass]="link.classes"
-        >
-          <strong>{{ link.title }}</strong></a
-        >
-      </li>
-    </ul>
-    <ng-content></ng-content>
-  </div>
-  <div class="col-3 col-lg-4">sarch</div>
+        <ul>
+          <li *ngFor="let link_ of link.items" class="menu__item--subitem">
+            <app-menu-link [link]="link_"></app-menu-link>
+          </li>
+        </ul>
+      </nav>
+      <button
+        *ngIf="link.items"
+        class="menu__item__toggler btn btn--transparent theme--menu-color d-lg-none"
+        [class.menu__item__toggler--toggled]="submenu"
+        (click)="toggleSubmenu()"
+      >
+        <i-feather name="chevron-down"></i-feather>
+      </button>
+    </li>
+  </ul>
+  <ng-content></ng-content>
 </nav>

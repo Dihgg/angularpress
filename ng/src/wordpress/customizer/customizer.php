@@ -72,17 +72,27 @@ function logo_customizer($wp_customize) {
 	));
 	
 	$theme_logos = array(
+		// Desktop logo
+		array(
+			'slug' => 'desktop_logo_image',
+			'default' => '',
+			'label' => __('Desktop Logo', 'angularpress')
+		),
+		array(
+			'slug' => 'desktop_logo_image_footer',
+			'default' => '',
+			'label' => __('Desktop Logo (Footer)', 'angularpress')
+		),
 		// Mobile logo
 		array(
 			'slug' => 'mobile_logo_image',
 			'default' => '',
 			'label' => __('Mobile Logo', 'angularpress')
 		),
-		// Desktop logo
 		array(
-			'slug' => 'desktop_logo_image',
+			'slug' => 'mobile_logo_image_footer',
 			'default' => '',
-			'label' => __('Desktop Logo', 'angularpress')
+			'label' => __('Mobile Logo (Footer)', 'angularpress')
 		)
 	);
 
@@ -129,6 +139,7 @@ function options_customizer($wp_customize) {
 						'on' => __( 'On', 'angularpress' ),
 						'off' => __( 'Off', 'angularpress' )
 					),
+					'sanitize_callback' => 'angularpress_sanitize_select',
 					'label' => __('Show Socials', 'angularpress'),
 					'description' => __( 'Show Socials menu.', 'angularpress' )
 				),
@@ -147,8 +158,18 @@ function options_customizer($wp_customize) {
 						'on' => __( 'On', 'angularpress' ),
 						'off' => __( 'Off', 'angularpress' )
 					),
+					'sanitize_callback' => 'angularpress_sanitize_select',
 					'label' => __('Show Socials', 'angularpress'),
 					'description' => __( 'Show Socials menu.', 'angularpress' )
+				),
+				array(
+					'slug' => 'footer_disclaimer',
+					'default' => '',
+					'type'	=> 'textarea',
+					'choices' => null,
+					'sanitize_callback' => 'sanitize_textarea_field',
+					'label' => __('Disclaimer', 'angularpress'),
+					'description' => __( 'Text of footer Disclaimer.', 'angularpress' )
 				),
 			)
 		),
@@ -166,7 +187,7 @@ function options_customizer($wp_customize) {
 				$option['slug'],
 				array(
 					'default' => $option['default'],
-					'sanitize_callback' => 'angularpress_sanitize_select',
+					'sanitize_callback' => $option['sanitize_callback'],
 					'type' => 'theme_mod',
 					'capability' => 'edit_theme_options',
 					'transport' => 'refresh'
@@ -178,7 +199,7 @@ function options_customizer($wp_customize) {
 					$wp_customize,
 					$option['slug'],
 					array(
-						'type' => 'radio',
+						'type' => $option['type'],
 						'section' => $id,
 						'label' => $option['label'],
 						'description' => $option['description'],

@@ -1,0 +1,9 @@
+@import "partials/partials";
+
+.social {
+  display: flex;
+  justify-content: center;
+  @include bp($s-md) {
+    justify-content: space-evenly;
+  }
+}

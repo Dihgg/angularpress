@@ -21,6 +21,10 @@
 		);
 	}
 
+	add_action('after_setup_theme', function () {
+		load_theme_textdomain('angularpress', get_template_directory() . '/assets/languages');
+	});
+
 	// Filters
 	require_once('filters/filters.php');
 	

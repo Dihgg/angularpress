@@ -1,10 +1,45 @@
-<header id="header" class="theme--menu-bg theme--menu-color container-fluid">
-  <app-menu
-    [menu]="header"
-    class="menu-header"
-    [showHome]="true"
-    [toggler]="true"
-  >
-    <app-socials *ngIf="showSocials"></app-socials>
-  </app-menu>
+<header
+  id="header"
+  class="theme--menu-bg theme--menu-color container-fluid py-lg-2"
+>
+  <div class="row d-flex flex-wrap align-items-center justify-content-between">
+    <div class="col-2 d-flex justify-content-start">
+      <button
+        class="btn btn--transparent d-lg-none"
+        (click)="menuToggled = !menuToggled"
+      >
+        <i-feather name="menu" class="theme--menu-color"></i-feather>
+      </button>
+      <app-logo class="d-none d-lg-flex align-items-center"></app-logo>
+    </div>
+    <div
+      class="col-8 col-lg-auto d-flex align-items-center justify-content-center justify-content-lg-start flex-fill"
+    >
+      <app-logo class="d-lg-none"></app-logo>
+      <app-menu
+        location="main-nav"
+        class="header__menu"
+        [showHome]="true"
+        [class.header__menu--toggled]="menuToggled"
+        [attr.aria-hidden]="!menuToggled || null"
+        [classes]="[
+          'col',
+          'd-flex',
+          'flex-column',
+          'justify-content-space-between'
+        ]"
+      >
+        <app-socials
+          *ngIf="showSocials"
+          class="mt-auto mb-3 d-lg-none"
+        ></app-socials>
+      </app-menu>
+    </div>
+    <div class="col-2 col-lg-auto d-flex justify-content-end">
+      <app-socials *ngIf="showSocials" class="d-none d-lg-flex"></app-socials>
+      <button class="btn btn--transparent">
+        <i-feather name="search" class="theme--menu-color"></i-feather>
+      </button>
+    </div>
+  </div>
 </header>

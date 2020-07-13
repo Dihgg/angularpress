@@ -1,3 +1,5 @@
+import { TRANSLATIONS } from '@angular/core';
+
 export interface User {
 	id: string;
 	name: string;
@@ -31,12 +33,14 @@ export interface Post {
 }
 
 export interface MenuItem {
+	ID: number;
 	type: 'post' | 'custom';
 	title: string;
 	url: string;
 	classes: string[];
 	target: string;
 	urlRouter?: string;
+	items?: MenuItem[];
 }
 
 export interface Block {
@@ -63,10 +67,16 @@ export interface Media {
 
 }
 
-export interface THEME {	
+export interface THEME {
+	TEMPLATE_URI: string,	
+
 	logos: {
 		mobile: string;
 		desktop: string;
+		footer: {
+			mobile: string;
+			desktop: string;
+		};
 	};
 
 	options: {
@@ -75,6 +85,12 @@ export interface THEME {
 		};
 		footer: {
 			socials: boolean;
+			disclaimer: boolean;
 		} 
 	};
 }
+
+/* export interface TRANSLATION {
+	term: string;
+	translation?: string;
+} */

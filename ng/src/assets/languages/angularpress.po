@@ -1,0 +1,23 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Project-Id-Version: Angularpress\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: dihgg@dihgg.com\n"
+"MIME-Version: 1.0\n"
+"Language: pt_BR\n"
+"X-Generator: Poedit 2.3.1\n"
+
+#. Text in function
+#: gamefoss/index.php:40
+msgid "All rights reserved"
+msgstr "Todos os direitos reservados"
+
+#. Text in function
+#: gamefoss/index.php:40
+msgid "Developed by"
+msgstr "Desenvolvido por"
