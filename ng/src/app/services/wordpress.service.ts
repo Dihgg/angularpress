@@ -20,7 +20,7 @@ export class WordpressService {
   private headers = {};
 
   public static BASE_HREF: string = BASE_HREF;
-  public static THEME: THEME = THEME;
+  public THEME: THEME = THEME;
 
   constructor(
     private http: HttpClient,
@@ -118,7 +118,6 @@ export class WordpressService {
   public getMenu(location: string): Observable<MenuItem[]> {
     return this.get<MenuItem>(`menu`, { location: location }).pipe(
       map((res: any) => {
-        console.log('RES', res);
         let items: MenuItem[] = [];
         if (!res) {
           return [];
@@ -177,9 +176,5 @@ export class WordpressService {
       }),
         catchError(error => throwError(error))
       );
-  }
-
-  public THEME(): THEME {
-    return WordpressService.THEME;
   }
 }

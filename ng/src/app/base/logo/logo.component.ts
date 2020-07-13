@@ -13,12 +13,12 @@ export class LogoComponent implements OnInit {
   public logos: THEME['logos'];
 
   constructor(
-    public title: Title
+    public title: Title,
+    public wordpress: WordpressService
   ) {
-    this.logos = WordpressService.THEME.logos;
+    this.logos = wordpress.THEME.logos;
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

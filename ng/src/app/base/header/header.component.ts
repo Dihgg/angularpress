@@ -10,8 +10,10 @@ export class HeaderComponent implements OnInit {
   public showSocials: boolean;
   public menuToggled = false;
 
-  constructor() {
-    this.showSocials = WordpressService.THEME.options.header.socials;
+  constructor(
+    public wordpress: WordpressService
+  ) {
+    this.showSocials = wordpress.THEME.options.header.socials;
   }
 
   ngOnInit(): void { }

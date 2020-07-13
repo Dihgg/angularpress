@@ -9,8 +9,10 @@ import { WordpressService } from 'src/app/services/wordpress.service';
 export class FooterComponent implements OnInit {
   public showSocials: boolean;
 
-  constructor() {
-    this.showSocials = WordpressService.THEME.options.footer.socials;
+  constructor(
+    public wordpress: WordpressService
+  ) {
+    this.showSocials = wordpress.THEME.options.footer.socials;
   }
 
   ngOnInit(): void { }

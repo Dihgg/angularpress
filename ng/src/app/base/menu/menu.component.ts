@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { MenuItem, THEME } from 'src/app/services/wordpress.interface';
-import { Title } from '@angular/platform-browser';
 import { WordpressService } from 'src/app/services/wordpress.service';
 
 @Component({
