@@ -23,16 +23,13 @@
     <p
       class="footer__info col-12 d-flex justify-content-center justify-content-lg-end"
     >
-      <small
-        *ngIf="wordpress.THEME.options.footer.disclaimer"
-        class="disclaimer"
-      >
+      <small class="disclaimer">
         <span class="d-block mb-2">
           &copy;&nbsp;{{ year }}&nbsp;{{
             wordpress.translate("All rights reserved")
           }}.
         </span>
-        <span class="d-block">
+        <span *ngIf="wordpress.THEME.options.footer.disclaimer" class="d-block">
           {{ wordpress.THEME.options.footer.disclaimer }}
         </span>
       </small>

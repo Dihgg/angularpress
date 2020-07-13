@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "gamefoss": {
+    "angularpress": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,8 +17,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "deployUrl": "angularpress/wp-content/themes/gamefoss/",
-            "outputPath": "../wp-content/themes/gamefoss/",
+            "deployUrl": "angularpress/wp-content/themes/angularpress/",
+            "outputPath": "../wp-content/themes/angularpress/",
             "index": "src/index.php",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -52,7 +52,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "deployUrl": "wp-content/themes/gamefoss/",
+              "deployUrl": "wp-content/themes/angularpress/",
               "baseHref": "/",
               "optimization": true,
               "outputHashing": "all",
@@ -80,18 +80,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "gamefoss:build"
+            "browserTarget": "angularpress:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "gamefoss:build:production"
+              "browserTarget": "angularpress:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "gamefoss:build"
+            "browserTarget": "angularpress:build"
           }
         },
         "test": {
@@ -127,7 +127,7 @@
       }
     }
   },
-  "defaultProject": "gamefoss",
+  "defaultProject": "angularpress",
   "cli": {
     "analytics": "056d39f1-f06f-4fa0-bcd4-2d0024ee1443"
   }

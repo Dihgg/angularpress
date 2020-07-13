@@ -13,11 +13,11 @@ msgstr ""
 "X-Generator: Poedit 2.3.1\n"
 
 #. Text in function
-#: gamefoss/index.php:40
+#: angularpress/index.php:40
 msgid "All rights reserved"
 msgstr "Todos os direitos reservados"
 
 #. Text in function
-#: gamefoss/index.php:40
+#: angularpress/index.php:40
 msgid "Developed by"
 msgstr "Desenvolvido por"
