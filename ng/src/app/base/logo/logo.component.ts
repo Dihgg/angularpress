@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { WordpressService } from 'src/app/services/wordpress.service';
 import { THEME } from 'src/app/services/wordpress.interface';
 import { Title } from '@angular/platform-browser';
@@ -10,15 +10,20 @@ import { Title } from '@angular/platform-browser';
 })
 export class LogoComponent implements OnInit {
 
-  public logos: THEME['logos'];
+  @Input() footer = false;
+
+  public logos: THEME['logos'] | THEME['logos']['footer'];
 
   constructor(
     public title: Title,
     public wordpress: WordpressService
-  ) {
-    this.logos = wordpress.THEME.logos;
-  }
+  ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.logos = this.wordpress.THEME.logos;
+    if (this.footer && (this.wordpress.THEME.logos.footer.desktop || this.wordpress.THEME.logos.footer.mobile)) {
+      this.logos = this.wordpress.THEME.logos.footer;
+    }
+  }
 
 }

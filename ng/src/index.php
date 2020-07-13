@@ -21,7 +21,11 @@
       TEMPLATE_URI: `<?php echo get_template_directory_uri() ?>`,
       logos: {
         mobile: `<?php echo get_theme_mod('mobile_logo_image'); ?>`,
-        desktop: `<?php echo get_theme_mod('desktop_logo_image'); ?>`
+        desktop: `<?php echo get_theme_mod('desktop_logo_image'); ?>`,
+        footer: {
+          mobile: `<?php echo get_theme_mod('mobile_logo_image_footer'); ?>`,
+          desktop: `<?php echo get_theme_mod('desktop_logo_image_footer'); ?>`,
+        }
       },
       options: {
         header: {

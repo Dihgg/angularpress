@@ -70,6 +70,10 @@ export interface THEME {
 	logos: {
 		mobile: string;
 		desktop: string;
+		footer: {
+			mobile: string;
+			desktop: string;
+		};
 	};
 
 	options: {

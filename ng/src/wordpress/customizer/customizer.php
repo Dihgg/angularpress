@@ -72,17 +72,27 @@ function logo_customizer($wp_customize) {
 	));
 	
 	$theme_logos = array(
+		// Desktop logo
+		array(
+			'slug' => 'desktop_logo_image',
+			'default' => '',
+			'label' => __('Desktop Logo', 'angularpress')
+		),
+		array(
+			'slug' => 'desktop_logo_image_footer',
+			'default' => '',
+			'label' => __('Desktop Logo (Footer)', 'angularpress')
+		),
 		// Mobile logo
 		array(
 			'slug' => 'mobile_logo_image',
 			'default' => '',
 			'label' => __('Mobile Logo', 'angularpress')
 		),
-		// Desktop logo
 		array(
-			'slug' => 'desktop_logo_image',
+			'slug' => 'mobile_logo_image_footer',
 			'default' => '',
-			'label' => __('Desktop Logo', 'angularpress')
+			'label' => __('Mobile Logo (Footer)', 'angularpress')
 		)
 	);
 
