@@ -181,30 +181,13 @@ export class WordpressService {
       );
   }
 
-  public translate(label: string): string {
-    return this.TRANSLATION[label] || '';
-  }
-  
   /**
-   * Método para chamar a API de Tradução
-   * @param {TRANSLATION[]} terms Array de Termos para tradução
-   * @returns {Obeservable<TRANSLATION[]>} Observable da resposta com um array de termos traduzidos 
+   * Traduz o tema
+   * @param {string} label Label a ser traduzida
+   * @returns {string} Retorna a tradução (se houver)
    */
-  /* public getTranslation(terms: TRANSLATION[]): Observable<TRANSLATION[]> {
-    return this.get<string>(`translate`, { terms: JSON.stringify(terms) })
-      .pipe(map((res: any): TRANSLATION[] => {
-        return res;
-      }),
-        catchError(error => throwError(error)))
-  } */
+  public translate(label: string): string {
+    return this.TRANSLATION[label] || label;
+  }
 
- /*  public translate(translations: TRANSLATION[], term: string): string {
-    let translated: string;
-    Object.values<TRANSLATION>(translations).forEach((translation: TRANSLATION) => {
-      if(translation.term === term) {
-        translated = translation.translation;
-      }
-    });
-    return translated;
-  } */
 }

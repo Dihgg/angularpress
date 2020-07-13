@@ -6,19 +6,18 @@
     <div class="col-12 col-lg-2 mb-3 d-flex justify-content-center">
       <app-logo [footer]="true"></app-logo>
     </div>
-    <div class="col-12 col-lg-10 mb-3 d-flex justify-content-center">
-      <app-menu
-        class="container-fluid"
-        location="footer-links"
-        [showHome]="true"
-      >
-      </app-menu>
-    </div>
-    <div
-      class="col-12 d-flex justify-content-center justify-content-lg-between"
+    <app-menu
+      class="col-12 col-lg-10 mb-3 d-flex justify-content-space-between"
+      location="footer-links"
+      [showHome]="true"
     >
-      <app-socials *ngIf="showSocials"></app-socials>
-    </div>
+    </app-menu>
+  </div>
+  <div class="row">
+    <app-socials
+      *ngIf="showSocials"
+      class="col-12 d-flex justify-content-center justify-content-lg-between"
+    ></app-socials>
   </div>
   <div class="row">
     <p

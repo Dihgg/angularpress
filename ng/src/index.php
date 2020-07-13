@@ -5,7 +5,10 @@
 <head>
   <meta charset="utf-8">
   <?php wp_head(); ?>
-  <title><?php echo wp_title('|', true) ?></title>
+  <title>
+    <?php echo wp_title('|', true) ?>
+    <?php echo bloginfo('name'); ?>
+  </title>
   <base href="<?php echo home_url() ?>">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">

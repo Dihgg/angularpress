@@ -11,5 +11,9 @@
   }
   .disclaimer {
     max-width: 420px;
+    text-align: center;
+    @include bp($s-md) {
+      text-align: right;
+    }
   }
 }
