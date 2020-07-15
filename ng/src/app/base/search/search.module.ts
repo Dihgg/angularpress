@@ -5,7 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { FeatherModule } from 'angular-feather';
 
 @NgModule({
-  declarations: [SearchbarComponent],
+  declarations: [
+    SearchbarComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,

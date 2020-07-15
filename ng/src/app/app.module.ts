@@ -22,6 +22,7 @@ import { MenuModule } from './base/menu/menu.module';
 import { SocialsModule } from './base/socials/socials.module';
 import { LogoModule } from './base/logo/logo.module';
 import { SearchModule } from './base/search/search.module';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { SearchModule } from './base/search/search.module';
     AuthorComponent,
     HeaderComponent,
     FooterComponent,
+    SearchComponent,
   ],
   imports: [
     BlocksModule,

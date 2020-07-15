@@ -16,8 +16,16 @@ export class SearchbarComponent implements OnInit {
 
   constructor(
     public wordpress: WordpressService,
-    public route: Router
-  ) { }
+    public router: Router,
+    public route: ActivatedRoute
+  ) {
+    this.route.queryParams.subscribe( params => {
+      this.query = params['s'];
+      if (this.query) {
+        this.active = true;
+      }
+    });
+  }
 
   ngOnInit(): void { }
 
@@ -29,12 +37,15 @@ export class SearchbarComponent implements OnInit {
   }
 
   public onSubmit() {
-    console.log('SEARCH!', this.query);
-    this.route.navigate(['/search'], {
-      queryParams: {
-        's': this.query
-      }
-    });
+    if (this.query) {
+      this.router.navigate(['/search'], {
+        queryParams: {
+          's': this.query
+        }
+      });
+    } else {
+      this.btnClick();
+    }
   }
 
 }
