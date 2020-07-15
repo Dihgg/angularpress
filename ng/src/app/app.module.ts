@@ -21,6 +21,7 @@ import { MenuLinkComponent } from './base/menu/menu-link/menu-link.component';
 import { MenuModule } from './base/menu/menu.module';
 import { SocialsModule } from './base/socials/socials.module';
 import { LogoModule } from './base/logo/logo.module';
+import { SearchModule } from './base/search/search.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { LogoModule } from './base/logo/logo.module';
     IconsModule,
     MenuModule,
     SocialsModule,
-    LogoModule
+    LogoModule,
+    SearchModule
   ],
   providers: [],
   bootstrap: [AppComponent]

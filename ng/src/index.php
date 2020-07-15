@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <?php wp_head(); ?>
   <title>
-    <?php echo wp_title('|', true) ?>
+    <?php echo wp_title('|') ?>
     <?php echo bloginfo('name'); ?>
   </title>
   <base href="<?php echo home_url() ?>">
