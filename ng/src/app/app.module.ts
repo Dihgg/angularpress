@@ -11,39 +11,31 @@ import { ArchiveComponent } from './archive/archive.component';
 import { CategoryComponent } from './category/category.component';
 import { TagComponent } from './tag/tag.component';
 import { AuthorComponent } from './author/author.component';
-import { HeaderComponent } from './base/header/header.component';
 import { BlocksModule } from './blocks/blocks.module';
-import { FooterComponent } from './base/footer/footer.component';
-import { MenuComponent } from './base/menu/menu.component';
-import { SocialsComponent } from './base/socials/socials.component';
-import { IconsModule } from './icons/icons.module';
-import { MenuLinkComponent } from './base/menu/menu-link/menu-link.component';
-import { MenuModule } from './base/menu/menu.module';
-import { SocialsModule } from './base/socials/socials.module';
-import { LogoModule } from './base/logo/logo.module';
+import { IconsModule } from './base/icons/icons.module';
+import { BaseModule } from './base/base.module';
+import { SearchComponent } from './search/search.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    PostComponent,
-    PageComponent,
     ArchiveComponent,
-    CategoryComponent,
-    TagComponent,
     AuthorComponent,
-    HeaderComponent,
-    FooterComponent,
+    CategoryComponent,
+    HomeComponent,
+    PageComponent,
+    PostComponent,
+    SearchComponent,
+    TagComponent
   ],
   imports: [
+    AppRoutingModule,
+    BaseModule,
     BlocksModule,
     BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    IconsModule,
-    MenuModule,
-    SocialsModule,
-    LogoModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

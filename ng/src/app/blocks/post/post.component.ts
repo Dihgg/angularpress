@@ -11,20 +11,23 @@ import { PostOptions } from '../../types/options.type';
 export class PostComponent implements OnInit {
 
   @Input() post: Post;
-  @Input() options: PostOptions;
+  @Input() options: PostOptions = {
+    showDate: false,
+    showContent: false,
+    contentType: 'excerpt',
+    excerpt: 0
+  };
 
   public thumbnail: Image;
 
   constructor(
     public wordpress: WordpressService
   ) { }
-
+  
   ngOnInit(): void {
     if (this.post.thumbnail) {
       this.wordpress.getMedia(this.post.thumbnail).subscribe(
-        media => {
-          this.thumbnail = media.sizes['medium']
-        }
+        media => (this.thumbnail = media.sizes['medium'])
       );
     }
   }

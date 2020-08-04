@@ -6,7 +6,8 @@ import {
   Twitter,
   Search,
   ExternalLink,
-  ChevronDown
+  ChevronDown,
+  Loader
 } from 'angular-feather/icons';
 
 @NgModule({
@@ -18,7 +19,8 @@ import {
       Twitter,
       Search,
       ExternalLink,
-      ChevronDown
+      ChevronDown,
+      Loader
     })
   ],
   exports: [

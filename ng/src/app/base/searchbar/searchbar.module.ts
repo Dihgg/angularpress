@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SocialsComponent } from './socials.component';
+import { SearchbarComponent } from './searchbar.component';
 import { IconsModule } from '../icons/icons.module';
-
-
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    SocialsComponent
+    SearchbarComponent
   ],
   imports: [
     CommonModule,
-    IconsModule
+    FormsModule,
+    IconsModule,
   ],
   exports: [
-    SocialsComponent
+    SearchbarComponent
   ]
 })
-export class SocialsModule { }
+export class SearchBarModule { }

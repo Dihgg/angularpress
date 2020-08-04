@@ -1,23 +1,27 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Project-Id-Version: Angularpress\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: dihgg@dihgg.com\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Language: pt_BR\n"
+"Language: pt\n"
 "X-Generator: Poedit 2.3.1\n"
 
 #. Text in function
-#: angularpress/index.php:40
+#: languages.php:1
 msgid "All rights reserved"
 msgstr "Todos os direitos reservados"
 
 #. Text in function
-#: angularpress/index.php:40
+#: languages.php:1
 msgid "Developed by"
 msgstr "Desenvolvido por"
+
+#. Text in function
+#: languages.php:1
+msgid "You searched by"
+msgstr "Você procurou por"
