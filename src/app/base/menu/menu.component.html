@@ -1,0 +1,29 @@
+<nav class="menu theme--menu-bg theme--menu-color" [ngClass]="classes">
+  <ul class="menu__items">
+    <li *ngFor="let link of items" class="menu__item">
+      <app-menu-link [link]="link"></app-menu-link>
+      <nav
+        #$submenu
+        *ngIf="link.items"
+        class="menu__item__submenu"
+        [class.menu__item__submenu--toggled]="submenu"
+        [style.height.px]="submenuH"
+      >
+        <ul>
+          <li *ngFor="let link_ of link.items" class="menu__item--subitem">
+            <app-menu-link [link]="link_"></app-menu-link>
+          </li>
+        </ul>
+      </nav>
+      <button
+        *ngIf="link.items"
+        class="menu__item__toggler btn btn--transparent theme--menu-color d-lg-none"
+        [class.menu__item__toggler--toggled]="submenu"
+        (click)="toggleSubmenu()"
+      >
+        <i-feather name="chevron-down"></i-feather>
+      </button>
+    </li>
+  </ul>
+  <ng-content></ng-content>
+</nav>

@@ -1,0 +1,11 @@
+<nav class="social">
+  <a
+    *ngFor="let social of socials"
+    [href]="social.url"
+    target="_blank"
+    [title]="social.title"
+    class="social__item theme--menu-color mx-2 ml-lg-0"
+  >
+    <i-feather [name]="getIcon(social.url)"></i-feather>
+  </a>
+</nav>

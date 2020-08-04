@@ -1,0 +1,39 @@
+<div class="search-page container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h2>{{ wordpress.translate("You searched by") }}:</h2>
+      <form name="search" (submit)="onSubmit()">
+        <input
+          type="text"
+          name="s"
+          [placeholder]="wordpress.translate('search')"
+          [(ngModel)]="queryIn"
+        />
+        <button
+          type="submit"
+          title="{{ wordpress.translate('search') }}"
+          class="btn btn--transparent"
+        >
+          <i-feather name="search"></i-feather>
+        </button>
+      </form>
+      <p *ngIf="posts.length">
+        {{ wordpress.translate("Results Found") }}: {{ posts.length }}
+      </p>
+    </div>
+  </div>
+  <div id="results" class="row" *ngIf="posts.length">
+    <ul class="col-12">
+      <li *ngFor="let post of posts">
+        {{ post.title }}
+      </li>
+    </ul>
+  </div>
+  <p id="no-results" *ngIf="!loading && !posts.length">
+    {{ wordpress.translate("No results found") }}
+  </p>
+</div>
+<button *ngIf="!loading && posts.length < max" class="btn" (click)="loadMore()">
+  {{ wordpress.translate("Load More") }}
+</button>
+<app-loading [loading]="loading"></app-loading>

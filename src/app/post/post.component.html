@@ -1,0 +1,15 @@
+<article *ngIf="post">
+	<header>
+		<h1>{{post.title}}</h1>
+		<time [attr.datetime]="post.date">{{post.date_formatted}}</time>
+		{{post.author}}
+		<app-author [id]="post.author" *ngIf="post.author"></app-author>
+		<section>
+			<blockquote [innerHTML]="post.excerpt"></blockquote>
+		</section>
+	</header>
+	<body>
+		<app-blocks [blocks]="post.blocks"></app-blocks>
+	</body>
+</article>
+<app-loading [loading]="loading"></app-loading>
