@@ -1,0 +1,16 @@
+// BREAKPOINTS
+@mixin bp($min-size: false, $max-size: false) {
+  @if $min-size {
+    @media screen and (min-width: $min-size) {
+      @content;
+    }
+  } @else if $min-size and $max-size {
+    @media screen and (min-width: $min-size) and (max-width: $max-size - 1px) {
+      @content;
+    }
+  } @else {
+    @media screen and (max-width: $max-size - 1px) {
+      @content;
+    }
+  }
+}

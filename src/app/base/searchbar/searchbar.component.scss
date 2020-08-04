@@ -1,0 +1,36 @@
+@import "partials/partials";
+
+.search {
+	position: relative;
+	$self: &;
+	min-width: 24px;
+	
+	&__input {
+		// position: absolute;
+		border: none;
+		height: 100%;
+		width: 0;
+		right: 0;
+		overflow: hidden;
+		transition: width $transition-default;
+		input {
+			width: 100%;
+		}
+	}
+	
+	&--active {
+		#{$self}__input {
+			width: calc(100vw - #{$gutter*2});
+			@include bp($s-sm) {
+				width: 240px;
+			}
+		}
+	}
+	button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 2;
+		transition: color $transition-default;
+	}
+}
