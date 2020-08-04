@@ -1,0 +1,23 @@
+// Sticky footer
+html,
+body {
+  height: 100%;
+}
+
+app-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#main-container {
+  flex: 1 0 auto;
+}
+// // Sticky Footer
+
+html,
+body {
+  margin: 0 !important;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
