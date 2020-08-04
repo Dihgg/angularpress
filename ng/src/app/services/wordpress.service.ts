@@ -4,8 +4,9 @@ import { LocationStrategy, Location } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem, Block, Media, Image, PostArgs, THEME, /* TRANSLATION */ } from '../services/wordpress.interface';
+import { Post, User, MenuItem, Block, Media, Image, PostArgs, THEME, SearchRequest, SearchReponse } from '../services/wordpress.interface';
 import { sanitizeHtml } from '../utils/utils';
+import { Title } from '@angular/platform-browser';
 
 declare const BASE_HREF: string;
 declare const THEME: THEME;
@@ -22,14 +23,14 @@ export class WordpressService {
 
   public static BASE_HREF: string = BASE_HREF;
   public THEME: THEME = THEME;
-  public TRANSLATION = TRANSLATION; 
+  public TRANSLATION = TRANSLATION;
 
   constructor(
     private http: HttpClient,
-    private location: Location
+    private location: Location,
+    private title: Title
   ) {
     this.URL = `${this.location.prepareExternalUrl('wp-json')}/wp/${this.context}/`;
-    console.log('TRANS', this.TRANSLATION);
   }
 
   /**
@@ -48,6 +49,25 @@ export class WordpressService {
     return str.replace(/(<([^>]+)>)/ig, '');
   }
 
+  private preparePost(post: any): Post {
+    return {
+      id: post.id,
+      url: post.link,
+      title: sanitizeHtml(post.title.rendered),
+      date: post.date,
+      date_formatted: post.date_formatted,
+      excerpt: sanitizeHtml(post.excerpt.rendered),
+      content: sanitizeHtml(post.content.rendered),
+      blocks: post.blocks.map((block: any): Block => ({
+        name: block.blockName,
+        attrs: block.attrs,
+        html: block.innerHTML
+      })),
+      author: post.author,
+      thumbnail: post.featured_media || null
+    }
+  }
+
   /**
    * Recupera Posts
    * @param {Params} params Parâmetros para recuperação dos posts
@@ -59,25 +79,17 @@ export class WordpressService {
       map((res: any) => {
         let posts: Post[] = [];
         res.forEach((post: any) => {
-          posts.push({
-            id: post.id,
-            url: post.link,
-            title: sanitizeHtml(post.title.rendered),
-            date: post.date,
-            date_formatted: post.date_formatted,
-            excerpt: sanitizeHtml(post.excerpt.rendered),
-            content: sanitizeHtml(post.content.rendered),
-            blocks: post.blocks.map((block: any): Block => ({
-              name: block.blockName,
-              attrs: block.attrs,
-              html: block.innerHTML
-            })),
-            author: post.author,
-            thumbnail: post.featured_media || null
-          });
+          posts.push(this.preparePost(post));
         });
         return posts;
       }),
+      catchError(error => throwError(error))
+    );
+  }
+
+  public getPost(id: string): Observable<Post> {
+    return this.get<Post>(`posts/${id}`).pipe(
+      map((post: any): Post => this.preparePost(post)),
       catchError(error => throwError(error))
     );
   }
@@ -182,12 +194,45 @@ export class WordpressService {
   }
 
   /**
+   * Método para fazer busca na API do Wordpress
+   * @param {SearchRequest} req Argumentos para o request 
+   * @returns {Observable<SearchReponse[]} Obersable com um array de SearchResponse
+   */
+  public search(req: SearchRequest): Observable<SearchReponse[]> {
+    return this.get<SearchReponse>(`search`, req)
+      .pipe(map((res: any): SearchReponse[] => {
+        const response: SearchReponse[] = [];
+        res.forEach((item: any) => {
+          response.push({
+            id: item.id,
+            title: item.title,
+            url: item.url,
+            type: item.type,
+            subtype: item.subtype
+          });
+        });
+        return response;
+      }),
+        catchError(error => throwError(error))
+      );
+  }
+
+  /**
    * Traduz o tema
    * @param {string} label Label a ser traduzida
    * @returns {string} Retorna a tradução (se houver)
    */
   public translate(label: string): string {
     return this.TRANSLATION[label] || label;
+  }
+
+  /**
+   * Modifica o título da página. Mantendo o título do blog no final
+   * @param {string} title Título
+   * @param {string} separator Separador
+   */
+  public setTitle(title: string, separator: string = ' | '): void {
+    this.title.setTitle(`${title}${separator}${this.THEME.NAME}`);
   }
 
 }

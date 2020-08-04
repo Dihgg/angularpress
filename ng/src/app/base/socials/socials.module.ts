@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SocialsComponent } from './socials.component';
-import { IconsModule } from 'src/app/icons/icons.module';
+import { IconsModule } from '../icons/icons.module';
 
 
 

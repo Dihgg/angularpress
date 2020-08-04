@@ -24,7 +24,8 @@ import { GalleryModule } from './gallery/gallery.module';
     GalleryModule
   ],
   exports: [
-    BlocksComponent
+    BlocksComponent,
+    PostComponent
   ]
 })
 export class BlocksModule { }

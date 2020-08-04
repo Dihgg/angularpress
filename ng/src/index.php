@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <?php wp_head(); ?>
   <title>
-    <?php echo wp_title('|') ?>
+    <?php echo wp_title() ?>
     <?php echo bloginfo('name'); ?>
   </title>
   <base href="<?php echo home_url() ?>">
@@ -22,6 +22,7 @@
   <script type="text/javascript">
     const BASE_HREF = `<?php echo home_url() ?>`;
     const THEME = {
+      NAME: `<?php echo(bloginfo('name')) ?>`,
       TEMPLATE_URI: `<?php echo get_template_directory_uri() ?>`,
       logos: {
         mobile: `<?php echo get_theme_mod('mobile_logo_image'); ?>`,
@@ -38,7 +39,8 @@
         footer: {
           socials: <?php echo (get_theme_mod('footer_show_socials', 'off') === 'on') ? 'true' : 'false'; ?>,
           disclaimer: `<?php echo get_theme_mod('footer_disclaimer'); ?>`
-        }
+        },
+        posts_per_page: `<?php echo get_option('posts_per_page') ?>`
       }
     };
 

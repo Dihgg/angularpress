@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WordpressService } from '../services/wordpress.service';
 import { ActivatedRoute } from '@angular/router';
 import { PostComponent } from '../post/post.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-page',
@@ -16,9 +17,7 @@ export class PageComponent extends PostComponent {
   ) {
     super(route, wordpress);
     this.slug = this.route.snapshot.paramMap.get('page');
-    this.type = 'pages';
-    console.log('LOADED PAGE!');
-    
+    this.type = 'pages';    
   }
 
 }

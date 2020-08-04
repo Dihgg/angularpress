@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchbarComponent } from './searchbar.component';
+import { IconsModule } from '../icons/icons.module';
 import { FormsModule } from '@angular/forms';
-import { FeatherModule } from 'angular-feather';
 
 @NgModule({
   declarations: [
@@ -11,10 +11,10 @@ import { FeatherModule } from 'angular-feather';
   imports: [
     CommonModule,
     FormsModule,
-    FeatherModule
+    IconsModule,
   ],
   exports: [
     SearchbarComponent
   ]
 })
-export class SearchModule { }
+export class SearchBarModule { }

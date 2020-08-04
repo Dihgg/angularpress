@@ -19,11 +19,8 @@ export class SearchbarComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute
   ) {
-    this.route.queryParams.subscribe( params => {
-      this.query = params['s'];
-      if (this.query) {
-        this.active = true;
-      }
+    this.route.queryParams.subscribe(params => {
+      this.query = params['query'];
     });
   }
 
@@ -40,11 +37,11 @@ export class SearchbarComponent implements OnInit {
     if (this.query) {
       this.router.navigate(['/search'], {
         queryParams: {
-          's': this.query
+          'query': this.query
         }
       });
     } else {
-      this.btnClick();
+      this.active = false;
     }
   }
 
