@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { WordpressService } from 'src/app/services/wordpress.service';
-/* import { TRANSLATION } from 'src/app/services/wordpress.interface'; */
 
 @Component({
   selector: 'app-footer',
@@ -12,18 +11,13 @@ export class FooterComponent implements OnInit {
 
   public year: number = new Date().getFullYear();
 
-  /* public labels: TRANSLATION[] = [
-    {
-      term: 'All rights reserved'
-    }
-  ]; */
 
   constructor(
     public wordpress: WordpressService
-  ) {
-    this.showSocials = wordpress.THEME.options.footer.socials;
-  }
+  ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.showSocials = this.wordpress.THEME.options.footer.socials;
+  }
 
 }
