@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "deployUrl": "<?php echo get_template_directory_uri() ?>/",
-            "outputPath": "wp-content/themes/angularpress/",
+            "outputPath": "../wp-content/themes/angularpress/",
             "index": "src/index.php",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
