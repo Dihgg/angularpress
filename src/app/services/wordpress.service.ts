@@ -9,8 +9,6 @@ import { sanitizeHtml } from '../utils/utils';
 import { Title } from '@angular/platform-browser';
 
 declare const BASE_HREF: string;
-declare const THEME: THEME;
-declare const TRANSLATION: {};
 
 @Injectable({
   providedIn: 'root'
@@ -22,15 +20,31 @@ export class WordpressService {
   private headers = {};
 
   public static BASE_HREF: string = BASE_HREF;
-  public THEME: THEME = THEME;
-  public TRANSLATION = TRANSLATION;
+  public THEME: THEME;
+  public TRANSLATION: any;
 
   constructor(
     private http: HttpClient,
     private location: Location,
     private title: Title
-  ) {
-    this.URL = `${this.location.prepareExternalUrl('wp-json')}/wp/${this.context}/`;
+  ) {    
+    this.URL = `${WordpressService.BASE_HREF}/wp-json/wp/${this.context}/`;
+  }
+
+  /**
+   * Insere no WordpressService as opções do wordpress
+   * @param {THEME} options Objeto JSON com informações do tema 
+   */
+  public setTHEME(options: THEME): void {
+    this.THEME = options;
+  }
+
+  /**
+   * Insere as traduções no WordpressService
+   * @param {any} translation JSON com a tradução
+   */
+  public setTRANSLATION(translation: any): void {
+    this.TRANSLATION = translation;
   }
 
   /**

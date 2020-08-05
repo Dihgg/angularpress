@@ -12,10 +12,10 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     public wordpress: WordpressService
-  ) {
-    this.showSocials = wordpress.THEME.options.header.socials;
-  }
+  ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.showSocials = this.wordpress.THEME.options.header.socials;
+  }
 
 }
