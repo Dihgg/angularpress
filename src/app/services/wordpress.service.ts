@@ -1,12 +1,13 @@
 import { Injectable, Type } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { LocationStrategy, Location } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem, Block, Media, Image, PostArgs, THEME, SearchRequest, SearchReponse } from '../services/wordpress.interface';
+import { Post, User, MenuItem, Block, Media, Image, PostArgs, THEME, SearchRequest, SearchReponse, SearchItem } from '../services/wordpress.interface';
 import { sanitizeHtml } from '../utils/utils';
 import { Title } from '@angular/platform-browser';
+import { rejects } from 'assert';
 
 declare const BASE_HREF: string;
 
@@ -17,7 +18,7 @@ export class WordpressService {
 
   private URL: string;
   private context = "v2";
-  private headers = {};
+  private headers: HttpHeaders = new HttpHeaders();
 
   public static BASE_HREF: string = BASE_HREF;
   public THEME: THEME;
@@ -55,7 +56,7 @@ export class WordpressService {
   private get<T>(path: string, params: Params = {}): Observable<T> {
     return this.http.get<T>(`${this.URL}${path}`, {
       headers: this.headers,
-      params: params,
+      params: params
     });
   }
 
@@ -212,8 +213,34 @@ export class WordpressService {
    * @param {SearchRequest} req Argumentos para o request 
    * @returns {Observable<SearchReponse[]} Obersable com um array de SearchResponse
    */
-  public search(req: SearchRequest): Observable<SearchReponse[]> {
-    return this.get<SearchReponse>(`search`, req)
+  public async search(req: SearchRequest): Promise<SearchReponse> {
+
+    return new Promise<SearchReponse>((resolve, reject) => {
+      this.http.get(`${this.URL}search`, {
+        headers: this.headers,
+        observe: 'response',
+        params: req as Params
+      }).toPromise().then((res: any) => {
+        const items: SearchItem[] = [];
+        res.body.forEach((result: any)=> {
+          items.push({
+            id: result.id,
+            title: result.title,
+            url: result.url,
+            type: result.type,
+            subtype: result.subtype
+          });
+        });
+        const result: SearchReponse = {
+          results: items,
+          total: res.headers.get('X-WP-Total'),
+          pages: res.headers.get('X-WP-TotalPages')
+        };
+        resolve(result);
+      }).catch((err => reject(err)) );
+    });
+
+    /* return this.get<SearchReponse>(`search`, req)
       .pipe(map((res: any): SearchReponse[] => {
         const response: SearchReponse[] = [];
         res.forEach((item: any) => {
@@ -228,7 +255,7 @@ export class WordpressService {
         return response;
       }),
         catchError(error => throwError(error))
-      );
+      ); */
   }
 
   /**

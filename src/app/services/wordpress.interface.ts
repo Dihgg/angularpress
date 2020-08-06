@@ -15,6 +15,7 @@ export interface PostArgs {
 	'order'?: 'asc' | 'desc';
 	'orderBy'?: string;
 	'per_page'?: number;
+	'page'?: number;
 	'slug'?: string;
 }
 
@@ -76,12 +77,17 @@ export interface SearchRequest {
 	'subtype'?: string;
 }
 
-export interface SearchReponse {
+export interface SearchItem {
 	'id': number;
 	'title': string;
 	'url': string;
 	'type': 'post' | string;
 	'subtype': string;
+}
+export interface SearchReponse {
+	'total': number,
+	'pages': number,
+	'results' : SearchItem[]
 }
 
 export interface THEME {

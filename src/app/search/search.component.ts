@@ -4,6 +4,7 @@ import { WordpressService } from '../services/wordpress.service';
 import { SearchReponse, Post } from '../services/wordpress.interface';
 import { PageComponent } from '../page/page.component';
 import { PostOptions } from '../types/options.type';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -16,10 +17,12 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy,
   public queryIn: string;
   public posts: Post[] = [];
 
-  public ids: number[] = [];
-  
-  public offset = 0;
-  public max = 0;
+
+  public currentPage = 0;
+  public pages = 0;
+  public total = 0;
+
+  private subscription: Subscription;
 
   public postOptions: PostOptions = {
     contentType: 'excerpt',
@@ -33,28 +36,26 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy,
     public router: Router,
     public wordpress: WordpressService
   ) {
-
     super(route, wordpress);
-
-    this.route.queryParams.subscribe(params => {
-      this.query = params['query']
-      this.loading = true;
-      this.wordpress.search({
-        search: this.query,
-        subtype: 'post'
-      }).subscribe(
-        search => this.onSearch(search)
-      );
-    });
   }
 
   public ngOnInit(): void {
     this.wordpress.setTitle(this.wordpress.translate('Search'));
+    this.subscription = this.route.queryParams.subscribe(params => {
+      this.query = params['query'];
+      this.queryIn = this.query;
+      this.posts = [];
+      this.loading = true;
+      this.currentPage = 0;
+      this.loadMore();
+    });
   }
 
   public ngOnChanges(): void { }
 
-  public ngOnDestroy(): void { }
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   public onSubmit(): void {
     this.query = this.queryIn;
@@ -65,30 +66,24 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy,
     });
   }
 
-  public onSearch(results: SearchReponse[]): void {
-    this.queryIn = this.query;
-    this.posts = [];
-    this.offset = 0;
-    this.max = results.length;
-    
-    if (results.length) {
-      this.ids = results.map<number>(result => result.id);
-      this.loadMore();
-    } else {
-      this.loading = false;
-    }
-  }
-
   public loadMore() {
     this.loading = true;
-    this.wordpress.getPosts({
-      'include[]': this.ids,
-      per_page: this.wordpress.THEME.options.posts_per_page,
-      offset: this.offset
-    }).toPromise().then(posts => {
-      posts.forEach(post => this.posts.push(post));
-      this.offset += posts.length;
-      this.loading = false;
+
+    this.wordpress.search({
+      search: this.query,
+      page: this.currentPage || 1,
+      per_page: this.wordpress.THEME.options.posts_per_page
+    }).then(res => {
+      this.pages = res.pages;
+      this.total = res.total;
+      this.wordpress.getPosts({
+        'include[]': res.results.map<number>(result => result.id)
+      }).toPromise().then(posts => {
+        console.log('AAA', posts);
+        posts.forEach(post => this.posts.push(post));
+        this.currentPage++;
+        this.loading = false;
+      });
     });
   }
 
