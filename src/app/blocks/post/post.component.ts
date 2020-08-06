@@ -15,19 +15,26 @@ export class PostComponent implements OnInit {
     showDate: false,
     showContent: false,
     contentType: 'excerpt',
-    excerpt: 0
+    excerpt: 0,
+    displayFeaturedImage: true,
+    featuredImageSizeSlug: "thumbnail",
+    featuredImageAlign: "center"
   };
 
+
   public thumbnail: Image;
+
 
   constructor(
     public wordpress: WordpressService
   ) { }
-  
+
   ngOnInit(): void {
-    if (this.post.thumbnail) {
+    console.log('POSTS OPTIONS', this.options);
+
+    if (this.options.displayFeaturedImage && this.post.thumbnail) {
       this.wordpress.getMedia(this.post.thumbnail).subscribe(
-        media => (this.thumbnail = media.sizes['medium'])
+        media => (this.thumbnail = media.sizes[this.options.featuredImageSizeSlug])
       );
     }
   }

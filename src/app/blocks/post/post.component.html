@@ -1,17 +1,47 @@
-<article *ngIf="post" class="post">
-	<a [routerLink]="getRouterLink(post.url)">
-		<img *ngIf="thumbnail" class="post__thumbnail" [src]="thumbnail.url" [alt]="thumbnail.alt"/>
-		<h1 class="post__title">{{post.title}}</h1>
-		<time *ngIf="options.showDate" [attr.datetime]="post.date">{{post.date_formatted}}</time>
-		<div *ngIf="options.showContent" class="post__content">
-			<ng-container [ngSwitch]="options.contentType">
-				<ng-container *ngSwitchCase="'excerpt'">
-					{{post.excerpt | truncate: options.excerpt}}
-				</ng-container>
-				<ng-container *ngSwitchCase="'full_post'">
-					{{post.content}}
-				</ng-container>
-			</ng-container>
-		</div>
-	</a>
+<article *ngIf="post" class="block-post container-fluid">
+  <div
+    class="row"
+    [class.flex-row-reverse]="options.featuredImageAlign === 'right'"
+  >
+    <div
+      *ngIf="thumbnail"
+      class="block-post__thumbnail col-12"
+      [class.col-sm-4]="
+        options.featuredImageAlign == 'left' ||
+        options.featuredImageAlign == 'right'
+      "
+    >
+      <a [routerLink]="getRouterLink(post.url)">
+        <img [src]="thumbnail.url" [alt]="thumbnail.alt" />
+      </a>
+    </div>
+    <div
+      class="block-post__info col-12"
+      [class.col-sm-8]="
+        options.featuredImageAlign == 'left' ||
+        options.featuredImageAlign == 'right'
+      "
+    >
+      <h1 class="block-post__title">
+        <a [routerLink]="getRouterLink(post.url)">
+          {{ post.title }}
+        </a>
+      </h1>
+      <time *ngIf="options.showDate" [attr.datetime]="post.date">
+        <a [routerLink]="getRouterLink(post.url)">{{ post.date_formatted }}</a>
+      </time>
+      <div *ngIf="options.showContent" class="block-post__content">
+        <a [routerLink]="getRouterLink(post.url)">
+          <ng-container [ngSwitch]="options.contentType">
+            <ng-container *ngSwitchCase="'excerpt'">
+              {{ post.excerpt | truncate: options.excerpt }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'full_post'">
+              {{ post.content }}
+            </ng-container>
+          </ng-container>
+        </a>
+      </div>
+    </div>
+  </div>
 </article>

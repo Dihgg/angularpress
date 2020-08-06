@@ -25,7 +25,8 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy,
     contentType: 'excerpt',
     showDate: true,
     excerpt: 55,
-    showContent: true
+    showContent: true,
+    displayFeaturedImage: true
   };
 
   constructor(

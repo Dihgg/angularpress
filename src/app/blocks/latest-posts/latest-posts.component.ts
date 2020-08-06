@@ -14,6 +14,7 @@ export class LatestPostsComponent implements OnInit {
   public args: PostArgs;
   public css: string[] = [];
   public options: PostOptions;
+  public column: string;
 
   @Input()
   set attrs(attrs: string[]) {
@@ -28,7 +29,10 @@ export class LatestPostsComponent implements OnInit {
       showDate: attrs['displayPostDate'],
       showContent: attrs['displayPostContent'],
       contentType: attrs['displayPostContentRadio'],
-      excerpt: attrs['excerptLength']
+      excerpt: attrs['excerptLength'],
+      displayFeaturedImage: attrs['displayFeaturedImage'],
+      featuredImageSizeSlug: attrs['featuredImageSizeSlug'],
+      featuredImageAlign: attrs['featuredImageAlign'],
     }
 
     this.css = [
@@ -37,13 +41,22 @@ export class LatestPostsComponent implements OnInit {
       `latest-posts--columns-${attrs['columns']}`,
       attrs['className'] || undefined
     ];
+
+    switch (attrs['postLayout']) {
+      case 'grid':
+        this.column = `col-${(12 / Number.parseInt(attrs['columns']))}`;
+        break;    
+        default:
+          this.column = 'col-12';
+        break;
+    }
   }
 
   constructor(
     public wordpress: WordpressService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.wordpress.getPosts(this.args).subscribe(
       posts => (this.posts = posts)
     )
