@@ -59,8 +59,8 @@ export class MenuComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.wordpress.getMenu(this.location).subscribe(
-      menu => this.setMenu(menu)
+    this.wordpress.getMenu(this.location).then(
+      menu => (this.setMenu(menu))
     );
   }
 

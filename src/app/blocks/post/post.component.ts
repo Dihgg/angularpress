@@ -22,7 +22,7 @@ export class PostComponent implements OnInit {
   };
 
 
-  public thumbnail: Image;
+  public thumbnail: Image[];
 
 
   constructor(
@@ -30,11 +30,10 @@ export class PostComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('POSTS OPTIONS', this.options);
-
+    console.log('POST', this.post);
     if (this.options.displayFeaturedImage && this.post.thumbnail) {
       this.wordpress.getMedia(this.post.thumbnail).subscribe(
-        media => (this.thumbnail = media.sizes[this.options.featuredImageSizeSlug])
+        media => (this.thumbnail = media.sizes)
       );
     }
   }

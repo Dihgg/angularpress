@@ -57,7 +57,7 @@ export class LatestPostsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {    
-    this.wordpress.getPosts(this.args).subscribe(
+    this.wordpress.getPosts(this.args).then(
       posts => (this.posts = posts)
     )
   }

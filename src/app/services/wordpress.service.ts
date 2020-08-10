@@ -1,14 +1,12 @@
 import { Injectable, Type } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { LocationStrategy, Location } from '@angular/common';
-import { Observable, throwError } from 'rxjs';
+import { Location } from '@angular/common';
+import { Observable, throwError, pipe } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
 import { Post, User, MenuItem, Block, Media, Image, PostArgs, THEME, SearchRequest, SearchReponse, SearchItem } from '../services/wordpress.interface';
 import { sanitizeHtml } from '../utils/utils';
 import { Title } from '@angular/platform-browser';
-import { rejects } from 'assert';
-
 declare const BASE_HREF: string;
 
 @Injectable({
@@ -28,7 +26,7 @@ export class WordpressService {
     private http: HttpClient,
     private location: Location,
     private title: Title
-  ) {    
+  ) {
     this.URL = `${WordpressService.BASE_HREF}/wp-json/wp/${this.context}/`;
   }
 
@@ -87,26 +85,27 @@ export class WordpressService {
    * Recupera Posts
    * @param {Params} params Parâmetros para recuperação dos posts
    * @param {'posts' | 'pages'} type Tipo de post para recuperação
-   * @returns {Observable<Post[]>} Retorna um observable com array de posts
+   * @returns {Promise<Post[]>} Uma Promise com array de posts
    */
-  public getPosts(params: PostArgs, type: 'posts' | 'pages' | string = 'posts'): Observable<Post[]> {
-    return this.get<Post[]>(type, params).pipe(
-      map((res: any) => {
-        let posts: Post[] = [];
-        res.forEach((post: any) => {
-          posts.push(this.preparePost(post));
-        });
-        return posts;
-      }),
-      catchError(error => throwError(error))
-    );
+  public async getPosts(params: PostArgs, type: 'posts' | 'pages' | string = 'posts'): Promise<Post[]> {
+    return new Promise<Post[]>((resolve, reject) => {
+      this.get<Post[]>(type, params).toPromise().then(posts => {
+        resolve(posts.map(post => this.preparePost(post)));
+      }).catch(err => reject(err));
+    })
   }
 
-  public getPost(id: string): Observable<Post> {
-    return this.get<Post>(`posts/${id}`).pipe(
-      map((post: any): Post => this.preparePost(post)),
-      catchError(error => throwError(error))
-    );
+  /**
+   * Recupera um post via ID
+   * @param {number} id Id do post
+   */
+  public async getPost(id: number): Promise<Post> {
+    return new Promise<Post>((resolve, reject) => {
+      this.get<Post>(`posts/${id}`)
+        .toPromise()
+        .then(post => resolve(this.preparePost(post)))
+        .catch( err => reject(err) );
+    });
   }
 
   /**
@@ -114,19 +113,21 @@ export class WordpressService {
    * @param {number} id ID do usuário
    * @returns {Observable<User>} Retorna um observable com dados do usuário
    */
-  public getUser(id: number): Observable<User> {
-    return this.get<User>(`users/${id}`).pipe(
-      map((res: any) => {
-        return {
-          id: res.id,
-          name: res.name,
-          link: res.link,
-          slug: res.slug,
-          avatar: res.avatar_urls['96']
-        }
-      }),
-      catchError(error => throwError(error))
-    );
+  public async getUser(id: number): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      this.get<User>(`users/${id}`)
+        .toPromise()
+        .then((user: any) => {
+          resolve({
+            id: user.id,
+            name: user.name,
+            link: user.link,
+            slug: user.slug,
+            avatar: user.avatar_urls['96']
+          });
+        })
+        .catch(err => reject(err));
+    });
   }
 
   private getMenuItem(item: any): MenuItem {
@@ -143,37 +144,43 @@ export class WordpressService {
   /**
    * Recupera um Menu do Wordpress
    * @param {string} location Nome do menu
-   * @returns {Observable<MenuItem[]>} Retorna um observable com uma lista de itens de menu
+   * @returns {Promise<MenuItem[]>} Retorna uma Promise com uma lista de itens de menu
    */
-  public getMenu(location: string): Observable<MenuItem[]> {
-    return this.get<MenuItem>(`menu`, { location: location }).pipe(
-      map((res: any) => {
-        let items: MenuItem[] = [];
-        if (!res) {
-          return [];
-        }
-        res.forEach((item: any) => {
-          if (parseInt(item.menu_item_parent)) {
-            let index: number;
-            items.forEach((obj: any, i: number) => {
-              if (obj.ID === parseInt(item.menu_item_parent)) {
-                index = i;
-              }
-            });
-            if (items[index].items) {
-              items[index].items.push(this.getMenuItem(item));
-            } else {
-              items[index].items = [this.getMenuItem(item)];
-            }
-          } else {
-            items.push(this.getMenuItem(item));
+  public getMenu(location: string): Promise<MenuItem[]> {
+    return new Promise<MenuItem[]>((resolve, reject) => {
+      this.get<MenuItem>('menu', {
+        'location': location
+      })
+        .toPromise()
+        .then((res: any) => {
+          if (!res) {
+            resolve([]);
           }
-        });
-        return items;
-      }),
-      catchError(error => throwError(error))
-    );
-  }
+          const items: MenuItem[] = [];
+          res.forEach((item: any) => {
+            if (parseInt(item.menu_item_parent)) {
+              let index: number;
+              items.forEach((obj: any, i: number) => {
+                if (obj.ID === parseInt(item.menu_item_parent)) {
+                  index = i;
+                }
+              });
+              if (items[index].items) {
+                items[index].items.push(this.getMenuItem(item));
+              } else {
+                items[index].items = [this.getMenuItem(item)];
+              }
+            } else {
+              items.push(this.getMenuItem(item));
+            }
+          });
+
+          resolve(items);
+
+        })
+        .catch(err => reject(err));
+    });
+  }  
 
   /**
    * Recupera informações sobre uma mídia
@@ -189,17 +196,19 @@ export class WordpressService {
           url: media.source_url,
           sizes: (() => {
             const images: Image[] = [];
-            Object.getOwnPropertyNames(media.media_details.sizes).forEach((key: string) => {
-              const image: any = media.media_details.sizes[key];
-              images[key] = {
-                size: key,
-                width: image.width,
-                height: image.height,
-                url: image.source_url,
-                alt: media.alt_text,
-                caption: sanitizeHtml(media.caption.rendered)
-              };
-            });
+            if (media.media_details.sizes) {
+              Object.getOwnPropertyNames(media.media_details.sizes).forEach((key: string) => {
+                const image: any = media.media_details.sizes[key];
+                images[key] = {
+                  size: key,
+                  width: image.width,
+                  height: image.height,
+                  url: image.source_url,
+                  alt: media.alt_text,
+                  caption: sanitizeHtml(media.caption.rendered)
+                };
+              });
+            }
             return images;
           })()
         }
@@ -222,7 +231,7 @@ export class WordpressService {
         params: req as Params
       }).toPromise().then((res: any) => {
         const items: SearchItem[] = [];
-        res.body.forEach((result: any)=> {
+        res.body.forEach((result: any) => {
           items.push({
             id: result.id,
             title: result.title,
@@ -237,25 +246,8 @@ export class WordpressService {
           pages: res.headers.get('X-WP-TotalPages')
         };
         resolve(result);
-      }).catch((err => reject(err)) );
+      }).catch((err => reject(err)));
     });
-
-    /* return this.get<SearchReponse>(`search`, req)
-      .pipe(map((res: any): SearchReponse[] => {
-        const response: SearchReponse[] = [];
-        res.forEach((item: any) => {
-          response.push({
-            id: item.id,
-            title: item.title,
-            url: item.url,
-            type: item.type,
-            subtype: item.subtype
-          });
-        });
-        return response;
-      }),
-        catchError(error => throwError(error))
-      ); */
   }
 
   /**

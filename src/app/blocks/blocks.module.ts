@@ -7,6 +7,7 @@ import { PostComponent } from './post/post.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { TruncatePipe } from '../pipes/truncate.pipe';
 import { GalleryModule } from './gallery/gallery.module';
+import { LoadingModule } from '../base/loading/loading.module';
 
 
 
@@ -20,6 +21,7 @@ import { GalleryModule } from './gallery/gallery.module';
   imports: [
     AppRoutingModule,
     CommonModule,
+    LoadingModule,
     YoutubeModule,
     GalleryModule
   ],

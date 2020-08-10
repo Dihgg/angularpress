@@ -16,7 +16,7 @@ export class SocialsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.wordpress.getMenu('social').subscribe(
+    this.wordpress.getMenu('social').then(
       menu => (this.socials = menu)
     );
   }

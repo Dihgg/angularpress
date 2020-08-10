@@ -1,10 +1,10 @@
-<article *ngIf="post" class="block-post container-fluid">
+<article *ngIf="post" class="block-post">
   <div
     class="row"
     [class.flex-row-reverse]="options.featuredImageAlign === 'right'"
   >
     <div
-      *ngIf="thumbnail"
+      *ngIf="options.displayFeaturedImage"
       class="block-post__thumbnail col-12"
       [class.col-sm-4]="
         options.featuredImageAlign == 'left' ||
@@ -12,7 +12,24 @@
       "
     >
       <a [routerLink]="getRouterLink(post.url)">
-        <img [src]="thumbnail.url" [alt]="thumbnail.alt" />
+        <picture *ngIf="thumbnail" class="block-post__image">
+          <source
+            *ngIf="thumbnail['medium']"
+            media="(min-width:768px)"
+            [attr.srcset]="thumbnail['medium'].url"
+          />
+          <source
+            *ngIf="thumbnail['large']"
+            media="(min-width:1024px)"
+            [attr.srcset]="thumbnail['large'].url"
+          />
+          <img
+            *ngIf="thumbnail['full']"
+            [src]="thumbnail['full'].url"
+            [alt]="thumbnail['full'].caption"
+          />
+        </picture>
+        <app-loading [loading]="!thumbnail"></app-loading>
       </a>
     </div>
     <div
