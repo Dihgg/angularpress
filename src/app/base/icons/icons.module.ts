@@ -7,7 +7,8 @@ import {
   Search,
   ExternalLink,
   ChevronDown,
-  Loader
+  Loader,
+  X
 } from 'angular-feather/icons';
 
 @NgModule({
@@ -20,7 +21,8 @@ import {
       Search,
       ExternalLink,
       ChevronDown,
-      Loader
+      Loader,
+      X
     })
   ],
   exports: [
