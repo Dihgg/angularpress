@@ -82,8 +82,8 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy,
       this.total = res.total;
       this.wordpress.getPosts({
         'include[]': res.results.map<number>(result => result.id)
-      }).then(posts => {
-        posts.forEach(post => this.posts.push(post));
+      }).then(response => {
+        response.posts.forEach(post => this.posts.push(post));
         this.currentPage++;
         this.loading = false;
       });
