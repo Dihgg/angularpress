@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Post, Image } from 'src/app/services/wordpress.interface';
+import { Post, Image, Category, Tag } from 'src/app/services/wordpress.interface';
 import { WordpressService } from 'src/app/services/wordpress.service';
 import { PostOptions } from '../../types/options.type';
 
@@ -24,22 +24,30 @@ export class PostComponent implements OnInit {
 
   public thumbnail: Image[];
 
+  public category: Category;
+
+  public tags: Tag[];
+
 
   constructor(
     public wordpress: WordpressService
   ) { }
 
   ngOnInit(): void {
-    console.log('POST', this.post);
+
+    this.wordpress.getCategories({ post: this.post.id })
+      .then((response) => (this.category = response.categories[0]));
+
+    if (this.options.showContent) {
+      this.wordpress.getTags({ post: this.post.id })
+        .then((response) => (this.tags = response.tags));
+    }
+
     if (this.options.displayFeaturedImage && this.post.thumbnail) {
       this.wordpress.getMedia(this.post.thumbnail).subscribe(
         media => (this.thumbnail = media.sizes)
       );
     }
-  }
-
-  public getRouterLink(url: string): string {
-    return url.replace(WordpressService.BASE_HREF, '');
   }
 
 }

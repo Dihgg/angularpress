@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Post, PostArgs } from 'src/app/services/wordpress.interface';
+import { Post, PostRequest } from 'src/app/services/wordpress.interface';
 import { WordpressService } from 'src/app/services/wordpress.service';
 import { PostOptions } from '../../types/options.type';
 
@@ -11,10 +11,10 @@ import { PostOptions } from '../../types/options.type';
 export class LatestPostsComponent implements OnInit {
 
   public posts: Post[] = [];
-  public args: PostArgs;
+  public args: PostRequest;
   public css: string[] = [];
   public options: PostOptions;
-  public column: string;
+  public columns: string[] = [];
 
   @Input()
   set attrs(attrs: string[]) {
@@ -44,10 +44,9 @@ export class LatestPostsComponent implements OnInit {
 
     switch (attrs['postLayout']) {
       case 'grid':
-        this.column = `col-${(12 / Number.parseInt(attrs['columns']))}`;
-        break;    
-        default:
-          this.column = 'col-12';
+        this.columns.push(`col-md-${(12 / Number.parseInt(attrs['columns']))}`);
+      default:
+        this.columns.push('col-12');
         break;
     }
   }
@@ -56,9 +55,9 @@ export class LatestPostsComponent implements OnInit {
     public wordpress: WordpressService
   ) { }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.wordpress.getPosts(this.args).then(
-      posts => (this.posts = posts)
+      response => (this.posts = response.posts)
     )
   }
 

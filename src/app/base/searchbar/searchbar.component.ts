@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { WordpressService } from 'src/app/services/wordpress.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -43,6 +43,16 @@ export class SearchbarComponent implements OnInit {
     } else {
       this.active = false;
     }
+  }
+
+  public onClose(): void {
+    this.query = "";
+    this.active = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  public documentClick(event: MouseEvent) {
+    this.active = false;
   }
 
 }

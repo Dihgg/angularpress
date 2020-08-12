@@ -27,8 +27,8 @@ export class PostComponent implements OnInit {
     this.wordpress.getPosts({
       'slug': this.slug
     }, this.type).then(
-      posts => {
-        this.post = posts[0];
+      response => {
+        this.post = response.posts[0];
         this.loading = false;
         this.wordpress.setTitle(this.post.title);
       }

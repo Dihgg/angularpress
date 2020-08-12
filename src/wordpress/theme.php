@@ -28,13 +28,8 @@ if (function_exists('add_theme_support')) {
 	add_theme_support('post-thumbnails');
 
 	// ADD MENUS
-	register_nav_menus(
-		array(
-			'main-nav' => __('Main Menu', 'theme'),   // main nav in header
-			'footer-links' => __('Footer Links', 'theme'), // secondary nav in footer
-			'social' => __('Socials', 'theme') // Socials nav
-		)
-	);
+	require_once('theme/menu.php');
+	
 
 	check_dependencies();
 }
@@ -46,5 +41,5 @@ add_action('after_setup_theme', function () {
 // Filters
 require_once('filters/filters.php');
 
-
+// Customizer
 require_once('customizer/customizer.php');

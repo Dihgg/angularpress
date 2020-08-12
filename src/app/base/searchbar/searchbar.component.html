@@ -1,23 +1,37 @@
-<form class="search" [class.search--active]="active" (submit)="onSubmit()">
+<form
+  class="search"
+  [class.search--active]="active"
+  (submit)="onSubmit()"
+  (click)="$event.stopPropagation()"
+>
   <div class="search__input">
     <input
       #$input
       type="text"
       name="s"
-      [placeholder]="wordpress.translate('search')"
+      [placeholder]="wordpress.translate('Search')"
       class="px-2"
       [(ngModel)]="query"
       [attr.aria-hidden]="!active || null"
     />
   </div>
   <button
-    [attr.aria-label]="wordpress.translate('search')"
-    [type]="(active && query && query.length) ? 'submit' : 'button'"
-    class="btn btn--transparent"
+    [attr.aria-label]="wordpress.translate('Search')"
+    [type]="active && query && query.length ? 'submit' : 'button'"
+    class="search__button btn btn--transparent"
     [class.theme--menu-color]="!active"
     [class.theme--color]="active"
-    (click)="(active && query && query.length) ? onSubmit() : btnClick()"
+    [class.search__button--active]="active"
+    (click)="active && query && query.length ? onSubmit() : btnClick()"
   >
     <i-feather name="search"></i-feather>
+  </button>
+  <button
+    type="button"
+    class="search__close btn btn--transparent"
+    [class.search__close--active]="active"
+    (click)="onClose()"
+  >
+    <i-feather name="x"></i-feather>
   </button>
 </form>

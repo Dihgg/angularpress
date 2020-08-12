@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Observable, throwError, pipe } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem, Block, Media, Image, PostArgs, THEME, SearchRequest, SearchReponse, SearchItem } from '../services/wordpress.interface';
+import { Post, User, MenuItem, Block, Media, Image, PostRequest, THEME, SearchRequest, SearchReponse, SearchItem, PostResponse, CategoriesResponse, CategoriesRequest, Category, TagRequest, TagResponse, Tag } from '../services/wordpress.interface';
 import { sanitizeHtml } from '../utils/utils';
 import { Title } from '@angular/platform-browser';
 declare const BASE_HREF: string;
@@ -87,10 +87,20 @@ export class WordpressService {
    * @param {'posts' | 'pages'} type Tipo de post para recuperação
    * @returns {Promise<Post[]>} Uma Promise com array de posts
    */
-  public async getPosts(params: PostArgs, type: 'posts' | 'pages' | string = 'posts'): Promise<Post[]> {
-    return new Promise<Post[]>((resolve, reject) => {
-      this.get<Post[]>(type, params).toPromise().then(posts => {
-        resolve(posts.map(post => this.preparePost(post)));
+  public async getPosts(params: PostRequest, type: 'posts' | 'pages' | string = 'posts'): Promise<PostResponse> {
+    return new Promise<PostResponse>((resolve, reject) => {
+      this.http.get(`${this.URL}${type}`, {
+        headers: this.headers,
+        observe: 'response',
+        params: params as Params
+      }).toPromise().then(res => {
+        console.log('POST RESP', res);
+        const response: PostResponse = {
+          total: Number.parseInt(res.headers.get('X-WP-Total')),
+          pages: Number.parseInt(res.headers.get('X-WP-TotalPages')),
+          posts: (res.body as any[]).map(post => this.preparePost(post))
+        }
+        resolve(response);
       }).catch(err => reject(err));
     })
   }
@@ -146,7 +156,7 @@ export class WordpressService {
    * @param {string} location Nome do menu
    * @returns {Promise<MenuItem[]>} Retorna uma Promise com uma lista de itens de menu
    */
-  public getMenu(location: string): Promise<MenuItem[]> {
+  public async getMenu(location: string): Promise<MenuItem[]> {
     return new Promise<MenuItem[]>((resolve, reject) => {
       this.get<MenuItem>('menu', {
         'location': location
@@ -250,6 +260,70 @@ export class WordpressService {
     });
   }
 
+  private prepareCategory(category: any): Category {
+    return {
+      id: category.id,
+      count: category.count,
+      name: category.name,
+      description: category.description,
+      link: category.link,
+      slug: category.slug,
+      taxonomy: category.taxonomy
+    }
+  }
+
+  /**
+   * 
+   * @param req 
+   */
+  public async getCategories(req: CategoriesRequest): Promise<CategoriesResponse> {
+    return new Promise<CategoriesResponse>((resolve, reject) => {
+      this.http.get(`${this.URL}categories`, {
+        headers: this.headers,
+        observe: 'response',
+        params: req as Params
+      }).toPromise()
+        .then((res) => {
+          resolve({
+            total: Number.parseInt(res.headers.get('X-WP-Total')),
+            pages: Number.parseInt(res.headers.get('X-WP-TotalPages')),
+            categories: (res.body as any[]).map((category) => this.prepareCategory(category))
+          });
+        })
+        .catch( err => reject(err));
+    });
+  }
+
+  private prepareTag(tag: any): Tag {
+    return {
+      id: tag.id,
+      count: tag.count,
+      description: tag.description,
+      link: this.routerLink(tag.link),
+      name: tag.name,
+      slug: tag.slug,
+      taxonomy: tag.taxonomy
+    };
+  }
+
+  public async getTags(req: TagRequest): Promise<TagResponse> {
+    return new Promise<TagResponse>((resolve, reject) => {
+      this.http.get(`${this.URL}tags`, {
+        headers: this.headers,
+        observe: 'response',
+        params: req as Params
+      }).toPromise()
+        .then((res) => {
+          resolve({
+            total: Number.parseInt(res.headers.get('X-WP-Total')),
+            pages: Number.parseInt(res.headers.get('X-WP-TotalPages')),
+            tags: (res.body as any[]).map((tag) => this.prepareTag(tag))
+          });
+        })
+        .catch( err => reject(err));
+    });
+  }
+
   /**
    * Traduz o tema
    * @param {string} label Label a ser traduzida
@@ -266,6 +340,9 @@ export class WordpressService {
    */
   public setTitle(title: string, separator: string = ' | '): void {
     this.title.setTitle(`${title}${separator}${this.THEME.NAME}`);
+  }
+  public routerLink(url: string): string {
+    return url.replace(WordpressService.BASE_HREF, "");
   }
 
 }
