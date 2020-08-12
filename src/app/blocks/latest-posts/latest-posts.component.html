@@ -1,5 +1,7 @@
-<ul *ngIf="posts" class="latest-posts" [ngClass]="css.join(' ')">
-	<li *ngFor="let post of posts">
-		<app-post [post]="post" [options]="options"></app-post>
-	</li>
-</ul>
+<div class="latest-posts">
+	<ul *ngIf="posts" class="latest-posts__list row" [ngClass]="css.join(' ')">
+		<li *ngFor="let post of posts" class="my-3" [ngClass]="columns.join(' ')">
+			<app-post [post]="post" [options]="options"></app-post>
+		</li>
+	</ul>
+</div>

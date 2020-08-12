@@ -1,0 +1,12 @@
+@import "partials/partials";
+
+.search {
+  &__aside {
+    &__content {
+      @include bp($s-sm) {
+        position: sticky;
+        top: 120px;
+      }
+    }
+  }
+}

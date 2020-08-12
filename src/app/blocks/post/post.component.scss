@@ -1,0 +1,12 @@
+.block-post {
+  &__thumbnail {
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+app-loading::ng-deep .loading {
+  height: 100%;
+}

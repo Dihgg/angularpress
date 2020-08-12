@@ -22,12 +22,13 @@ export class PostComponent implements OnInit {
     this.slug = this.route.snapshot.paramMap.get('slug');
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
+
     this.wordpress.getPosts({
       'slug': this.slug
-    }, this.type).subscribe(
-      posts => {
-        this.post = posts[0];
+    }, this.type).then(
+      response => {
+        this.post = response.posts[0];
         this.loading = false;
         this.wordpress.setTitle(this.post.title);
       }

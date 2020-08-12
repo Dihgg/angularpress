@@ -1,17 +1,82 @@
-<article *ngIf="post" class="post">
-	<a [routerLink]="getRouterLink(post.url)">
-		<img *ngIf="thumbnail" class="post__thumbnail" [src]="thumbnail.url" [alt]="thumbnail.alt"/>
-		<h1 class="post__title">{{post.title}}</h1>
-		<time *ngIf="options.showDate" [attr.datetime]="post.date">{{post.date_formatted}}</time>
-		<div *ngIf="options.showContent" class="post__content">
-			<ng-container [ngSwitch]="options.contentType">
-				<ng-container *ngSwitchCase="'excerpt'">
-					{{post.excerpt | truncate: options.excerpt}}
-				</ng-container>
-				<ng-container *ngSwitchCase="'full_post'">
-					{{post.content}}
-				</ng-container>
-			</ng-container>
-		</div>
-	</a>
+<article *ngIf="post" class="block-post">
+  <div
+    class="row"
+    [class.flex-row-reverse]="options.featuredImageAlign === 'right'"
+  >
+    <div
+      *ngIf="options.displayFeaturedImage"
+      class="block-post__thumbnail col-12"
+      [class.col-sm-4]="
+        options.featuredImageAlign == 'left' ||
+        options.featuredImageAlign == 'right'
+      "
+    >
+      <a [routerLink]="wordpress.routerLink(post.url)">
+        <picture *ngIf="thumbnail" class="block-post__image">
+          <source
+            *ngIf="thumbnail['full']"
+            media="(min-width:1200px)"
+            [attr.srcset]="thumbnail['full'].url"
+          />
+          <source
+            *ngIf="thumbnail['large']"
+            media="(min-width:1024px)"
+            [attr.srcset]="thumbnail['large'].url"
+          />
+          <source
+            *ngIf="thumbnail['medium']"
+            media="(min-width:768px)"
+            [attr.srcset]="thumbnail['medium'].url"
+          />
+          <img
+            *ngIf="thumbnail['thumbnail']"
+            [src]="thumbnail['thumbnail'].url"
+            [alt]="thumbnail['thumbnail'].caption"
+          />
+        </picture>
+        <app-loading [loading]="!thumbnail"></app-loading>
+      </a>
+    </div>
+    <div
+      class="block-post__info col-12"
+      [class.col-sm-8]="
+        options.featuredImageAlign == 'left' ||
+        options.featuredImageAlign == 'right'
+      "
+    >
+      <a
+        *ngIf="category"
+        class="block-post__category"
+        [routerLink]="wordpress.routerLink(category.link)"
+        >{{ category.name }}</a
+      >
+      <h1 class="block-post__title">
+        <a [routerLink]="wordpress.routerLink(post.url)">
+          {{ post.title }}
+        </a>
+      </h1>
+      <time *ngIf="options.showDate" [attr.datetime]="post.date">
+        <a [routerLink]="wordpress.routerLink(post.url)">{{
+          post.date_formatted
+        }}</a>
+      </time>
+      <div *ngIf="options.showContent" class="block-post__content">
+        <a [routerLink]="wordpress.routerLink(post.url)">
+          <ng-container [ngSwitch]="options.contentType">
+            <ng-container *ngSwitchCase="'excerpt'">
+              {{ post.excerpt | truncate: options.excerpt }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'full_post'">
+              {{ post.content }}
+            </ng-container>
+          </ng-container>
+        </a>
+        <nav *ngIf="tags">
+          <a *ngFor="let tag of tags" [routerLink]="tag.link">
+            <small>#{{ tag.name }}</small>&nbsp;
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
 </article>

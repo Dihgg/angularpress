@@ -28,7 +28,11 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy,
     contentType: 'excerpt',
     showDate: true,
     excerpt: 55,
-    showContent: true
+    showContent: false,
+    displayFeaturedImage: true,
+    featuredImageAlign: 'left',
+    featuredImageSizeSlug: 'thumbnail'
+    
   };
 
   constructor(
@@ -78,8 +82,7 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy,
       this.total = res.total;
       this.wordpress.getPosts({
         'include[]': res.results.map<number>(result => result.id)
-      }).toPromise().then(posts => {
-        console.log('AAA', posts);
+      }).then(posts => {
         posts.forEach(post => this.posts.push(post));
         this.currentPage++;
         this.loading = false;

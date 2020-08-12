@@ -2,7 +2,8 @@
 	display: flex;
     position: relative;
     align-items: center;
-    justify-content: center;
+	justify-content: center;
+	height: 100%;
 	.loader {
 		animation: spin 1s linear infinite;
 	}

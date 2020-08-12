@@ -38,7 +38,7 @@ export class MenuComponent implements OnInit {
 
   private setUrl(item: MenuItem): MenuItem {
     if (item.url.includes(WordpressService.BASE_HREF) && !item.target) {
-      item.urlRouter = item.url.replace(WordpressService.BASE_HREF, "");
+      item.urlRouter = this.wordpress.routerLink(item.url);
       item.url = null;
     }
     return item;
@@ -59,8 +59,8 @@ export class MenuComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.wordpress.getMenu(this.location).subscribe(
-      menu => this.setMenu(menu)
+    this.wordpress.getMenu(this.location).then(
+      menu => (this.setMenu(menu))
     );
   }
 
