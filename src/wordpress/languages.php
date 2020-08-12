@@ -10,6 +10,7 @@ function translations()
 				'No results found'		=> __('No results found', 'angularpress'),
 				'Results found'			=> __('Results found', 'angularpress'),
 				'Search'				=> __('Search', 'angularpress'),
+				'Load More'				=> __('Carregar Mais', 'angularpress'),
 			)
 		),
 		ENT_QUOTES,
