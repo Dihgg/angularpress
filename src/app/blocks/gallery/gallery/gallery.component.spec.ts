@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GalleryComponent } from './gallery.component';
+import { Stub } from 'src/testing/stub';
+import { WordpressService } from 'src/app/services/wordpress.service';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
@@ -8,7 +10,25 @@ describe('GalleryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GalleryComponent ]
+      declarations: [
+        GalleryComponent,
+        Stub.Component({
+          selector: 'ngu-carousel',
+          inputs: [
+            'inputs',
+            'dataSource'
+          ] 
+        }),
+        Stub.Component({
+          selector: 'ngu-tile',
+        })
+      ],
+      providers: [
+        {
+          provide: WordpressService,
+          useValue: Stub.Wordpress()
+        }
+      ]
     })
     .compileComponents();
   }));

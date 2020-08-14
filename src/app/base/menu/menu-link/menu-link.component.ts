@@ -8,11 +8,10 @@ import { MenuItem } from 'src/app/services/wordpress.interface';
 })
 export class MenuLinkComponent implements OnInit {
 
-  @Input() link: MenuItem;
+  @Input() link: MenuItem
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

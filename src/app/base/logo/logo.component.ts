@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { WordpressService } from 'src/app/services/wordpress.service';
 import { THEME } from 'src/app/services/wordpress.interface';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-logo',
@@ -15,7 +14,6 @@ export class LogoComponent implements OnInit {
   public logos: THEME['logos'] | THEME['logos']['footer'];
 
   constructor(
-    public title: Title,
     public wordpress: WordpressService
   ) { }
 

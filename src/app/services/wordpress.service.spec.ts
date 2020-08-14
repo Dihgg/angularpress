@@ -2,16 +2,20 @@ import { TestBed } from '@angular/core/testing';
 
 import { WordpressService } from './wordpress.service';
 import { HttpClientModule } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 describe('WordpressService', () => {
   let service: WordpressService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      providers: [
+        Location,
+        Title
+      ],
       imports: [
-        HttpClientModule
+        HttpClientModule,
       ]
     });
     service = TestBed.inject(WordpressService);

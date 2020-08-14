@@ -16,6 +16,6 @@
     <img [src]="logos.mobile || logos.desktop" [alt]="title.getTitle()" />
   </picture>
   <ng-container *ngIf="!logos.mobile && !logos.desktop">
-    {{ title.getTitle() }}
+    {{ wordpress.getTitle() }}
   </ng-container>
 </a>

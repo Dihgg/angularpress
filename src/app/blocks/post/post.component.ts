@@ -44,7 +44,7 @@ export class PostComponent implements OnInit {
     }
 
     if (this.options.displayFeaturedImage && this.post.thumbnail) {
-      this.wordpress.getMedia(this.post.thumbnail).subscribe(
+      this.wordpress.getMedia(this.post.thumbnail).then(
         media => (this.thumbnail = media.sizes)
       );
     }

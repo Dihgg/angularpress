@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WordpressService } from '../services/wordpress.service';
-import { SearchReponse, Post } from '../services/wordpress.interface';
+import { Post } from '../services/wordpress.interface';
 import { PageComponent } from '../page/page.component';
 import { PostOptions } from '../types/options.type';
 import { Subscription } from 'rxjs';

@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageComponent } from './page.component';
+import { Stub } from 'src/testing/stub';
+import { WordpressService } from '../services/wordpress.service';
+import { ActivatedRoute } from '@angular/router';
 
 describe('PageComponent', () => {
   let component: PageComponent;
@@ -8,7 +11,31 @@ describe('PageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageComponent ]
+      declarations: [
+        PageComponent,
+        Stub.Component({
+          selector: 'app-blocks',
+          inputs: [
+            'blocks'
+          ]
+        }),
+        Stub.Component({
+          selector: 'app-loading',
+          inputs: [
+            'loading'
+          ]
+        }),
+      ],
+      providers: [
+        {
+          provide: WordpressService,
+          useValue: Stub.Wordpress()
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: Stub.ActivatedRoute()
+        }
+      ]
     })
     .compileComponents();
   }));

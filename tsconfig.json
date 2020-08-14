@@ -19,11 +19,6 @@
       "dom"
     ],
     "esModuleInterop": true,
-    "paths": {
-      "*": [
-        "../node_modules"
-      ]
-    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

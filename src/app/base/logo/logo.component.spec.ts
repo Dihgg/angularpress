@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LogoComponent } from './logo.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { WordpressService } from 'src/app/services/wordpress.service';
+import { Stub } from 'src/testing/stub';
 
 describe('LogoComponent', () => {
   let component: LogoComponent;
@@ -8,7 +11,16 @@ describe('LogoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogoComponent ]
+      declarations: [ LogoComponent ],
+      imports: [
+        RouterTestingModule
+      ],
+      providers: [
+        {
+          provide: WordpressService,
+          useValue: Stub.Wordpress()
+        }
+      ]
     })
     .compileComponents();
   }));

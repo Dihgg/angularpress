@@ -4,7 +4,26 @@ import { Location } from '@angular/common';
 import { Observable, throwError, pipe } from 'rxjs';
 import { map, catchError } from "rxjs/operators";
 import { Params } from '@angular/router';
-import { Post, User, MenuItem, Block, Media, Image, PostRequest, THEME, SearchRequest, SearchReponse, SearchItem, PostResponse, CategoriesResponse, CategoriesRequest, Category, TagRequest, TagResponse, Tag } from '../services/wordpress.interface';
+import {
+  Post,
+  User,
+  MenuItem,
+  Block,
+  Media,
+  Image,
+  PostRequest,
+  THEME,
+  SearchRequest,
+  SearchReponse,
+  SearchItem,
+  PostResponse,
+  CategoriesResponse,
+  CategoriesRequest,
+  Category,
+  TagRequest,
+  TagResponse,
+  Tag
+} from '../services/wordpress.interface';
 import { sanitizeHtml } from '../utils/utils';
 import { Title } from '@angular/platform-browser';
 declare const BASE_HREF: string;
@@ -44,6 +63,37 @@ export class WordpressService {
    */
   public setTRANSLATION(translation: any): void {
     this.TRANSLATION = translation;
+  }
+
+  /**
+   * Traduz o tema
+   * @param {string} label Label a ser traduzida
+   * @returns {string} Retorna a tradução (se houver)
+   */
+  public translate(label: string): string {
+    return this.TRANSLATION[label] || label;
+  }
+
+  /**
+   * Modifica o título da página. Mantendo o título do blog no final
+   * @param {string} title Título
+   * @param {string} separator Separador
+   */
+  public setTitle(title: string, separator: string = ' | '): void {
+    this.title.setTitle(`${title}${separator}${this.THEME.NAME}`);
+  }
+
+  public getTitle(): string {
+    return this.title.getTitle();
+  }
+
+  /**
+   * Trata URL para utilizar em um [routerLink]
+   * @param {string} url URL de entrada
+   * @returns {string} URL tratata
+   */
+  public routerLink(url: string): string {
+    return url.replace(WordpressService.BASE_HREF, "");
   }
 
   /**
@@ -114,7 +164,7 @@ export class WordpressService {
       this.get<Post>(`posts/${id}`)
         .toPromise()
         .then(post => resolve(this.preparePost(post)))
-        .catch( err => reject(err) );
+        .catch(err => reject(err));
     });
   }
 
@@ -123,24 +173,25 @@ export class WordpressService {
    * @param {number} id ID do usuário
    * @returns {Observable<User>} Retorna um observable com dados do usuário
    */
-  public async getUser(id: number): Promise<User> {
+  public async getUser(id: number, size = 96): Promise<User> {
     return new Promise<User>((resolve, reject) => {
-      this.get<User>(`users/${id}`)
+      this.get<User>(`users/${id}`, {
+        headers: this.headers,
+        observe: 'body'
+      })
         .toPromise()
-        .then((user: any) => {
-          resolve({
-            id: user.id,
-            name: user.name,
-            link: user.link,
-            slug: user.slug,
-            avatar: user.avatar_urls['96']
-          });
-        })
+        .then((user: any) => resolve({
+          id: user.id,
+          name: user.name,
+          link: user.link,
+          slug: user.slug,
+          avatar: user.avatar_urls[size]
+        }))
         .catch(err => reject(err));
     });
   }
 
-  private getMenuItem(item: any): MenuItem {
+  private prepareMenuItem(item: any): MenuItem {
     return {
       ID: parseInt(item.ID),
       type: (item.post_type === 'custom') ? 'custom' : 'post',
@@ -176,12 +227,12 @@ export class WordpressService {
                 }
               });
               if (items[index].items) {
-                items[index].items.push(this.getMenuItem(item));
+                items[index].items.push(this.prepareMenuItem(item));
               } else {
-                items[index].items = [this.getMenuItem(item)];
+                items[index].items = [this.prepareMenuItem(item)];
               }
             } else {
-              items.push(this.getMenuItem(item));
+              items.push(this.prepareMenuItem(item));
             }
           });
 
@@ -190,41 +241,50 @@ export class WordpressService {
         })
         .catch(err => reject(err));
     });
-  }  
+  }
+
+  /**
+   * Preparar Media para o serviço  
+   * @param {any} media Objeto de retorno da API
+   * @returns {Media} Retorna um objeto do tipo Media
+   */
+  private prepareMedia(media: any): Media {
+    return {
+      id: media.id,
+      type: media.media_type,
+      url: media.source_url,
+      sizes: (() => {
+        const images: Image[] = [];
+        if (media.media_details.sizes) {
+          Object.getOwnPropertyNames(media.media_details.sizes).forEach((key: string) => {
+            const image: any = media.media_details.sizes[key];
+            images[key] = {
+              size: key,
+              width: image.width,
+              height: image.height,
+              url: image.source_url,
+              alt: media.alt_text,
+              caption: sanitizeHtml(media.caption.rendered)
+            };
+          });
+        }
+        return images;
+      })()
+    }
+  }
 
   /**
    * Recupera informações sobre uma mídia
    * @param {string} id id da mídia
    * @returns {Obeservable<Media>} Observable da resposta com uma mídia 
    */
-  public getMedia(id: number): Observable<Media> {
-    return this.get<Media>(`media/${id}`)
-      .pipe(map((media: any): Media => {
-        return {
-          id: media.id,
-          type: media.media_type,
-          url: media.source_url,
-          sizes: (() => {
-            const images: Image[] = [];
-            if (media.media_details.sizes) {
-              Object.getOwnPropertyNames(media.media_details.sizes).forEach((key: string) => {
-                const image: any = media.media_details.sizes[key];
-                images[key] = {
-                  size: key,
-                  width: image.width,
-                  height: image.height,
-                  url: image.source_url,
-                  alt: media.alt_text,
-                  caption: sanitizeHtml(media.caption.rendered)
-                };
-              });
-            }
-            return images;
-          })()
-        }
-      }),
-        catchError(error => throwError(error))
-      );
+  public async getMedia(id: number): Promise<Media> {
+    return new Promise<Media>((resolve, reject) => {
+      this.get<Media>(`media/${id}`)
+        .toPromise()
+        .then( (media: any) => resolve(this.prepareMedia(media)) )
+        .catch( err => reject(err));
+    });
   }
 
   /**
@@ -260,6 +320,11 @@ export class WordpressService {
     });
   }
 
+  /**
+   * Preparar Category para o serviço  
+   * @param {any} category Objeto de retorno da API
+   * @returns {Category} Retorna um objeto do tipo Category
+   */
   private prepareCategory(category: any): Category {
     return {
       id: category.id,
@@ -273,8 +338,9 @@ export class WordpressService {
   }
 
   /**
-   * 
-   * @param req 
+   * Método para retornar Categorias do Wordpress
+   * @param {CategoriesRequest} req Request para API
+   * @returns {Promise<CategoriesResponse>} Retorna uma Promise<CategoriesResponse>
    */
   public async getCategories(req: CategoriesRequest): Promise<CategoriesResponse> {
     return new Promise<CategoriesResponse>((resolve, reject) => {
@@ -290,10 +356,15 @@ export class WordpressService {
             categories: (res.body as any[]).map((category) => this.prepareCategory(category))
           });
         })
-        .catch( err => reject(err));
+        .catch(err => reject(err));
     });
   }
 
+  /**
+   * Preparar Tag para o serviço  
+   * @param {any} tag Objeto de retorno da API
+   * @returns {Tag} Retorna um objeto do tipo Tag
+   */
   private prepareTag(tag: any): Tag {
     return {
       id: tag.id,
@@ -306,6 +377,11 @@ export class WordpressService {
     };
   }
 
+  /**
+   * Método para retornar Tag do Wordpress
+   * @param {TagRequest} req Request para API
+   * @returns {Promise<TagResponse>} Retorna uma Promise<TagResponse>
+   */
   public async getTags(req: TagRequest): Promise<TagResponse> {
     return new Promise<TagResponse>((resolve, reject) => {
       this.http.get(`${this.URL}tags`, {
@@ -320,29 +396,7 @@ export class WordpressService {
             tags: (res.body as any[]).map((tag) => this.prepareTag(tag))
           });
         })
-        .catch( err => reject(err));
+        .catch(err => reject(err));
     });
   }
-
-  /**
-   * Traduz o tema
-   * @param {string} label Label a ser traduzida
-   * @returns {string} Retorna a tradução (se houver)
-   */
-  public translate(label: string): string {
-    return this.TRANSLATION[label] || label;
-  }
-
-  /**
-   * Modifica o título da página. Mantendo o título do blog no final
-   * @param {string} title Título
-   * @param {string} separator Separador
-   */
-  public setTitle(title: string, separator: string = ' | '): void {
-    this.title.setTitle(`${title}${separator}${this.THEME.NAME}`);
-  }
-  public routerLink(url: string): string {
-    return url.replace(WordpressService.BASE_HREF, "");
-  }
-
 }
