@@ -38,4 +38,14 @@ describe('SocialsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should get icon name', () => {
+    const icon = component.getIcon('https://facebook.com/dummy');
+    expect(icon).toBe('facebook');
+  });
+
+  it('should get icon default name', () => {
+    const icon = component.getIcon('https://dummt.com/dummy');
+    expect(icon).toBe('external-link');
+  });
 });

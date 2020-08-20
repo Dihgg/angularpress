@@ -69,28 +69,29 @@ export interface SearchReponse extends RestResponse {
 	results: SearchItem[]
 }
 
-export interface CategoriesRequest extends RestRequest {
+export interface CategoryRequest extends RestRequest {
 	hide_empty?: boolean;
 	orderby?: 'id' | 'include' | 'name' | 'slug' | 'include_slugs' | 'term_group' | 'description' | 'count';
 	parent?: number;
 	post?: number;
 }
 
-export interface CategoriesResponse extends RestResponse {
+export interface CategoryResponse extends RestResponse {
 	categories: Category[]
 }
 
 export interface Category {
-	count: number,
-	description: string,
-	id: number,
-	link: string,
-	name: string,
-	slug: string,
-	taxonomy: string
+	count: number;
+	description: string;
+	id: number;
+	link: string;
+	name: string;
+	slug: string;
+	taxonomy: string;
+	parent?: number;
 }
 
-export interface TagRequest extends CategoriesRequest { }
+export interface TagRequest extends CategoryRequest { }
 
 export interface TagResponse extends RestResponse {
 	tags: Tag[]
@@ -135,8 +136,10 @@ export interface THEME {
 	'NAME': string,
 	'TEMPLATE_URI': string,
 	'logos': {
-		'mobile': string;
-		'desktop': string;
+		'header': {
+			'mobile': string;
+			'desktop': string;
+		};
 		'footer': {
 			'mobile': string;
 			'desktop': string;

@@ -18,13 +18,13 @@ export class SearchbarComponent implements OnInit {
     public wordpress: WordpressService,
     public router: Router,
     public route: ActivatedRoute
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.query = params['query'];
     });
   }
-
-  ngOnInit(): void { }
 
   public btnClick() {
     this.active = !this.active;

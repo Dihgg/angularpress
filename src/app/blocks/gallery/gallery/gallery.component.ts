@@ -15,10 +15,21 @@ export class GalleryComponent implements OnInit {
   public images: Image[] = [];
   public css: string[] = [];
 
-  public config: NguCarouselConfig;
+  public config: NguCarouselConfig = {
+    grid: { xs: 1, sm: 1, md: this.columns, lg: this.columns, all: 0 },
+    slide: 3,
+    speed: 250,
+    point: {
+      visible: true
+    },
+    load: 2,
+    velocity: 0,
+    touch: true,
+    easing: 'cubic-bezier(0, 0, 0.2, 1)'
+  };
 
   @Input()
-  set attrs(attrs: string[]) {
+  set attrs(attrs: any) {
     this.ids = attrs['ids'];
 
     this.columns = attrs['columns'];
@@ -28,19 +39,6 @@ export class GalleryComponent implements OnInit {
       `gallery--align-${attrs['align'] || 'left'}`,
       attrs['className'] || undefined
     ];
-
-    this.config = {
-      grid: { xs: 1, sm: 1, md: this.columns, lg: this.columns, all: 0 },
-      slide: 3,
-      speed: 250,
-      point: {
-        visible: true
-      },
-      load: 2,
-      velocity: 0,
-      touch: true,
-      easing: 'cubic-bezier(0, 0, 0.2, 1)'
-    };
   }
 
   constructor(
@@ -48,7 +46,7 @@ export class GalleryComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.ids.forEach((id: number) => this.wordpress.getMedia(id).then(
+    this.ids.forEach((id: number) => this.wordpress.getMedia(id).subscribe(
       media => this.images.push(media.sizes['full'])
     ));
   }

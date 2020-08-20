@@ -13,22 +13,22 @@ export class MenuComponent implements OnInit {
   public logos: THEME['logos'];
 
   public submenu = false;
-  public submenuH: number = 0;
+  public submenuH = 0;
 
   @Input() showHome = false;
   @Input() classes: string[] = [];
+  @Input() location: string;
 
   @ViewChild('$submenu') $submenu: ElementRef;
 
-  @Input() location: string;
   public setMenu(items: MenuItem[]) {
     this.items = [];
     items.forEach((item: MenuItem) => {
       item = this.setUrl(item);
-      if (item.items) {
+      if (item.items.length) {
         item.classes.push('menu__item__link--has-child', 'mb-2');
-        item.items.forEach((item_: MenuItem, i: number) => {
-          item.items[i] = this.setUrl(item_);
+        item.items.forEach((subitem: MenuItem, i: number) => {
+          item.items[i] = this.setUrl(subitem);
           item.items[i].classes.push('mb-2');
         });
       }
@@ -59,7 +59,7 @@ export class MenuComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.wordpress.getMenu(this.location).then(
+    this.wordpress.getMenu(this.location).subscribe(
       menu => (this.setMenu(menu))
     );
   }

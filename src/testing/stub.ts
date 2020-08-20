@@ -1,44 +1,29 @@
 import { Component, ElementRef } from '@angular/core';
 import { WordpressServiceStub } from './wordpress.stub';
-import { Post, THEME } from 'src/app/services/wordpress.interface';
+import { Mock } from './mock';
 
 export class Stub {
 
-	static Component(options: Component): any {
-		let metadata: Component = {
-			selector: options.selector,
-			template: options.template || '',
-			inputs: options.inputs,
-			outputs: options.outputs
-		}
-		return Component(metadata)( class _ { });
-	}
+    static Component(options: Component): any {
+        const metadata: Component = {
+            selector: options.selector,
+            template: options.template || '',
+            inputs: options.inputs,
+            outputs: options.outputs
+        };
+        return Component(metadata)(class StubbedClass { });
+    }
 
-	static ActivatedRoute() {
-		return {
-			snapshot: {
-				paramMap: {
-					get: (name: string): string => 'stub'
-				}
-			},
-			queryParams: {
-				subscribe: (params: any) => ({
-					query: 'mock'
-				})
-			}
-		}
-	}
+    static ActivatedRoute() {
+        return Mock.ActivatedRoute();
+    }
 
-	static ElementRef() {
-		return class Mock extends ElementRef {
-			constructor() {
-				super(null);
-			}
-		}
-	} 
+    static ElementRef(): ElementRef {
+        return Mock.ElementRef();
+    }
 
-	static Wordpress() {
-		return new WordpressServiceStub();
-	}
-	
+    static Wordpress() {
+        return new WordpressServiceStub();
+    }
+
 }

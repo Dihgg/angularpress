@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthorComponent } from './author.component';
 import { WordpressService } from '../services/wordpress.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Stub } from 'src/testing/stub';
 
 describe('AuthorComponent', () => {
   let component: AuthorComponent;
@@ -15,7 +16,10 @@ describe('AuthorComponent', () => {
         HttpClientTestingModule
       ],
       providers: [
-        WordpressService
+        {
+          provide: WordpressService,
+          useValue: Stub.Wordpress()
+        }
       ]
     })
     .compileComponents();
@@ -24,6 +28,7 @@ describe('AuthorComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AuthorComponent);
     component = fixture.componentInstance;
+    component.id = 1;
     fixture.detectChanges();
   });
 

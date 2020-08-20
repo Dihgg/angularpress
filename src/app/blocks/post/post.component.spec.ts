@@ -46,4 +46,19 @@ describe('PostComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('should create with others options', () => {
+    it('should create with content', () => {
+      component.options.showContent = true;
+      component.ngOnInit();
+      expect(component).toBeTruthy();
+    });
+
+    it('should create with featured image', () => {
+      component.options.displayFeaturedImage = true;
+      component.post.thumbnail = 1;
+      component.ngOnInit();
+      expect(component).toBeTruthy();
+    });
+  });
 });

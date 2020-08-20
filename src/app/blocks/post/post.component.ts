@@ -36,15 +36,15 @@ export class PostComponent implements OnInit {
   ngOnInit(): void {
 
     this.wordpress.getCategories({ post: this.post.id })
-      .then((response) => (this.category = response.categories[0]));
+      .subscribe((response) => (this.category = response.categories[0]));
 
     if (this.options.showContent) {
       this.wordpress.getTags({ post: this.post.id })
-        .then((response) => (this.tags = response.tags));
+        .subscribe((response) => (this.tags = response.tags));
     }
 
     if (this.options.displayFeaturedImage && this.post.thumbnail) {
-      this.wordpress.getMedia(this.post.thumbnail).then(
+      this.wordpress.getMedia(this.post.thumbnail).subscribe(
         media => (this.thumbnail = media.sizes)
       );
     }

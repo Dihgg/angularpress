@@ -18,7 +18,7 @@ export class AuthorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.wordpress.getUser(this.id).then(
+    this.wordpress.getUser(this.id).subscribe(
       user => (this.author = user)
     );
   }

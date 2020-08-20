@@ -10,7 +10,7 @@ export class YoutubeComponent implements OnInit {
   public videoId: string;
 
   @Input()
-  set attrs(attrs: string[]) {
+  set attrs(attrs: any) {
     const url = attrs['url'];
     const match = url.match(/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
     if (match && match[2].length === 11) {

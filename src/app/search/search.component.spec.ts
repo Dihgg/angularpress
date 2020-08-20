@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Stub } from 'src/testing/stub';
 import { FormsModule } from '@angular/forms';
 import { WordpressService } from '../services/wordpress.service';
+import { of } from 'rxjs';
+import { SearchReponse } from '../services/wordpress.interface';
 
 describe('SearchComponent', () => {
   let component: SearchComponent;
@@ -60,6 +62,22 @@ describe('SearchComponent', () => {
   });
 
   it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should submit', () => {
+    jest.spyOn(component.router, 'navigate');
+    component.onSubmit();
+    expect(component.router.navigate).toBeCalled();
+  });
+
+  it('should return empty search', () => {
+    jest.spyOn(component.wordpress, 'search').mockReturnValue(of<SearchReponse>({
+      pages: 1,
+      total: 0,
+      results: []
+    }));
+    component.ngOnInit();
     expect(component).toBeTruthy();
   });
 });

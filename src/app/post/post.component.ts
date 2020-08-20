@@ -26,7 +26,7 @@ export class PostComponent implements OnInit {
 
     this.wordpress.getPosts({
       'slug': this.slug
-    }, this.type).then(
+    }, this.type).subscribe(
       response => {
         this.post = response.posts[0];
         this.loading = false;

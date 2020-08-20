@@ -11,16 +11,21 @@ export class LogoComponent implements OnInit {
 
   @Input() footer = false;
 
-  public logos: THEME['logos'] | THEME['logos']['footer'];
+  public logos: {
+    'desktop': string;
+    'mobile': string;
+  };
 
   constructor(
     public wordpress: WordpressService
   ) { }
 
   ngOnInit(): void {
-    this.logos = this.wordpress.THEME.logos;
-    if (this.footer && (this.wordpress.THEME.logos.footer.desktop || this.wordpress.THEME.logos.footer.mobile)) {
+    // this.logos = this.wordpress.THEME.logos;
+    if (this.footer && this.wordpress.hasLogo('footer')) {
       this.logos = this.wordpress.THEME.logos.footer;
+    } else if (this.wordpress.hasLogo('header')) {
+      this.logos = this.wordpress.THEME.logos.header;
     }
   }
 

@@ -13,7 +13,7 @@
       media="(max-width:768px)"
       [attr.srcset]="logos.mobile"
     />
-    <img [src]="logos.mobile || logos.desktop" [alt]="title.getTitle()" />
+    <img [src]="logos.mobile || logos.desktop" [alt]="wordpress.getTitle()" />
   </picture>
   <ng-container *ngIf="!logos.mobile && !logos.desktop">
     {{ wordpress.getTitle() }}

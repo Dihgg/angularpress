@@ -42,4 +42,24 @@ describe('GalleryComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should set attrs', () => {
+    component.attrs = {
+      'ids': [1,2,3],
+      'columns': 3,
+      'align': 'left',
+      'className': 'mock'
+    };
+    component.ngOnInit();
+    expect(component).toBeTruthy();
+  });
+
+  it('should set attrs with defaults', () => {
+    component.attrs = {
+      'ids': [1,2,3],
+      'columns': 3,
+    };
+    component.ngOnInit();
+    expect(component).toBeTruthy();
+  });
 });

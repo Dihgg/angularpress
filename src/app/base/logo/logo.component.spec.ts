@@ -31,7 +31,24 @@ describe('LogoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('creation', () => {
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+    it('should create with footer option', () => {
+      component.footer = true;
+      component.ngOnInit();
+      expect(component).toBeTruthy();
+    });
+
+    it('should create with footer logo not set', () => {
+      jest.spyOn(component.wordpress, 'hasLogo').mockReturnValue(false);
+      component.footer = true;
+      component.ngOnInit();
+      expect(component).toBeTruthy();
+    });
+
   });
+
+
 });

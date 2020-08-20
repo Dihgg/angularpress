@@ -1,8 +1,8 @@
-import { Injectable, Type } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Location } from '@angular/common';
-import { Observable, throwError, pipe } from 'rxjs';
-import { map, catchError } from "rxjs/operators";
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { Params } from '@angular/router';
 import {
   Post,
@@ -17,8 +17,8 @@ import {
   SearchReponse,
   SearchItem,
   PostResponse,
-  CategoriesResponse,
-  CategoriesRequest,
+  CategoryResponse,
+  CategoryRequest,
   Category,
   TagRequest,
   TagResponse,
@@ -26,6 +26,7 @@ import {
 } from '../services/wordpress.interface';
 import { sanitizeHtml } from '../utils/utils';
 import { Title } from '@angular/platform-browser';
+
 declare const BASE_HREF: string;
 
 @Injectable({
@@ -33,13 +34,14 @@ declare const BASE_HREF: string;
 })
 export class WordpressService {
 
-  private URL: string;
-  private context = "v2";
+  public static BASE_HREF: string = BASE_HREF;
+
+  public URL: string;
+  private context = 'v2';
   private headers: HttpHeaders = new HttpHeaders();
 
-  public static BASE_HREF: string = BASE_HREF;
   public THEME: THEME;
-  public TRANSLATION: any;
+  public TRANSLATION = {};
 
   constructor(
     private http: HttpClient,
@@ -51,7 +53,7 @@ export class WordpressService {
 
   /**
    * Insere no WordpressService as opções do wordpress
-   * @param {THEME} options Objeto JSON com informações do tema 
+   * @param options Objeto JSON com informações do tema
    */
   public setTHEME(options: THEME): void {
     this.THEME = options;
@@ -59,7 +61,7 @@ export class WordpressService {
 
   /**
    * Insere as traduções no WordpressService
-   * @param {any} translation JSON com a tradução
+   * @param translation JSON com a tradução
    */
   public setTRANSLATION(translation: any): void {
     this.TRANSLATION = translation;
@@ -67,8 +69,8 @@ export class WordpressService {
 
   /**
    * Traduz o tema
-   * @param {string} label Label a ser traduzida
-   * @returns {string} Retorna a tradução (se houver)
+   * @param label Label a ser traduzida
+   * @returns Retorna a tradução (se houver)
    */
   public translate(label: string): string {
     return this.TRANSLATION[label] || label;
@@ -76,8 +78,8 @@ export class WordpressService {
 
   /**
    * Modifica o título da página. Mantendo o título do blog no final
-   * @param {string} title Título
-   * @param {string} separator Separador
+   * @param title Título
+   * @param separator Separador
    */
   public setTitle(title: string, separator: string = ' | '): void {
     this.title.setTitle(`${title}${separator}${this.THEME.NAME}`);
@@ -89,29 +91,44 @@ export class WordpressService {
 
   /**
    * Trata URL para utilizar em um [routerLink]
-   * @param {string} url URL de entrada
-   * @returns {string} URL tratata
+   * @param url URL de entrada
+   * @returns URL tratata
    */
   public routerLink(url: string): string {
-    return url.replace(WordpressService.BASE_HREF, "");
+    return url.replace(WordpressService.BASE_HREF, '');
+  }
+
+  public hasLogo(location: 'header' | 'footer' = 'header'): boolean {
+    if (this.THEME.logos[location].desktop || this.THEME.logos[location].mobile) {
+      return true;
+    }
+    return false;
   }
 
   /**
    * Wrapper do método get
-   * @param {string} path caminho para REST API 
-   * @param {Params} query Parâmetros URL GET
+   * @param path caminho para REST API
+   * @param query Parâmetros URL GET
    */
   private get<T>(path: string, params: Params = {}): Observable<T> {
     return this.http.get<T>(`${this.URL}${path}`, {
       headers: this.headers,
-      params: params
+      params,
     });
   }
 
-  private sanitizeHtml(str: string): string {
-    return str.replace(/(<([^>]+)>)/ig, '');
+  /**
+   * Retornar um Objeto do tipo Block para o Serviço
+   * @param block Objeto de retorno da API
+   * @returns Block para consumo do serviço
+   */
+  private prepareBlock(block: any): Block {
+    return {
+      name: block.blockName,
+      attrs: block.attrs,
+      html: block.innerHTML
+    };
   }
-
   private preparePost(post: any): Post {
     return {
       id: post.id,
@@ -121,209 +138,204 @@ export class WordpressService {
       date_formatted: post.date_formatted,
       excerpt: sanitizeHtml(post.excerpt.rendered),
       content: sanitizeHtml(post.content.rendered),
-      blocks: post.blocks.map((block: any): Block => ({
-        name: block.blockName,
-        attrs: block.attrs,
-        html: block.innerHTML
-      })),
+      blocks: post.blocks.map((block: any): Block => this.prepareBlock(block)),
       author: post.author,
       thumbnail: post.featured_media || null
-    }
+    };
   }
 
   /**
    * Recupera Posts
-   * @param {Params} params Parâmetros para recuperação dos posts
-   * @param {'posts' | 'pages'} type Tipo de post para recuperação
-   * @returns {Promise<Post[]>} Uma Promise com array de posts
+   * @param params Parâmetros para recuperação dos posts
+   * @param sts' | 'pages'} type Tipo de post para recuperação
+   * @returns ostResponse>} Um Observable com a resposta
    */
-  public async getPosts(params: PostRequest, type: 'posts' | 'pages' | string = 'posts'): Promise<PostResponse> {
-    return new Promise<PostResponse>((resolve, reject) => {
-      this.http.get(`${this.URL}${type}`, {
-        headers: this.headers,
-        observe: 'response',
-        params: params as Params
-      }).toPromise().then(res => {
-        console.log('POST RESP', res);
-        const response: PostResponse = {
-          total: Number.parseInt(res.headers.get('X-WP-Total')),
-          pages: Number.parseInt(res.headers.get('X-WP-TotalPages')),
-          posts: (res.body as any[]).map(post => this.preparePost(post))
-        }
-        resolve(response);
-      }).catch(err => reject(err));
-    })
+  public getPosts(params: PostRequest, type: 'posts' | 'pages' | string = 'posts'): Observable<PostResponse> {
+    return this.http.get(`${this.URL}${type}`, {
+      headers: this.headers,
+      observe: 'response',
+      params: params as Params
+    }).pipe(
+      map((res: any) => ({
+        total: Number.parseInt(res.headers.get('X-WP-Total'), 10),
+        pages: Number.parseInt(res.headers.get('X-WP-TotalPages'), 10),
+        posts: (res.body as any[]).map(post => this.preparePost(post))
+      })),
+      catchError(error => throwError(error))
+    );
   }
 
   /**
    * Recupera um post via ID
-   * @param {number} id Id do post
+   * @param id Id do post
+   * @returns Um Observable com o post
    */
-  public async getPost(id: number): Promise<Post> {
-    return new Promise<Post>((resolve, reject) => {
-      this.get<Post>(`posts/${id}`)
-        .toPromise()
-        .then(post => resolve(this.preparePost(post)))
-        .catch(err => reject(err));
-    });
+  public getPost(id: number): Observable<Post> {
+    return this.get<Post>(`posts/${id}`)
+      .pipe(
+        map((res: any) => (this.preparePost(res))),
+        catchError(error => throwError(error))
+      );
   }
 
   /**
    * Recupera Usuário
-   * @param {number} id ID do usuário
-   * @returns {Observable<User>} Retorna um observable com dados do usuário
+   * @param id ID do usuário
+   * @returns ser>} Retorna um observable com dados do usuário
    */
-  public async getUser(id: number, size = 96): Promise<User> {
-    return new Promise<User>((resolve, reject) => {
-      this.get<User>(`users/${id}`, {
-        headers: this.headers,
-        observe: 'body'
-      })
-        .toPromise()
-        .then((user: any) => resolve({
+  public getUser(id: number, size = 96): Observable<User> {
+    return this.get<User>(`users/${id}`)
+      .pipe(
+        map((user: any) => ({
           id: user.id,
           name: user.name,
           link: user.link,
           slug: user.slug,
           avatar: user.avatar_urls[size]
-        }))
-        .catch(err => reject(err));
-    });
+        })),
+        catchError(error => throwError(error))
+      );
   }
 
+  /**
+   * Prepara um MenuItem
+   * @param item Objeto de resposta
+   * @returns MenuItem de resposta
+   */
   private prepareMenuItem(item: any): MenuItem {
     return {
-      ID: parseInt(item.ID),
+      ID: parseInt(item.ID, 10),
       type: (item.post_type === 'custom') ? 'custom' : 'post',
       title: item.title,
       url: item.url,
       classes: item.classes,
-      target: item.target || null
-    }
+      target: item.target || null,
+      items: []
+    };
   }
 
   /**
    * Recupera um Menu do Wordpress
-   * @param {string} location Nome do menu
-   * @returns {Promise<MenuItem[]>} Retorna uma Promise com uma lista de itens de menu
+   * @param location Nome do menu
+   * @returns enuItem[]>} Retorna uma Promise com uma lista de itens de menu
    */
-  public async getMenu(location: string): Promise<MenuItem[]> {
-    return new Promise<MenuItem[]>((resolve, reject) => {
-      this.get<MenuItem>('menu', {
-        'location': location
-      })
-        .toPromise()
-        .then((res: any) => {
-          if (!res) {
-            resolve([]);
-          }
-          const items: MenuItem[] = [];
-          res.forEach((item: any) => {
-            if (parseInt(item.menu_item_parent)) {
-              let index: number;
-              items.forEach((obj: any, i: number) => {
-                if (obj.ID === parseInt(item.menu_item_parent)) {
-                  index = i;
-                }
-              });
-              if (items[index].items) {
-                items[index].items.push(this.prepareMenuItem(item));
-              } else {
-                items[index].items = [this.prepareMenuItem(item)];
+  public getMenu(location: string): Observable<MenuItem[]> {
+    return this.http.get<MenuItem[]>(`${this.URL}menu`, {
+      params: {
+        location
+      }
+    }).pipe(
+      map((res: any) => {
+        let items: MenuItem[] = [];
+        res.forEach((item: any) => {
+          const parent = parseInt(item.menu_item_parent, 10);
+          if (parent) {
+            items = items.map((obj: MenuItem) => {
+              if (obj.ID === parent) {
+                obj.items.push(this.prepareMenuItem(item));
               }
-            } else {
-              items.push(this.prepareMenuItem(item));
-            }
-          });
-
-          resolve(items);
-
-        })
-        .catch(err => reject(err));
-    });
+              return obj;
+            });
+          } else {
+            items.push(this.prepareMenuItem(item));
+          }
+        });
+        return items;
+      }),
+      catchError(error => throwError(error))
+    );
   }
 
   /**
-   * Preparar Media para o serviço  
-   * @param {any} media Objeto de retorno da API
-   * @returns {Media} Retorna um objeto do tipo Media
+   * Prepara as imagens para o objeto de Media
+   * @param media Objeto de resposta da API
+   */
+  private prepareImages(media: any): Image[] {
+    const images: Image[] = [];
+    Object.keys(media.media_details.sizes).forEach((key: string) => {
+      const size = media.media_details.sizes[key];
+      images[key] = {
+        size: key,
+        width: size.width,
+        height: size.height,
+        url: size.source_url,
+        alt: media.alt_text,
+        caption: sanitizeHtml(media.caption.rendered)
+      };
+    });
+    return images;
+  }
+
+  /**
+   * Preparar Media para o serviço
+   * @param media Objeto de retorno da API
+   * @returns Retorna um objeto do tipo Media
    */
   private prepareMedia(media: any): Media {
     return {
       id: media.id,
       type: media.media_type,
       url: media.source_url,
-      sizes: (() => {
-        const images: Image[] = [];
-        if (media.media_details.sizes) {
-          Object.getOwnPropertyNames(media.media_details.sizes).forEach((key: string) => {
-            const image: any = media.media_details.sizes[key];
-            images[key] = {
-              size: key,
-              width: image.width,
-              height: image.height,
-              url: image.source_url,
-              alt: media.alt_text,
-              caption: sanitizeHtml(media.caption.rendered)
-            };
-          });
-        }
-        return images;
-      })()
-    }
+      sizes: this.prepareImages(media)
+    };
   }
 
   /**
    * Recupera informações sobre uma mídia
-   * @param {string} id id da mídia
-   * @returns {Obeservable<Media>} Observable da resposta com uma mídia 
+   * @param id id da mídia
+   * @returns edia>} Observable da resposta com uma mídia
    */
-  public async getMedia(id: number): Promise<Media> {
-    return new Promise<Media>((resolve, reject) => {
-      this.get<Media>(`media/${id}`)
-        .toPromise()
-        .then( (media: any) => resolve(this.prepareMedia(media)) )
-        .catch( err => reject(err));
-    });
+  public getMedia(id: number): Observable<Media> {
+    return this.get<Media>(`media/${id}`)
+      .pipe(
+        map((media: any) => (this.prepareMedia(media))),
+        catchError(error => throwError(error))
+      );
+  }
+
+  /**
+   * Preparar um SearchItem para o serviço
+   * @param item Item de resposta da API
+   * @returns um objeto SearchItem
+   */
+  private prepareSearchItem(item: any): SearchItem {
+    return {
+      id: item.id,
+      title: item.title,
+      url: item.url,
+      type: item.type,
+      subtype: item.subtype
+    };
   }
 
   /**
    * Método para fazer busca na API do Wordpress
-   * @param {SearchRequest} req Argumentos para o request 
-   * @returns {Observable<SearchReponse[]} Obersable com um array de SearchResponse
+   * @param req Argumentos para o request
+   * @returns earchReponse[]} Obersable com um array de SearchResponse
    */
-  public async search(req: SearchRequest): Promise<SearchReponse> {
-
-    return new Promise<SearchReponse>((resolve, reject) => {
-      this.http.get(`${this.URL}search`, {
-        headers: this.headers,
-        observe: 'response',
-        params: req as Params
-      }).toPromise().then((res: any) => {
-        const items: SearchItem[] = [];
-        res.body.forEach((result: any) => {
-          items.push({
-            id: result.id,
-            title: result.title,
-            url: result.url,
-            type: result.type,
-            subtype: result.subtype
-          });
-        });
-        const result: SearchReponse = {
-          results: items,
+  public search(req: SearchRequest): Observable<SearchReponse> {
+    return this.http.get(`${this.URL}search`, {
+      headers: this.headers,
+      observe: 'response',
+      params: req as Params
+    }).pipe(
+      map((res: any) => {
+        return {
           total: res.headers.get('X-WP-Total'),
-          pages: res.headers.get('X-WP-TotalPages')
+          pages: res.headers.get('X-WP-TotalPages'),
+          results: res.body.map(
+            (item: any): SearchItem => this.prepareSearchItem(item)
+          ) as SearchItem[]
         };
-        resolve(result);
-      }).catch((err => reject(err)));
-    });
+      }),
+      catchError(error => throwError(error))
+    );
   }
 
   /**
-   * Preparar Category para o serviço  
-   * @param {any} category Objeto de retorno da API
-   * @returns {Category} Retorna um objeto do tipo Category
+   * Preparar Category para o serviço
+   * @param category Objeto de retorno da API
+   * @returns Retorna um objeto do tipo Category
    */
   private prepareCategory(category: any): Category {
     return {
@@ -333,37 +345,39 @@ export class WordpressService {
       description: category.description,
       link: category.link,
       slug: category.slug,
-      taxonomy: category.taxonomy
-    }
+      taxonomy: category.taxonomy,
+      parent: category.parent
+    };
   }
 
   /**
    * Método para retornar Categorias do Wordpress
-   * @param {CategoriesRequest} req Request para API
-   * @returns {Promise<CategoriesResponse>} Retorna uma Promise<CategoriesResponse>
+   * @param req Request para API
+   * @returns ategoriesResponse>} Retorna uma Promise<CategoryResponse>
    */
-  public async getCategories(req: CategoriesRequest): Promise<CategoriesResponse> {
-    return new Promise<CategoriesResponse>((resolve, reject) => {
-      this.http.get(`${this.URL}categories`, {
-        headers: this.headers,
-        observe: 'response',
-        params: req as Params
-      }).toPromise()
-        .then((res) => {
-          resolve({
-            total: Number.parseInt(res.headers.get('X-WP-Total')),
-            pages: Number.parseInt(res.headers.get('X-WP-TotalPages')),
+  public getCategories(req: CategoryRequest): Observable<CategoryResponse> {
+    return this.http.get(`${this.URL}categories`, {
+      headers: this.headers,
+      observe: 'response',
+      params: req as Params
+    })
+      .pipe(
+        map(
+          (res: any) => ({
+            total: Number.parseInt(res.headers.get('X-WP-Total'), 10),
+            pages: Number.parseInt(res.headers.get('X-WP-TotalPages'), 10),
             categories: (res.body as any[]).map((category) => this.prepareCategory(category))
-          });
-        })
-        .catch(err => reject(err));
-    });
+          })
+        ),
+        catchError(error => throwError(error)
+        )
+      );
   }
 
   /**
-   * Preparar Tag para o serviço  
-   * @param {any} tag Objeto de retorno da API
-   * @returns {Tag} Retorna um objeto do tipo Tag
+   * Preparar Tag para o serviço
+   * @param tag Objeto de retorno da API
+   * @returns Retorna um objeto do tipo Tag
    */
   private prepareTag(tag: any): Tag {
     return {
@@ -379,24 +393,21 @@ export class WordpressService {
 
   /**
    * Método para retornar Tag do Wordpress
-   * @param {TagRequest} req Request para API
-   * @returns {Promise<TagResponse>} Retorna uma Promise<TagResponse>
+   * @param req Request para API
+   * @returns agResponse>} Retorna uma Promise<TagResponse>
    */
-  public async getTags(req: TagRequest): Promise<TagResponse> {
-    return new Promise<TagResponse>((resolve, reject) => {
-      this.http.get(`${this.URL}tags`, {
-        headers: this.headers,
-        observe: 'response',
-        params: req as Params
-      }).toPromise()
-        .then((res) => {
-          resolve({
-            total: Number.parseInt(res.headers.get('X-WP-Total')),
-            pages: Number.parseInt(res.headers.get('X-WP-TotalPages')),
-            tags: (res.body as any[]).map((tag) => this.prepareTag(tag))
-          });
-        })
-        .catch(err => reject(err));
-    });
+  public getTags(req: TagRequest): Observable<TagResponse> {
+    return this.http.get(`${this.URL}tags`, {
+      headers: this.headers,
+      observe: 'response',
+      params: req as Params
+    }).pipe(
+      map((res: any) => ({
+        total: Number.parseInt(res.headers.get('X-WP-Total'), 10),
+        pages: Number.parseInt(res.headers.get('X-WP-TotalPages'), 10),
+        tags: (res.body as any[]).map((tag) => this.prepareTag(tag))
+      })),
+      catchError(error => throwError(error))
+    );
   }
 }

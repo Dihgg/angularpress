@@ -7,8 +7,10 @@ function theme_options()
 				'NAME'			=> get_bloginfo('name'),
 				'TEMPLATE_URI'	=> get_template_directory_uri(),
 				'logos' => array(
-					'mobile'	=> get_theme_mod('mobile_logo_image'),
-					'desktop'	=> get_theme_mod('desktop_logo_image'),
+					'header'	=> array(
+						'mobile'	=> get_theme_mod('mobile_logo_image'),
+						'desktop'	=> get_theme_mod('desktop_logo_image'),
+					),
 					'footer'	=> array(
 						'mobile'	=> get_theme_mod('mobile_logo_image_footer'),
 						'desktop'	=> get_theme_mod('desktop_logo_image_footer')
