@@ -17,7 +17,7 @@ export class LatestPostsComponent implements OnInit {
   public columns: string[] = [];
 
   @Input()
-  set attrs(attrs: string[]) {
+  set attrs(attrs: any) {
     this.args = {
       per_page: attrs['postsToShow'],
       order: attrs['order'],
@@ -56,7 +56,7 @@ export class LatestPostsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.wordpress.getPosts(this.args).then(
+    this.wordpress.getPosts(this.args).subscribe(
       response => (this.posts = response.posts)
     )
   }

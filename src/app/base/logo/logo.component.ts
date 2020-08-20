@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { WordpressService } from 'src/app/services/wordpress.service';
 import { THEME } from 'src/app/services/wordpress.interface';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-logo',
@@ -12,17 +11,21 @@ export class LogoComponent implements OnInit {
 
   @Input() footer = false;
 
-  public logos: THEME['logos'] | THEME['logos']['footer'];
+  public logos: {
+    'desktop': string;
+    'mobile': string;
+  };
 
   constructor(
-    public title: Title,
     public wordpress: WordpressService
   ) { }
 
   ngOnInit(): void {
-    this.logos = this.wordpress.THEME.logos;
-    if (this.footer && (this.wordpress.THEME.logos.footer.desktop || this.wordpress.THEME.logos.footer.mobile)) {
+    // this.logos = this.wordpress.THEME.logos;
+    if (this.footer && this.wordpress.hasLogo('footer')) {
       this.logos = this.wordpress.THEME.logos.footer;
+    } else if (this.wordpress.hasLogo('header')) {
+      this.logos = this.wordpress.THEME.logos.header;
     }
   }
 

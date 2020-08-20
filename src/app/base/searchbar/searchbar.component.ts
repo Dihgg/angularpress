@@ -18,13 +18,13 @@ export class SearchbarComponent implements OnInit {
     public wordpress: WordpressService,
     public router: Router,
     public route: ActivatedRoute
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.query = params['query'];
+      this.query = params.query;
     });
   }
-
-  ngOnInit(): void { }
 
   public btnClick() {
     this.active = !this.active;
@@ -37,7 +37,7 @@ export class SearchbarComponent implements OnInit {
     if (this.query) {
       this.router.navigate(['/search'], {
         queryParams: {
-          'query': this.query
+          query: this.query
         }
       });
     } else {
@@ -46,7 +46,7 @@ export class SearchbarComponent implements OnInit {
   }
 
   public onClose(): void {
-    this.query = "";
+    this.query = '';
     this.active = false;
   }
 

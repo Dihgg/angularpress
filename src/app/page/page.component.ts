@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { WordpressService } from '../services/wordpress.service';
 import { ActivatedRoute } from '@angular/router';
 import { PostComponent } from '../post/post.component';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-page',

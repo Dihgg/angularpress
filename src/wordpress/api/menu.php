@@ -14,6 +14,10 @@
 			$menu_obj = wp_get_nav_menu_object( $locations[$location] );
 
 			// Get menu items by menu name
-			return wp_get_nav_menu_items($menu_obj->name);
+			$menu_items = wp_get_nav_menu_items($menu_obj->name);
+			if ($menu_items) {
+				return $menu_items;
+			}
+			return array();
 		}
 	));

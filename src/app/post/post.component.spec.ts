@@ -4,6 +4,7 @@ import { PostComponent } from './post.component';
 import { WordpressService } from '../services/wordpress.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Stub } from 'src/testing/stub';
 
 describe('PostComponent', () => {
   let component: PostComponent;
@@ -11,7 +12,27 @@ describe('PostComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PostComponent],
+      declarations: [
+        PostComponent,
+        Stub.Component({
+          selector: 'app-author',
+          inputs: [
+            'id'
+          ]
+        }),
+        Stub.Component({
+          selector: 'app-blocks',
+          inputs: [
+            'blocks'
+          ]
+        }),
+        Stub.Component({
+          selector: 'app-loading',
+          inputs: [
+            'loading'
+          ]
+        })
+      ],
       imports: [
         HttpClientTestingModule
       ],
@@ -19,13 +40,7 @@ describe('PostComponent', () => {
         WordpressService,
         {
           provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: convertToParamMap({
-                slug: 'mock'
-              })
-            }
-          }
+          useValue: Stub.ActivatedRoute()
         }
       ]
     })
