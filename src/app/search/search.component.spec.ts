@@ -61,12 +61,15 @@ describe('SearchComponent', () => {
     fixture.detectChanges();
   });
 
+  beforeEach(() => {
+    jest.spyOn(component.router, 'navigate').mockImplementation(() => null);
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should submit', () => {
-    jest.spyOn(component.router, 'navigate');
     component.onSubmit();
     expect(component.router.navigate).toBeCalled();
   });

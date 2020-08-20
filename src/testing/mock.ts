@@ -14,6 +14,7 @@ import {
     Tag
 } from 'src/app/services/wordpress.interface';
 import { ElementRef } from '@angular/core';
+import { of } from 'rxjs';
 
 export class Mock {
 
@@ -202,13 +203,18 @@ export class Mock {
                     get: (name: string): string => 'stub'
                 }
             },
-            queryParams: ({
+            queryParams: of((cb) => {
+                cb({
+                    query: 'mock'
+                });
+            })
+            /* queryParams: ({
                 subscribe: (cb) => {
                     cb({
                         query: 'mock'
                     });
                 }
-            })
+            }) */
         };
     }
 }

@@ -37,14 +37,14 @@ describe('SearchbarComponent', () => {
     .compileComponents();
   }));
 
-  /* beforeEach(() => {
-
-  }); */
-
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  beforeEach(() => {
+    jest.spyOn(component.router, 'navigate').mockImplementation(() => null);
   });
 
   it('should create', () => {
@@ -63,7 +63,6 @@ describe('SearchbarComponent', () => {
   });
 
   it('should submit', () => {
-    jest.spyOn(component.router, 'navigate');
     component.query = 'mock query';
     component.onSubmit();
     expect(component.router.navigate).toBeCalled();
@@ -79,7 +78,7 @@ describe('SearchbarComponent', () => {
     component.onClose();
     expect(component.active).toBeFalsy();
   });
-  
+
   it('should close on documentClick', () => {
     component.documentClick(null);
     expect(component.active).toBeFalsy();

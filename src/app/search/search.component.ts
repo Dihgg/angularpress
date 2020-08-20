@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent extends PageComponent implements OnInit, OnDestroy {
+export class SearchComponent extends PageComponent implements OnInit {
 
   public query: string;
   public queryIn: string;
@@ -21,8 +21,6 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy 
   public currentPage = 0;
   public pages = 0;
   public total = 0;
-
-  private subscription: Subscription;
 
   public postOptions: PostOptions = {
     contentType: 'excerpt',
@@ -44,7 +42,7 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy 
 
   public ngOnInit(): void {
     this.wordpress.setTitle(this.wordpress.translate('Search'));
-    this.subscription = this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       this.query = params.query;
       this.queryIn = this.query;
       this.posts = [];
@@ -52,10 +50,6 @@ export class SearchComponent extends PageComponent implements OnInit, OnDestroy 
       this.currentPage = 0;
       this.loadMore();
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   public onSubmit(): void {
