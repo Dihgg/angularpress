@@ -1,6 +1,6 @@
 <nav class="menu theme--menu-bg theme--menu-color" [ngClass]="classes">
   <ul class="menu__items">
-    <li *ngFor="let link of items" class="menu__item">
+    <li *ngFor="let link of items" class="menu__item mx-lg-2 my-3 my-lg-1">
       <app-menu-link [link]="link"></app-menu-link>
       <nav
         #$submenu
@@ -16,7 +16,7 @@
         </ul>
       </nav>
       <button
-        *ngIf="link.items"
+        *ngIf="link.items.length"
         class="menu__item__toggler btn btn--transparent theme--menu-color d-lg-none"
         [class.menu__item__toggler--toggled]="submenu"
         (click)="toggleSubmenu()"

@@ -1,3 +1,3 @@
 export function sanitizeHtml(str: string) {
-	return str.replace(/(<([^>]+)>)/ig, '');
+    return str.replace(/(<([^>]+)>)/ig, '');
 }

@@ -1,1 +1,27 @@
-<p>archive works!</p>
+<section id="archive">
+  <h3 class="text-center mb-2">
+    {{ type }}
+  </h3>
+  <h2 *ngIf="cat" class="text-center text-uppercase mb-2">{{ cat.name }}</h2>
+  <p *ngIf="total > 0" class="text-center mt-0 mb-3">
+    <small>{{ total }} posts</small>
+  </p>
+  <ul class="row justify-content-center">
+    <li *ngFor="let post of posts" class="col-12 col-md-4 mb-4">
+      <app-post [post]="post" [options]="postOptions"></app-post>
+    </li>
+  </ul>
+  <div class="row">
+    <div class="col text-center">
+      <button
+        *ngIf="!loading && page < totalPages"
+        type="button"
+        class="btn theme--menu-bg theme--menu-color py-3 px-5"
+        (click)="loadMore()"
+      >
+        {{ wordpress.translate("Load More") }}
+      </button>
+    </div>
+  </div>
+  <app-loading [loading]="loading"></app-loading>
+</section>

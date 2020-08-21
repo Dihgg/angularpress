@@ -1,15 +1,38 @@
 import { Component, OnInit } from '@angular/core';
+import { ArchiveComponent } from '../archive/archive.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { WordpressService } from '../services/wordpress.service';
 
 @Component({
   selector: 'app-tag',
-  templateUrl: './tag.component.html',
-  styleUrls: ['./tag.component.scss']
+  templateUrl: '../archive/archive.component.html',
+  styleUrls: ['../archive/archive.component.scss']
 })
-export class TagComponent implements OnInit {
+export class TagComponent extends ArchiveComponent {
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(
+    public route: ActivatedRoute,
+    public wordpress: WordpressService,
+    public router: Router
+  ) {
+    super(
+      route,
+      wordpress,
+      router
+    );
   }
 
+  public reload() {
+    const slug = this.route.snapshot.paramMap.get('tag');
+    if (this.slug === slug) {
+      return;
+    }
+    super.reload();
+    this.slug = slug;
+    this.wordpress.getTags({
+      slug: this.slug
+    }).subscribe(
+      response => this.loadPosts(response.tags[0])
+    );
+  }
 }
