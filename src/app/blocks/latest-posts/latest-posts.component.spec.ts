@@ -42,25 +42,24 @@ describe('LatestPostsComponent', () => {
 
   describe('should set attrs', () => {
     const attrs = {
-      'postsToShow': 1,
-      'order': 'asc',
-      'orderBy': 'name',
-      'categories': [],
-      'displayPostDate': false,
-      'displayPostContent': false,
-      'displayPostContentRadio': false,
-      'excerptLength': 55,
-      'displayFeaturedImage': false,
-      'featuredImageSizeSlug': 'full',
-      'featuredImageAlign': 'left',
-      'postLayout': 'grid',
-      'columns': 3,
+      postsToShow: 1,
+      order: 'asc',
+      orderBy: 'name',
+      categories: [],
+      displayPostDate: false,
+      displayPostContent: false,
+      displayPostContentRadio: false,
+      excerptLength: 55,
+      displayFeaturedImage: false,
+      featuredImageAlign: 'left',
+      postLayout: 'grid',
+      columns: 3,
     };
 
     it('should set attrs', () => {
       component.attrs = Object.assign({
-        'align': 'left',
-        'className': 'mock'
+        align: 'left',
+        className: 'mock'
       }, attrs);
       expect(component).toBeTruthy();
     });

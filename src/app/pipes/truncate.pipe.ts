@@ -6,8 +6,16 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TruncatePipe implements PipeTransform {
 
   transform(value: string, length: number, elipses = '...'): string {
-    let result = value || '';
 
+    if (length === null) {
+      return value;
+    }
+
+    if (length === 0) {
+      return '';
+    }
+
+    let result = value || '';
     if (value) {
       const words = value.split(/\s+/);
       if (words.length > Math.abs(length)) {

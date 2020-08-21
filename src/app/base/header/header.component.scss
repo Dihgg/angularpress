@@ -3,7 +3,7 @@
 #header {
   position: fixed;
   z-index: 10;
-  @include bp(false, $s-md) {
+  @include media-breakpoint-down(md) {
     > .row {
       height: 40px;
     }
@@ -14,7 +14,7 @@
       width: 80%;
       max-width: 320px;
       height: calc(100vh - 40px);
-      @include bp(false, $s-md) {
+      @include media-breakpoint-down(lg) {
         transform: translateX(-100%);
         transition: transform $transition-default;
         &--toggled {

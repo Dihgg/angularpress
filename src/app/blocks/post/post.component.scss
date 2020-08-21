@@ -1,12 +1,23 @@
+@import "partials/partials";
+
 .block-post {
+  $self: &;
   &__thumbnail {
-    img {
-      width: 100%;
-      height: auto;
+    #{$self}__image {
+      display: block;
+      padding-top: aspect-ratio(1, 1);
+      @include media-breakpoint-up(md) {
+        padding-top: aspect-ratio(16, 9);
+      }
+      position: relative;
+      img {
+        @include absolute-block;
+        object-fit: cover;
+      }
     }
   }
 }
 
 app-loading::ng-deep .loading {
-  height: 100%;
+  @include absolute-block;
 }

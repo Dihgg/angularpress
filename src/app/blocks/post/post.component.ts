@@ -15,10 +15,9 @@ export class PostComponent implements OnInit {
     showDate: false,
     showContent: false,
     contentType: 'excerpt',
-    excerpt: 0,
+    excerpt: null,
     displayFeaturedImage: true,
-    featuredImageSizeSlug: "thumbnail",
-    featuredImageAlign: "center"
+    featuredImageAlign: 'center'
   };
 
 

@@ -19,36 +19,34 @@ export class LatestPostsComponent implements OnInit {
   @Input()
   set attrs(attrs: any) {
     this.args = {
-      per_page: attrs['postsToShow'],
-      order: attrs['order'],
-      orderBy: attrs['orderBy'],
-      categories: attrs['categories'],
-    }
+      per_page: attrs.postsToShow,
+      order: attrs.order,
+      orderBy: attrs.orderBy,
+      categories: attrs.categories,
+    };
 
     this.options = {
-      showDate: attrs['displayPostDate'],
-      showContent: attrs['displayPostContent'],
-      contentType: attrs['displayPostContentRadio'],
-      excerpt: attrs['excerptLength'],
-      displayFeaturedImage: attrs['displayFeaturedImage'],
-      featuredImageSizeSlug: attrs['featuredImageSizeSlug'],
-      featuredImageAlign: attrs['featuredImageAlign'],
-    }
+      showDate: attrs.displayPostDate,
+      showContent: attrs.displayPostContent,
+      contentType: attrs.displayPostContentRadio,
+      excerpt: attrs.excerptLength,
+      displayFeaturedImage: attrs.displayFeaturedImage,
+      featuredImageAlign: attrs.featuredImageAlign,
+    };
 
     this.css = [
-      `latest-posts--${attrs['postLayout']}`,
-      `latest-posts--align-${attrs['align'] || 'left'}`,
-      `latest-posts--columns-${attrs['columns']}`,
-      attrs['className'] || undefined
+      `latest-posts--${attrs.postLayout}`,
+      `latest-posts--align-${attrs.align || 'left'}`,
+      `latest-posts--columns-${attrs.columns}`,
+      attrs.className || undefined
     ];
 
-    switch (attrs['postLayout']) {
+    switch (attrs.postLayout) {
       case 'grid':
-        this.columns.push(`col-md-${(12 / Number.parseInt(attrs['columns']))}`);
-      default:
-        this.columns.push('col-12');
+        this.columns.push(`col-md-${(12 / Number.parseInt(attrs.columns, 10))}`);
         break;
     }
+    this.columns.push('col-12');
   }
 
   constructor(
@@ -58,7 +56,7 @@ export class LatestPostsComponent implements OnInit {
   ngOnInit(): void {
     this.wordpress.getPosts(this.args).subscribe(
       response => (this.posts = response.posts)
-    )
+    );
   }
 
 }

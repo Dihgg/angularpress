@@ -22,7 +22,8 @@ import {
   Category,
   TagRequest,
   TagResponse,
-  Tag
+  Tag,
+  RestRequest
 } from '../services/wordpress.interface';
 import { sanitizeHtml } from '../utils/utils';
 import { Title } from '@angular/platform-browser';
@@ -105,6 +106,12 @@ export class WordpressService {
     return false;
   }
 
+  private defaultsRequest(req: RestRequest): Params {
+    return Object.assign<RestRequest, Params>(req, {
+      per_page: this.THEME.options.posts_per_page
+    });
+  }
+
   /**
    * Wrapper do método get
    * @param path caminho para REST API
@@ -150,11 +157,11 @@ export class WordpressService {
    * @param sts' | 'pages'} type Tipo de post para recuperação
    * @returns ostResponse>} Um Observable com a resposta
    */
-  public getPosts(params: PostRequest, type: 'posts' | 'pages' | string = 'posts'): Observable<PostResponse> {
+  public getPosts(request: PostRequest, type: 'posts' | 'pages' | string = 'posts'): Observable<PostResponse> {
     return this.http.get(`${this.URL}${type}`, {
       headers: this.headers,
       observe: 'response',
-      params: params as Params
+      params: this.defaultsRequest(request)
     }).pipe(
       map((res: any) => ({
         total: Number.parseInt(res.headers.get('X-WP-Total'), 10),
@@ -317,7 +324,7 @@ export class WordpressService {
     return this.http.get(`${this.URL}search`, {
       headers: this.headers,
       observe: 'response',
-      params: req as Params
+      params: this.defaultsRequest(req)
     }).pipe(
       map((res: any) => {
         return {
@@ -359,7 +366,7 @@ export class WordpressService {
     return this.http.get(`${this.URL}categories`, {
       headers: this.headers,
       observe: 'response',
-      params: req as Params
+      params: this.defaultsRequest(req)
     })
       .pipe(
         map(
@@ -400,7 +407,7 @@ export class WordpressService {
     return this.http.get(`${this.URL}tags`, {
       headers: this.headers,
       observe: 'response',
-      params: req as Params
+      params: this.defaultsRequest(req)
     }).pipe(
       map((res: any) => ({
         total: Number.parseInt(res.headers.get('X-WP-Total'), 10),

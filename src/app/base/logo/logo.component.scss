@@ -1,12 +1,12 @@
 @import "partials/partials";
 
 .logo img {
-	width: 100%;
-	height: auto;
-	@include bp(false, $s-md) {
-	  width: 120px;
-	}
-	@include bp($s-lg) {
-	  max-width: 200px;
-	}
+  width: 100%;
+  height: auto;
+  @include media-breakpoint-down(lg) {
+    width: 120px;
   }
+  @include media-breakpoint-down(xl) {
+    max-width: 200px;
+  }
+}
