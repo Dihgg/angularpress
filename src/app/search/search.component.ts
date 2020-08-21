@@ -25,11 +25,10 @@ export class SearchComponent extends PageComponent implements OnInit {
   public postOptions: PostOptions = {
     contentType: 'excerpt',
     showDate: true,
-    excerpt: 55,
-    showContent: false,
+    excerpt: 0,
+    showContent: true,
     displayFeaturedImage: true,
-    featuredImageAlign: 'left',
-    featuredImageSizeSlug: 'thumbnail'
+    featuredImageAlign: 'left'
   };
 
   constructor(
@@ -67,7 +66,7 @@ export class SearchComponent extends PageComponent implements OnInit {
     this.wordpress.search({
       search: this.query,
       page: this.currentPage,
-      per_page: this.wordpress.THEME.options.posts_per_page
+      // per_page: this.wordpress.THEME.options.posts_per_page
     }).subscribe(res => {
       this.pages = res.pages;
       this.total = res.total;
