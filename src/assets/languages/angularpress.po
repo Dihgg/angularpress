@@ -9,7 +9,7 @@ msgstr ""
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Language: pt\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #. Text in function
 #: languages.php:1
@@ -25,3 +25,33 @@ msgstr "Desenvolvido por"
 #: languages.php:1
 msgid "You searched by"
 msgstr "Você procurou por"
+
+#. Text in function
+#: languages.php:1
+msgid "No results found"
+msgstr "Nenhum resultado encontrado"
+
+#. Text in function
+#: languages.php:1
+msgid "Results Found"
+msgstr "Resultados encontrados"
+
+#. Text in function
+#: languages.php:1
+msgid "Search"
+msgstr "Buscar"
+
+#. Text in function
+#: languages.php:1
+msgid "Load More"
+msgstr "Carregar Mais"
+
+#. Text in function
+#: languages.php:1
+msgid "Category"
+msgstr "Categoria"
+
+#. Text in function
+#: languages.php:1
+msgid "Tag"
+msgstr "Tag"
