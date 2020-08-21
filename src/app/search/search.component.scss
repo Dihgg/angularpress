@@ -3,10 +3,17 @@
 .search {
   &__aside {
     &__content {
-      @include bp($s-sm) {
+      @include media-breakpoint-up(md) {
         position: sticky;
         top: 120px;
       }
     }
+  }
+}
+
+form[name=search] {
+  input {
+    width: 100%;
+    height: 100%;
   }
 }

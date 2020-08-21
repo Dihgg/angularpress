@@ -1,8 +1,8 @@
 .btn {
 	cursor: pointer;
+	border: none;
 	&--transparent {
 		background: none;
-		border: none;
 		padding: 0;
 	}
 }

@@ -1,7 +1,10 @@
 @import "~normalize.css";
-@import "~bootstrap/scss/bootstrap-grid";
 
 @import "scss/partials/partials";
+
+@import "~bootstrap/scss/bootstrap-grid";
+@import "~bootstrap/scss/utilities/text";
+
 
 @import "scss/layout/typography";
 @import "scss/layout/buttons";

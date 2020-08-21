@@ -1,16 +1,7 @@
-// BREAKPOINTS
-@mixin bp($min-size: false, $max-size: false) {
-  @if $min-size {
-    @media screen and (min-width: $min-size) {
-      @content;
-    }
-  } @else if $min-size and $max-size {
-    @media screen and (min-width: $min-size) and (max-width: $max-size - 1px) {
-      @content;
-    }
-  } @else {
-    @media screen and (max-width: $max-size - 1px) {
-      @content;
-    }
-  }
+@mixin absolute-block {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
