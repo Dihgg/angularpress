@@ -132,7 +132,9 @@ describe('WordpressService', () => {
         expect(posts).toBeTruthy();
       });
 
-      const req = httpMock.expectOne(`${service.URL}posts`);
+      const url = new URL(`${service.URL}posts`);
+      url.searchParams.append('per_page', '12');
+      const req = httpMock.expectOne(url.href);
       expect(req.request.method).toEqual('GET');
       req.flush([
         API.Post(),
@@ -155,7 +157,9 @@ describe('WordpressService', () => {
         }
       );
       expect(spyRx.throwError).toBeCalled();
-      const req = httpMock.expectOne(`${service.URL}posts`).error(new ErrorEvent('network error'));
+      const url = new URL(`${service.URL}posts`);
+      url.searchParams.append('per_page', '12');
+      const req = httpMock.expectOne(url.href).error(new ErrorEvent('network error'));
     });
 
   });
@@ -263,6 +267,7 @@ describe('WordpressService', () => {
 
       const url = new URL(`${service.URL}search`);
       url.searchParams.append('search', 'mock');
+      url.searchParams.append('per_page', '12');
 
       const req = httpMock.expectOne(url.href);
       expect(req.request.method).toEqual('GET');
@@ -283,6 +288,7 @@ describe('WordpressService', () => {
 
       const url = new URL(`${service.URL}search`);
       url.searchParams.append('search', 'mock');
+      url.searchParams.append('per_page', '12');
 
       const req = httpMock.expectOne(url.href).error(new ErrorEvent('network error'));
     });
@@ -298,6 +304,7 @@ describe('WordpressService', () => {
 
       const url = new URL(`${service.URL}categories`);
       url.searchParams.append('post', '1');
+      url.searchParams.append('per_page', '12');
 
       const req = httpMock.expectOne(url.href);
       expect(req.request.method).toEqual('GET');
@@ -318,6 +325,7 @@ describe('WordpressService', () => {
 
       const url = new URL(`${service.URL}categories`);
       url.searchParams.append('post', '1');
+      url.searchParams.append('per_page', '12');
 
       const req = httpMock.expectOne(url.href).error(new ErrorEvent('network error'));
     });
@@ -333,6 +341,7 @@ describe('WordpressService', () => {
 
       const url = new URL(`${service.URL}tags`);
       url.searchParams.append('post', '1');
+      url.searchParams.append('per_page', '12');
 
       const req = httpMock.expectOne(url.href);
       expect(req.request.method).toEqual('GET');
@@ -353,6 +362,7 @@ describe('WordpressService', () => {
 
       const url = new URL(`${service.URL}tags`);
       url.searchParams.append('post', '1');
+      url.searchParams.append('per_page', '12');
 
       const req = httpMock.expectOne(url.href).error(new ErrorEvent('network error'));
     });

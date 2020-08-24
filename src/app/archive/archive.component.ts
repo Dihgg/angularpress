@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WordpressService } from '../services/wordpress.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Category, Tag, Post, PostRequest } from '../services/wordpress.interface';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './archive.component.html',
   styleUrls: ['./archive.component.scss']
 })
-export class ArchiveComponent implements OnDestroy {
+export class ArchiveComponent implements OnInit, OnDestroy {
 
   public slug: string;
 
@@ -42,14 +42,21 @@ export class ArchiveComponent implements OnDestroy {
     public route: ActivatedRoute,
     public wordpress: WordpressService,
     public router: Router
-  ) {
+  ) { }
+
+  ngOnInit() {
     this.slug = this.route.snapshot.paramMap.get('category');
 
     this.navigation = this.router.events.subscribe((e: any) => {
+      console.log('NAVIGATION', e);
       if (e instanceof NavigationEnd) {
         this.reload();
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.navigation.unsubscribe();
   }
 
   public reload() {
@@ -61,10 +68,6 @@ export class ArchiveComponent implements OnDestroy {
     this.totalPages = 0;
     this.total = 0;
     this.loading = true;
-  }
-
-  ngOnDestroy(): void {
-    this.navigation.unsubscribe();
   }
 
   private isCategory(arg: Category | Tag): boolean {
@@ -89,7 +92,7 @@ export class ArchiveComponent implements OnDestroy {
   public loadMore() {
     this.loading = true;
     this.page++;
-    this.request.page = this.page || 1;
+    this.request.page = this.page;
     this.wordpress.getPosts(this.request).subscribe( response => {
       this.total = response.total;
       this.totalPages = response.pages;

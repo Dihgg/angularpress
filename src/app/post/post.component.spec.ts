@@ -37,7 +37,10 @@ describe('PostComponent', () => {
         HttpClientTestingModule
       ],
       providers: [
-        WordpressService,
+        {
+          provide: WordpressService,
+          useValue: Stub.Wordpress()
+        },
         {
           provide: ActivatedRoute,
           useValue: Stub.ActivatedRoute()

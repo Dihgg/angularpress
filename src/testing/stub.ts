@@ -1,6 +1,8 @@
 import { Component, ElementRef } from '@angular/core';
 import { WordpressServiceStub } from './wordpress.stub';
 import { Mock } from './mock';
+import { RouterEvent } from '@angular/router';
+import { ReplaySubject } from 'rxjs';
 
 export class Stub {
 
@@ -24,6 +26,17 @@ export class Stub {
 
     static Wordpress() {
         return new WordpressServiceStub();
+    }
+
+    static EventSubject() {
+        return new ReplaySubject<RouterEvent>(1);
+    }
+    static Router(eventSubject: ReplaySubject<RouterEvent>) {
+        return {
+            navigate: jest.fn(),
+            events: eventSubject.asObservable(),
+            url: 'mock/url'
+        };
     }
 
 }

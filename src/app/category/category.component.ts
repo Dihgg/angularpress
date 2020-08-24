@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ArchiveComponent } from '../archive/archive.component';
 import { WordpressService } from '../services/wordpress.service';
 import { ActivatedRoute, Router } from '@angular/router';
