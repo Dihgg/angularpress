@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ArchiveComponent } from '../archive/archive.component';
 import { WordpressService } from '../services/wordpress.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: '../archive/archive.component.html',
   styleUrls: ['../archive/archive.component.scss']
 })
-export class CategoryComponent extends ArchiveComponent {
+export class CategoryComponent extends ArchiveComponent implements OnInit {
 
   constructor(
     public route: ActivatedRoute,
@@ -22,13 +22,15 @@ export class CategoryComponent extends ArchiveComponent {
     );
   }
 
-  public reload() {
-    super.reload();
+  public ngOnInit() {
+    super.ngOnInit();
     this.wordpress.getCategories({
       slug: this.slug
     }).subscribe(
       response => this.loadPosts(response.categories[0])
     );
   }
+
+  public reload() { }
 
 }

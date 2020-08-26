@@ -53,6 +53,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
         this.reload();
       }
     });
+    this.reload();
   }
 
   ngOnDestroy() {
@@ -70,6 +71,10 @@ export class ArchiveComponent implements OnInit, OnDestroy {
     this.loading = true;
   }
 
+  public setTitle(title: string): void {
+    this.wordpress.setTitle(title);
+  }
+
   private isCategory(arg: Category | Tag): boolean {
     return arg.parent !== undefined;
   }
@@ -85,6 +90,8 @@ export class ArchiveComponent implements OnInit, OnDestroy {
       this.type = this.wordpress.translate('Tag');
       this.request.tags = [this.cat.id];
     }
+
+    this.setTitle(`${this.cat.name} - ${this.type}`);
 
     this.loadMore();
   }

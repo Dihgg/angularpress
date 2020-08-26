@@ -1,8 +1,10 @@
-<section id="archive">
+<section id="archive" class="mb-3">
   <h3 class="text-center mb-2">
     {{ type }}
   </h3>
-  <h2 *ngIf="cat" class="text-center text-uppercase mb-2">{{ cat.name }}</h2>
+  <h2 *ngIf="cat" class="text-center text-uppercase mb-2">
+    <ng-container>{{ cat.name }}</ng-container>
+  </h2>
   <p *ngIf="total > 0" class="text-center mt-0 mb-3">
     <small>{{ total }} posts</small>
   </p>
