@@ -54,10 +54,4 @@ describe('CategoryComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should reload', () => {
-    jest.spyOn(component.wordpress, 'getCategories');
-    component.reload();
-    expect(component.wordpress.getCategories).toBeCalled();
-  });
 });

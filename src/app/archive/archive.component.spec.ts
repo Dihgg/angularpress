@@ -97,18 +97,18 @@ describe('ArchiveComponent', () => {
       jest.spyOn(component, 'reload');
     });
 
-    it('Navigate end', () => {
+    it('Navigate end (change route)', () => {
       const event = new NavigationEnd(1, '/tag/mock', '/tag/mock2');
       eventSubject.next(event);
       component.ngOnInit();
       expect(component.reload).toBeCalled();
     });
 
-    it('Navigate end', () => {
+    it('Navigate start', () => {
       const event = new NavigationStart(2, '/tag/mock');
       eventSubject.next(event);
       component.ngOnInit();
-      expect(component.reload).not.toBeCalled();
+      expect(component.reload).toBeCalled();
     });
 
   });
