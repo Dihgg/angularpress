@@ -1,0 +1,9 @@
+<h3>{{ title }} ({{ items.length }})</h3>
+<nav class="mt-2 mb-3 d-flex flex-wrap">
+  <a
+    *ngFor="let item of items"
+    class="d-block mr-auto mb-1"
+    (click)="clicked.emit(item)"
+    >{{ item.name }}</a
+  >
+</nav>

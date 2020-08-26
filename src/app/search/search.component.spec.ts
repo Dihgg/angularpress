@@ -36,6 +36,16 @@ describe('SearchComponent', () => {
             'options'
           ]
         }),
+        Stub.Component({
+          selector: 'app-cat-cloud',
+          inputs: [
+            'title',
+            'items'
+          ],
+          outputs: [
+            'clicked'
+          ]
+        }),
       ],
       imports: [
         RouterTestingModule,

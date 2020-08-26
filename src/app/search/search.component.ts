@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WordpressService } from '../services/wordpress.service';
-import { Post } from '../services/wordpress.interface';
+import { Post, Category, Tag, SearchRequest, SearchReponse } from '../services/wordpress.interface';
 import { PageComponent } from '../page/page.component';
 import { PostOptions } from '../types/options.type';
 import { Subscription } from 'rxjs';
@@ -14,13 +14,18 @@ import { Subscription } from 'rxjs';
 export class SearchComponent extends PageComponent implements OnInit {
 
   public query: string;
-  public queryIn: string;
+  private request: SearchRequest = {};
+  public response: SearchReponse = {
+    pages: 0,
+    results: [],
+    total: 0
+  };
+
   public posts: Post[] = [];
+  public categories: Category[] = [];
+  public tags: Tag[] = [];
 
-
-  public currentPage = 0;
-  public pages = 0;
-  public total = 0;
+  public hasLoadMore = true;
 
   public postOptions: PostOptions = {
     contentType: 'excerpt',
@@ -42,47 +47,93 @@ export class SearchComponent extends PageComponent implements OnInit {
   public ngOnInit(): void {
     this.wordpress.setTitle(this.wordpress.translate('Search'));
     this.route.queryParams.subscribe(params => {
-      this.query = params.query;
-      this.queryIn = this.query;
+      this.request = {
+        search: params.query,
+        page: 0
+      };
       this.posts = [];
+      this.categories = [];
+      this.tags = [];
+      this.query = this.request.search;
+
       this.loading = true;
-      this.currentPage = 0;
+
       this.loadMore();
     });
   }
 
   public onSubmit(): void {
-    this.query = this.queryIn;
+    this.request.search = this.query;
     this.router.navigate(['/search'], {
       queryParams: {
-        query: this.query
+        query: this.request.search
       }
     });
   }
 
-  public loadMore() {
+  private loadCategories(ids: number[]): void {
+    this.wordpress.getCategories({
+      'include[]': ids
+    }).subscribe(
+      response => {
+        console.log('should load categories', response.categories);
+        this.categories = this.categories.concat(response.categories);
+      }
+    );
+  }
+
+  private loadTags(ids: number[]): void {
+    this.wordpress.getTags({
+      'include[]': ids
+    }).subscribe(
+      response => {
+        console.log('should load tags', response.tags);
+        this.tags = this.tags.concat(response.tags);
+      }
+    );
+  }
+
+  public loadMore(): void {
     this.loading = true;
-    this.currentPage++;
-    this.wordpress.search({
-      search: this.query,
-      page: this.currentPage,
-      // per_page: this.wordpress.THEME.options.posts_per_page
-    }).subscribe(res => {
-      this.pages = res.pages;
-      this.total = res.total;
-      if (res.results.length) {
+    this.request.page++;
+    this.wordpress.search(
+      this.request
+    )
+    .subscribe(response => {
+      this.response = response;
+
+      if (response.results.length) {
+        if (this.request.page >= response.pages) {
+          this.hasLoadMore = false;
+        }
         this.wordpress.getPosts({
-          'include[]': res.results.map<number>(result => result.id)
-        }).subscribe(response => {
-          response.posts.forEach(post => this.posts.push(post));
+          'include[]': response.results.map<number>(result => result.id)
+        }).subscribe(posts => {
+
+          let categories: number[] = [];
+          let tags: number[] = [];
+
+          posts.posts.forEach(post => {
+            this.posts.push(post);
+            categories = categories.concat(post.categories);
+            tags = tags.concat(post.tags);
+          });
+
+          this.loadCategories(categories);
+          this.loadTags(tags);
+
           this.loading = false;
         });
       } else {
         this.loading = false;
+        this.hasLoadMore = false;
         this.posts = [];
-        this.total = 0;
       }
     });
+  }
+
+  public filterClick(cat: Category | Tag): void {
+    console.log('clicked', cat);
   }
 
 }

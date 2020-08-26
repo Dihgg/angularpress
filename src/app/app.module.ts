@@ -12,8 +12,8 @@ import { TagComponent } from './tag/tag.component';
 import { AuthorComponent } from './author/author.component';
 import { BlocksModule } from './blocks/blocks.module';
 import { BaseModule } from './base/base.module';
-import { SearchComponent } from './search/search.component';
 import { FormsModule } from '@angular/forms';
+import { SearchModule } from './search/search.module';
 
 @NgModule({
   declarations: [
@@ -24,15 +24,14 @@ import { FormsModule } from '@angular/forms';
     HomeComponent,
     PageComponent,
     PostComponent,
-    SearchComponent,
     TagComponent
   ],
   imports: [
     AppRoutingModule,
     BaseModule,
+    SearchModule,
     BlocksModule,
     BrowserModule,
-    FormsModule,
     HttpClientModule
   ],
   providers: [],

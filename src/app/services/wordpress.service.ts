@@ -147,7 +147,9 @@ export class WordpressService {
       content: sanitizeHtml(post.content.rendered),
       blocks: post.blocks.map((block: any): Block => this.prepareBlock(block)),
       author: post.author,
-      thumbnail: post.featured_media || null
+      thumbnail: post.featured_media || null,
+      categories: post.categories,
+      tags: post.tags
     };
   }
 

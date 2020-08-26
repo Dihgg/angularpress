@@ -53,7 +53,7 @@ export interface Post {
 }
 
 export interface SearchRequest extends RestRequest {
-    type?: 'post' | string;
+    type?: 'post' | 'page' | string;
     subtype?: string;
 }
 
