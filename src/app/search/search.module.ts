@@ -6,13 +6,17 @@ import { BlocksModule } from '../blocks/blocks.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { CatCloudComponent } from './cat-cloud/cat-cloud.component';
+import { SearchFormComponent } from './search-form/search-form.component';
+import { FilterCloudComponent } from './filter-cloud/filter-cloud.component';
 
 
 
 @NgModule({
   declarations: [
     SearchComponent,
-    CatCloudComponent
+    CatCloudComponent,
+    SearchFormComponent,
+    FilterCloudComponent
   ],
   imports: [
     CommonModule,

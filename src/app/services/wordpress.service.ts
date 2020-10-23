@@ -420,3 +420,11 @@ export class WordpressService {
     );
   }
 }
+
+export function isTag(arg: Category | Tag): boolean {
+  return arg.parent === undefined;
+}
+
+export function isCategory(arg: Category | Tag): boolean {
+  return arg.parent !== undefined;
+}

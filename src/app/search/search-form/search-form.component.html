@@ -1,0 +1,20 @@
+<form name="search" (submit)="submitted.emit(query)">
+  <h2 class="mb-2">{{ wordpress.translate("You searched by") }}:</h2>
+  <div class="d-flex align-items-center">
+    <input
+      type="text"
+      name="s"
+      class="mr-1"
+      [placeholder]="wordpress.translate('Search')"
+      [(ngModel)]="query"
+    />
+    <button
+      type="submit"
+      title="{{ wordpress.translate('Search') }}"
+      class="btn btn--transparent theme--menu-bg theme--menu-color p-1 d-flex align-items-center"
+    >
+      <span>{{ wordpress.translate("Search") }}&nbsp;</span>
+      <i-feather name="search"></i-feather>
+    </button>
+  </div>
+</form>

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { WordpressService } from '../services/wordpress.service';
+import { WordpressService, isCategory } from '../services/wordpress.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Category, Tag, Post, PostRequest } from '../services/wordpress.interface';
 import { PostOptions } from '../types/options.type';
@@ -48,7 +48,6 @@ export class ArchiveComponent implements OnInit, OnDestroy {
     this.slug = this.route.snapshot.paramMap.get('category');
 
     this.navigation = this.router.events.subscribe((e: any) => {
-      console.log('NAVIGATION', e);
       if (e instanceof NavigationEnd) {
         this.reload();
       }
@@ -75,15 +74,11 @@ export class ArchiveComponent implements OnInit, OnDestroy {
     this.wordpress.setTitle(title);
   }
 
-  private isCategory(arg: Category | Tag): boolean {
-    return arg.parent !== undefined;
-  }
-
   public loadPosts(cat: Category | Tag): void {
 
     this.cat = cat;
 
-    if (this.isCategory(this.cat)) {
+    if (isCategory(this.cat)) {
       this.type = this.wordpress.translate('Category');
       this.request.categories = [this.cat.id];
     } else {

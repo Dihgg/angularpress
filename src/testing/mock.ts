@@ -46,8 +46,8 @@ export class Mock {
         };
     }
 
-    static Post(): Post {
-        return {
+    static Post(object: any = {}): Post {
+        return Object.assign<any, Post>({
             id: 1,
             title: 'mock',
             url: 'http://mockurl.com/mock',
@@ -55,18 +55,23 @@ export class Mock {
             author: 1,
             content: 'mock content',
             excerpt: 'mock excerpt',
-            date_formatted: '01/01/1970'
-        };
+            date_formatted: '01/01/1970',
+            categories: [1],
+            tags: [1]
+        }, object );
     }
 
-    static PostResponse(): PostResponse {
-        return {
+    /**
+     * Mock PostResponse Response
+     * @param response Custom Response Object
+     * @param posts Custom Posts Array
+     */
+    static PostResponse(response: any = {}, posts: Post[] = null): PostResponse {
+        return Object.assign<any, PostResponse>({
             pages: 1,
             total: 1,
-            posts: [
-                Mock.Post()
-            ]
-        };
+            posts: posts || Mock.Post()
+        }, response);
     }
 
     static getMenuItem(object: any = {}, items: MenuItem[] = []): MenuItem {
@@ -205,16 +210,9 @@ export class Mock {
             },
             queryParams: of((cb) => {
                 cb({
-                    query: 'mock'
+                    search: 'mock'
                 });
             })
-            /* queryParams: ({
-                subscribe: (cb) => {
-                    cb({
-                        query: 'mock'
-                    });
-                }
-            }) */
         };
     }
 }

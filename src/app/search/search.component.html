@@ -2,42 +2,34 @@
   <div class="row flex-md-row-reverse">
     <aside class="search__aside col-12 col-md-4 mb-5">
       <div class="search__aside__content">
-        <form name="search" (submit)="onSubmit()">
-          <h2 class="mb-2">{{ wordpress.translate("You searched by") }}:</h2>
-          <div class="d-flex align-items-center">
-            <input
-              type="text"
-              name="s"
-              class="mr-1"
-              [placeholder]="wordpress.translate('Search')"
-              [(ngModel)]="query"
-            />
-            <button
-              type="submit"
-              title="{{ wordpress.translate('Search') }}"
-              class="btn btn--transparent theme--menu-bg theme--menu-color p-1 d-flex align-items-center"
-            >
-              <span>{{ wordpress.translate("Search") }}&nbsp;</span>
-              <i-feather name="search"></i-feather>
-            </button>
-          </div>
-        </form>
+        <app-search-form
+          [query]="query"
+          (submitted)="onSubmit($event)"
+        ></app-search-form>
         <section class="search__filters d-none d-sm-block my-3">
+          <app-filter-cloud
+            *ngIf="filters.length"
+            [filters]="filters"
+            (remove)="removeFilter($event)"
+          ></app-filter-cloud>
           <app-cat-cloud
+            class="d-block my-3"
             [title]="wordpress.translate('Categorias')"
             [items]="categories"
-            (clicked)="filterClick($event)"
+            (clicked)="addFilter($event)"
           ></app-cat-cloud>
           <app-cat-cloud
+            class="d-block my-3"
             [title]="wordpress.translate('Tags')"
             [items]="tags"
-            (clicked)="filterClick($event)"
+            prepend="#"
+            (clicked)="addFilter($event)"
           ></app-cat-cloud>
         </section>
       </div>
     </aside>
-    <section id="search__content" class="col-12 col-md-8">
-      <div class="row">
+    <section id="search__content" class="col-12 col-md-8 mb-5">
+      <div class="row" *ngIf="!loading">
         <p>
           <ng-container *ngIf="response.total > 0">
             {{ wordpress.translate("Results Found") }}: {{ response.total }}
@@ -47,22 +39,25 @@
           </ng-container>
         </p>
       </div>
-      <div class="row">
-        <ul *ngIf="response.total > 0" id="results">
+      <div class="row" *ngIf="posts.length">
+        <ul id="results">
           <li *ngFor="let post of posts" class="my-3">
             <app-post [post]="post" [options]="postOptions"></app-post>
           </li>
         </ul>
       </div>
-      <div class="row">
-        <div class="col text-center mb-5">
+      <div *ngIf="!loading && hasLoadMore" class="row">
+        <div class="col text-center">
           <button
-            *ngIf="!loading && hasLoadMore"
             class="btn theme--menu-bg theme--menu-color py-3 px-5"
             (click)="loadMore()"
           >
             {{ wordpress.translate("Load More") }}
           </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
           <app-loading [loading]="loading"></app-loading>
         </div>
       </div>

@@ -35,7 +35,8 @@ export class Stub {
         return {
             navigate: jest.fn(),
             events: eventSubject.asObservable(),
-            url: 'mock/url'
+            url: 'mock/url',
+            queryParams: eventSubject.asObservable(),
         };
     }
 

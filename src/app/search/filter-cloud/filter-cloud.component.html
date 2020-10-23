@@ -1,0 +1,20 @@
+<small>{{ wordpress.translate("Active filters") }}:</small>
+<ul class="d-flex flex-wrap">
+  <li
+    *ngFor="let filter of filters; let i = index"
+    class="d-inline-flex align-items-center mr-2 mb-1"
+  >
+    <span *ngIf="isTag(filter)">#&nbsp;</span>
+    <span>{{ filter.name }}</span>
+    <button
+      type="button"
+      title="{{ wordpress.translate('Remove filter') }} {{ filter.name }}"
+      class="btn btn--transparent d-flex"
+      (click)="remove.emit(i)"
+    >
+      <small>
+        <i-feather name="x"></i-feather>
+      </small>
+    </button>
+  </li>
+</ul>

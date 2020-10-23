@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { WordpressService } from '../services/wordpress.service';
-import { Post, Category, Tag, SearchRequest, SearchReponse } from '../services/wordpress.interface';
+import { ActivatedRoute, Router, Params } from '@angular/router';
+import { WordpressService, isTag } from '../services/wordpress.service';
+import { Post, Category, Tag, SearchRequest, SearchReponse, PostRequest, PostResponse, TagRequest } from '../services/wordpress.interface';
 import { PageComponent } from '../page/page.component';
 import { PostOptions } from '../types/options.type';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -14,18 +13,19 @@ import { Subscription } from 'rxjs';
 export class SearchComponent extends PageComponent implements OnInit {
 
   public query: string;
-  private request: SearchRequest = {};
-  public response: SearchReponse = {
+  private request: PostRequest = {};
+  public response: PostResponse = {
+    posts: [],
     pages: 0,
-    results: [],
     total: 0
   };
 
   public posts: Post[] = [];
   public categories: Category[] = [];
   public tags: Tag[] = [];
+  public filters: Array<Tag | Category> = [];
 
-  public hasLoadMore = true;
+  public hasLoadMore = false;
 
   public postOptions: PostOptions = {
     contentType: 'excerpt',
@@ -47,73 +47,50 @@ export class SearchComponent extends PageComponent implements OnInit {
   public ngOnInit(): void {
     this.wordpress.setTitle(this.wordpress.translate('Search'));
     this.route.queryParams.subscribe(params => {
+      const categories = params.categories || [];
+      const tags = params.tags || [];
+
       this.request = {
-        search: params.query,
+        search: params.search || '',
+        categories,
+        tags,
         page: 0
       };
+
+      this.query = params.search;
+
       this.posts = [];
-      this.categories = [];
-      this.tags = [];
-      this.query = this.request.search;
-
-      this.loading = true;
-
       this.loadMore();
+
+      console.log('FILTERS', categories, tags);
+
+      this.loadFilters(categories, tags);
     });
   }
 
-  public onSubmit(): void {
-    this.request.search = this.query;
+  public onSubmit(query: string): void {
+    this.categories = [];
+    this.tags = [];
+    this.filters = [];
     this.router.navigate(['/search'], {
       queryParams: {
-        query: this.request.search
+        search: query
       }
     });
-  }
-
-  private loadCategories(ids: number[]): void {
-    this.wordpress.getCategories({
-      'include[]': ids
-    }).subscribe(
-      response => {
-        console.log('should load categories', response.categories);
-        this.categories = this.categories.concat(response.categories);
-      }
-    );
-  }
-
-  private loadTags(ids: number[]): void {
-    this.wordpress.getTags({
-      'include[]': ids
-    }).subscribe(
-      response => {
-        console.log('should load tags', response.tags);
-        this.tags = this.tags.concat(response.tags);
-      }
-    );
   }
 
   public loadMore(): void {
     this.loading = true;
     this.request.page++;
-    this.wordpress.search(
-      this.request
-    )
-    .subscribe(response => {
-      this.response = response;
-
-      if (response.results.length) {
-        if (this.request.page >= response.pages) {
-          this.hasLoadMore = false;
-        }
-        this.wordpress.getPosts({
-          'include[]': response.results.map<number>(result => result.id)
-        }).subscribe(posts => {
-
+    this.wordpress
+      .getPosts(this.request)
+      .subscribe(response => {
+        this.response = response;
+        this.loading = false;
+        if (response.posts.length) {
           let categories: number[] = [];
           let tags: number[] = [];
-
-          posts.posts.forEach(post => {
+          response.posts.forEach((post: Post) => {
             this.posts.push(post);
             categories = categories.concat(post.categories);
             tags = tags.concat(post.tags);
@@ -121,19 +98,105 @@ export class SearchComponent extends PageComponent implements OnInit {
 
           this.loadCategories(categories);
           this.loadTags(tags);
-
-          this.loading = false;
-        });
-      } else {
-        this.loading = false;
-        this.hasLoadMore = false;
-        this.posts = [];
-      }
-    });
+        }
+        if (this.request.page >= response.pages) {
+          this.hasLoadMore = false;
+        } else {
+          this.hasLoadMore = true;
+        }
+      });
   }
 
-  public filterClick(cat: Category | Tag): void {
-    console.log('clicked', cat);
+  public addFilter(filter: Category | Tag): void {
+    if (!Boolean(this.filters.filter((e) => e.id === filter.id).length)) {
+      this.filters.push(filter);
+      this.updateFilters();
+    }
+  }
+
+  public removeFilter(index: number): void {
+    this.filters.splice(index, 1);
+    this.updateFilters();
+  }
+
+  public isTag(cat: Category | Tag) {
+    return isTag(cat);
+  }
+
+  private loadCategories(ids: number[]): void {
+    console.log('CATEGORIES', this.categories);
+    const categories = ids.filter(
+      function(id) {
+        return !this.includes(id);
+      },
+      this.categories.filter(
+        (category) => !isTag(category)
+      ).map<number>(
+        (category) => category.id
+      )
+    );
+
+    if (categories.length) {
+      this.wordpress.getCategories({
+        'include[]': categories,
+      }).subscribe(
+        response => (this.categories = this.categories.concat(response.categories))
+      );
+    }
+  }
+
+  private loadTags(ids: number[]): void {
+
+    const tags = ids.filter(
+      function(id) {
+        return !this.includes(id);
+      },
+      this.tags.filter(
+        (tag) => isTag(tag)
+      ).map<number>(
+        (tag) => tag.id
+      )
+    );
+
+    if (tags.length) {
+      this.wordpress.getTags({
+        'include[]': tags
+      }).subscribe(
+        response => (this.tags = this.tags.concat(response.tags))
+      );
+    }
+  }
+
+  private loadFilters(categories: number[], tags: number[]): void {
+    this.filters = [];
+    if (categories.length) {
+      this.wordpress.getCategories({
+        'include[]': categories
+      }).subscribe(
+        response => (this.filters = this.filters.concat(response.categories))
+      );
+    }
+
+    if (tags.length) {
+      this.wordpress.getTags({
+        'include[]': tags
+      }).subscribe(
+        response => (this.filters = this.filters.concat(response.tags))
+      );
+    }
+  }
+
+  private updateFilters() {
+    const tags = this.filters.filter((item) => isTag(item));
+    const categories = this.filters.filter((item) => !isTag(item));
+    this.router.navigate(['/search'], {
+      queryParams: {
+        search: this.request.search,
+        categories: categories.map<number>(category => category.id),
+        tags: tags.map<number>(tag => tag.id),
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 
 }
