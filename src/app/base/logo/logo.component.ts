@@ -11,9 +11,9 @@ export class LogoComponent implements OnInit {
 
   @Input() footer = false;
 
-  public logos: {
-    'desktop': string;
-    'mobile': string;
+  public logos = {
+    desktop: '',
+    mobile: ''
   };
 
   constructor(
@@ -21,8 +21,10 @@ export class LogoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.logos = this.wordpress.THEME.logos;
-    if (this.footer && this.wordpress.hasLogo('footer')) {
+    if (!this.footer) {
+      return;
+    }
+    if (this.wordpress.hasLogo('footer')) {
       this.logos = this.wordpress.THEME.logos.footer;
     } else if (this.wordpress.hasLogo('header')) {
       this.logos = this.wordpress.THEME.logos.header;
