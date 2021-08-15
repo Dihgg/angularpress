@@ -27,6 +27,7 @@ import { LoadingModule } from '../base/loading/loading.module';
   ],
   exports: [
     BlocksComponent,
+    LatestPostsComponent,
     PostComponent
   ]
 })
