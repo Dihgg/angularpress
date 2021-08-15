@@ -16,7 +16,7 @@ export class PageComponent extends PostComponent {
   ) {
     super(route, wordpress);
     this.slug = this.route.snapshot.paramMap.get('page');
-    this.type = 'pages';    
+    this.type = 'pages';
   }
 
 }

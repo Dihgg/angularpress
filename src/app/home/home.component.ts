@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WordpressService } from '../services/wordpress.service';
 import { ActivatedRoute } from '@angular/router';
 import { PageComponent } from '../page/page.component';
+import { Block } from '../services/wordpress.interface';
 
 @Component({
   selector: 'app-home',

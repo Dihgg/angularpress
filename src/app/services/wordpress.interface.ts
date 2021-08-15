@@ -117,8 +117,8 @@ export interface MenuItem {
 
 export interface Block {
     attrs: string[];
-    html: string;
-    name: string;
+    html?: string;
+    name?: string;
 }
 
 export interface Image {

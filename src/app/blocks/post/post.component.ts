@@ -11,7 +11,12 @@ import { PostOptions } from '../../types/options.type';
 export class PostComponent implements OnInit {
 
   @Input() post: Post;
-  @Input() options: PostOptions = {
+  @Input()
+  set options(options: PostOptions) {
+    Object.assign<PostOptions, PostOptions>(this.attrs, options);
+  }
+
+  public attrs: PostOptions = {
     showDate: false,
     showContent: false,
     contentType: 'excerpt',
@@ -37,12 +42,12 @@ export class PostComponent implements OnInit {
     this.wordpress.getCategories({ post: this.post.id })
       .subscribe((response) => (this.category = response.categories[0]));
 
-    if (this.options.showContent) {
+    if (this.attrs.showContent) {
       this.wordpress.getTags({ post: this.post.id })
         .subscribe((response) => (this.tags = response.tags));
     }
 
-    if (this.options.displayFeaturedImage && this.post.thumbnail) {
+    if (this.attrs.displayFeaturedImage && this.post.thumbnail) {
       this.wordpress.getMedia(this.post.thumbnail).subscribe(
         media => (this.thumbnail = media.sizes)
       );

@@ -11,7 +11,7 @@ import { PostOptions } from '../../types/options.type';
 export class LatestPostsComponent implements OnInit {
 
   public posts: Post[] = [];
-  public args: PostRequest;
+  public args: PostRequest = {};
   public css: string[] = [];
   public options: PostOptions;
   public columns: string[] = [];

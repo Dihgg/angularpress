@@ -1,14 +1,14 @@
 <article *ngIf="post" class="block-post">
   <div
     class="row"
-    [class.flex-row-reverse]="options.featuredImageAlign === 'right'"
+    [class.flex-row-reverse]="attrs.featuredImageAlign === 'right'"
   >
     <div
-      *ngIf="options.displayFeaturedImage"
+      *ngIf="attrs.displayFeaturedImage && post.thumbnail"
       class="block-post__thumbnail col-12"
       [class.col-sm-4]="
-        options.featuredImageAlign == 'left' ||
-        options.featuredImageAlign == 'right'
+        attrs.featuredImageAlign == 'left' ||
+        attrs.featuredImageAlign == 'right'
       "
     >
       <a [routerLink]="wordpress.routerLink(post.url)">
@@ -44,8 +44,8 @@
     <div
       class="block-post__info col-12 py-2"
       [class.col-sm-8]="
-        options.featuredImageAlign == 'left' ||
-        options.featuredImageAlign == 'right'
+        attrs.featuredImageAlign == 'left' ||
+        attrs.featuredImageAlign == 'right'
       "
     >
       <a
@@ -59,17 +59,17 @@
         <a [routerLink]="wordpress.routerLink(post.url)" [innerHTML]="post.title">
         </a>
       </h1>
-      <time *ngIf="options.showDate" class="my-2" [attr.datetime]="post.date">
+      <time *ngIf="attrs.showDate" class="my-2" [attr.datetime]="post.date">
         <a [routerLink]="wordpress.routerLink(post.url)">{{
           post.date_formatted
         }}</a>
       </time>
-      <div *ngIf="options.showContent" class="block-post__content">
+      <div *ngIf="attrs.showContent" class="block-post__content">
         <p class="block-post__content__text my-2">
           <a [routerLink]="wordpress.routerLink(post.url)">
-            <ng-container [ngSwitch]="options.contentType">
+            <ng-container [ngSwitch]="attrs.contentType">
               <ng-container *ngSwitchCase="'excerpt'">
-                {{ post.excerpt | truncate: options.excerpt }}
+                {{ post.excerpt | truncate: attrs.excerpt }}
               </ng-container>
               <ng-container *ngSwitchCase="'full_post'">
                 {{ post.content }}
