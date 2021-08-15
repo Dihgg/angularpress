@@ -9,7 +9,7 @@ function check_dependencies()
 		if (!is_plugin_active('wp-rest-blocks/wp-rest-blocks.php')) {
 			echo "<p>" . __('Warning: The theme needs Plugin wp-rest-blocks to function', 'angularpress') . "</p>";
 			echo "<p>" . __('Download it', 'angularpress') . " ";
-			echo "<a href='https://github.com/spacedmonkey/wp-rest-blocks.git'>" . __('here', 'angularpress') . "</a>";
+			echo "<a href='https://github.com/Dihgg/wp-rest-blocks'>" . __('here', 'angularpress') . "</a>";
 			echo ".</p>";
 			die;
 		}
@@ -19,6 +19,12 @@ function check_dependencies()
 /**
  * THEME SETUP
  */
+
+// permalinks structure
+require_once('theme/permalinks.php');
+// disable comments
+require_once('theme/comments.php');
+
 if (function_exists('add_theme_support')) {
 
 	// Add Menu Support
@@ -28,8 +34,7 @@ if (function_exists('add_theme_support')) {
 	add_theme_support('post-thumbnails');
 
 	// ADD MENUS
-	require_once('theme/menu.php');
-	
+	require_once('theme/menu.php');	
 
 	check_dependencies();
 }
